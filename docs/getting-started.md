@@ -2,7 +2,7 @@
 - [Requirements](#requirements)
 - [Installation guide](#installation-guide)
 - [Using the app for the first time](#using-the-app-for-the-first-time)
-- [Uninstallationguide](#uninstallation-guide)
+- [Uninstallation guide](#uninstallation-guide)
 
 
 ## Requirements
@@ -68,11 +68,11 @@ The first thing you'll need to do is add an account.
 Go to the Accounts page and click the + icon in the upper right corner to add a new account.   
 ![add-account](https://i.imgur.com/duBridY.png)
 
-Fill out the form with the [account name, type and current balance](http://example.com/). Press enter or click the check button on the left to submit the form.
-Now you can [add transactions and subscriptions](http://example.com/) using the account you've just made.
+Fill out the form with the [account name, type and current balance](https://github.com/zandrexrc/cashflow/blob/master/docs/user-manual.md#accounts). Press enter or click the check button on the left to submit the form.
+Now you can [add transactions and subscriptions](https://github.com/zandrexrc/cashflow/blob/master/docs/user-manual.md#transactions) using the account you've just made.
 
 ### Change the settings
-In the Settings page, you can [customize the app settings](http://example.com) to suit your own preferences.
+In the Settings page, you can [customize the app settings](https://github.com/zandrexrc/cashflow/blob/master/docs/user-manual.md#settings) to suit your own preferences.
 
 
 ## Uninstallation guide
