@@ -1,5 +1,14 @@
+<div align="center" markdown="1">
+
+<img src="https://i.imgur.com/jKQ4ywE.png" alt="Cashflow" width="240">
+
 # Cashflow
+
+</div>
+   
 Cashflow is an app that helps you keep track of your finances.   
+   
+   
 ![cashflow-screenshot](https://i.imgur.com/8u5cwge.png)
 
 Check out the [demo](https://cashflow-zandrexrc.netlify.app/). 
@@ -12,15 +21,15 @@ Check out the [demo](https://cashflow-zandrexrc.netlify.app/).
 - *Statistics*: Monitor your transaction activities.
 
 ## Getting started
-- [Installing Cashflow](http://example.com/)
-- [User manual](http://example.com/)
+- [Installing Cashflow](https://github.com/zandrexrc/cashflow/blob/master/docs/getting-started.md)
+- [User manual](https://github.com/zandrexrc/cashflow/blob/master/docs/user-manual.md)
 
 ## Documentation
-- [React components](http://example.com/)
-- [Redux state](http://example.com/)
-- [Express server API](http://example.com/)
-- [Database](http://example.com/)
+- [React components](https://github.com/zandrexrc/cashflow/blob/master/docs/components.md)
+- [Redux state](https://github.com/zandrexrc/cashflow/blob/master/docs/redux.md)
+- [Express server API](https://github.com/zandrexrc/cashflow/tree/master/docs/api)
+- [Database](https://github.com/zandrexrc/cashflow/blob/master/docs/database.md)
 
 ## Author and license
-Cashflow is developed by [Zandrex Camagon](http://example.com/). 
-Licensed under [MIT License](http://example.com/).
+Cashflow is developed by [Zandrex Camagon](http://zandrexrc.me). 
+Licensed under [MIT License](https://github.com/zandrexrc/cashflow/blob/master/LICENSE).
