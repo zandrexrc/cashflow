@@ -1,0 +1,58 @@
+{
+  "name": "cashflow",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1",
+    "typescript": "latest",
+    "core-js": "latest",
+    "prop-types": "latest",
+    "clsx": "latest",
+    "@material-ui/icons": "latest",
+    "@material-ui/core": "latest",
+    "material-table": "latest",
+    "cross-fetch": "latest",
+    "react-redux": "latest",
+    "redux-thunk": "latest",
+    "redux-logger": "latest",
+    "moment": "latest",
+    "chart.js": "latest",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "util": "^0.12.1"
+  },
+  "scripts": {
+    "start": "npm-run-all --parallel start:server start:web",
+    "start:web": "react-scripts start",
+    "start:server": "nodemon --watch src/server src/server/index.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "http://localhost:8080",
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "devDependencies": {
+    "nodemon": "latest",
+    "npm-run-all": "latest"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
