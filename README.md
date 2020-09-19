@@ -2,12 +2,10 @@
 
 <img src="https://i.imgur.com/jKQ4ywE.png" alt="Cashflow" width="240">
 
-# Cashflow
+# Cashflow   
+Cashflow is an app that helps you keep track of your finances.  
 
-</div>
-   
-Cashflow is an app that helps you keep track of your finances.   
-   
+</div> 
    
 ![cashflow-screenshot](https://i.imgur.com/8u5cwge.png)
 
