@@ -11,10 +11,7 @@
 
 
 ## Installation guide
-1. Download or clone the repo:
-```
-git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
-```
+1. Download or clone the repo.
 
 2. Log in to MySQL and create the database for the app:
 ```sql
