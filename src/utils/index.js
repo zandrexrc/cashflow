@@ -1,26 +1,33 @@
-export { getAccountNames, calcMostUsedAccounts } from './accountUtils';
-export { createActivityGraphData, createCategoryGraphData } from './graphUtils';
+export { 
+    getAccountName, 
+    calcMostUsedAccounts, 
+    validateAccount 
+} from './accountUtils';
+export { 
+    createActivityGraphData, 
+    createCategoryGraphData, 
+    createTransactionsGraphData,
+    createSubscriptionsGraphData, 
+    createAccountsGraphData
+} from './graphUtils';
 export { 
     getTransactionYears, 
-    getCategories, 
-    filterByAccount,
-    filterByCategory,
-    filterByDate,
-    getFilteredTransactions, 
-    calcNetIncome 
+    getCategories,
+    calcCategoryAmounts,
+    filterTransactions, 
+    validateTransaction, 
+    calcNetIncome
 } from './transactionUtils';
-
 export { 
+    calcNextBillingDate,
     calcMonthlySubscriptions, 
-    calcYearlySubscriptions, 
-    printNextBillingDate, 
-    sortNextBillingDates 
+    calcYearlySubscriptions,
+    filterSubscriptions,
+    validateSubscription 
 } from './subscriptionUtils';
-
 export { 
     dateStringToISO, 
     printDate,
-    printMonthName, 
     isValidCurrencyAmount, 
     isValidCurrencyCode 
 } from './miscUtils';

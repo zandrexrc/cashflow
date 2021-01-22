@@ -3,13 +3,15 @@ import { accounts } from './accounts';
 import { settings } from './settings';
 import { subscriptions } from './subscriptions';
 import { transactions } from './transactions';
-import { activeWindow, isFetching, error, dataIsLoaded } from './ui';
+import { activePage, isFetching, error, dataIsLoaded, dialogState, toastState } from './ui';
 
 const rootReducer = combineReducers({
-    activeWindow,
+    activePage,
     isFetching,
     dataIsLoaded,
     error,
+    dialogState,
+    toastState,
     settings,
     accounts,
     transactions,

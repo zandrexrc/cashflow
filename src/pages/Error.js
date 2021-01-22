@@ -4,12 +4,12 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles({
     root: {
-        width: '100%',
-        height: '100%',
         display: 'flex',
         flexFlow: 'column wrap',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
     }
 });
 

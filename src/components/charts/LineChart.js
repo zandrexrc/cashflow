@@ -4,12 +4,12 @@ import { useTheme } from '@material-ui/core/styles';
 import Chart from 'chart.js';
 
 
-const ActivityGraph = props => {
+const LineChart = props => {
     const theme = useTheme();
 
     useEffect(() => {
-        const ctx = document.getElementById('activityChart');
-        const activityChart = new Chart(ctx, {
+        const ctx = document.getElementById('lineChart');
+        const lineChart = new Chart(ctx, {
             type: 'line',
             data: props.data,
             options: {
@@ -56,13 +56,13 @@ const ActivityGraph = props => {
                 }
             }
         });
-        activityChart.update();
-        return () => activityChart.destroy();
+        lineChart.update();
+        return () => lineChart.destroy();
     });
 
     return (
         <canvas 
-            id="activityChart" 
+            id="lineChart" 
             width={props.width} 
             height={props.height}
         ></canvas>
@@ -70,12 +70,12 @@ const ActivityGraph = props => {
 }
 
 // PropTypes
-ActivityGraph.propTypes = {
-    width: PropTypes.string.isRequired,
-    height: PropTypes.string.isRequired,
+LineChart.propTypes = {
     data: PropTypes.object.isRequired,
+    height: PropTypes.string.isRequired,
+    width: PropTypes.string.isRequired,
     xAxisLabel: PropTypes.string.isRequired,
     yAxisLabel: PropTypes.string.isRequired,
 };
 
-export { ActivityGraph };
+export { LineChart };

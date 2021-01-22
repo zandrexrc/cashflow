@@ -46,6 +46,10 @@ const transactionsQueries = {
                         req.body.amount
                     ]
                 );
+
+                // Update account balance
+                queryString = "UPDATE accounts SET balance = balance + ? WHERE accountID = ?";
+                await db.query(queryString, [req.body.amount, req.body.accountID]);
         
                 // Get created transaction
                 queryString = "SELECT * FROM transactions WHERE transactionID = " +
@@ -73,7 +77,12 @@ const transactionsQueries = {
     async editTransaction(req, res) {
         try {
             await connection.dbQuery(async (db) => {
-                let queryString = "UPDATE transactions " +
+                // Get old transaction
+                let queryString = "SELECT amount FROM transactions WHERE transactionID = ?";
+                let queryRes = await db.query(queryString, [req.params.id]);
+                let oldAmount = queryRes[0].amount;
+
+                queryString = "UPDATE transactions " +
                             "SET date = ?, description = ?, accountID = ?, " +
                             "category = ?, amount = ? " +
                             "WHERE transactionID = ?";
@@ -88,10 +97,14 @@ const transactionsQueries = {
                         req.params.id
                     ]
                 );
+
+                // Update account balance
+                queryString = "UPDATE accounts SET balance = balance + ? WHERE accountID = ?";
+                await db.query(queryString, [(parseFloat(req.body.amount) - parseFloat(oldAmount)), req.body.accountID]);
         
                 // Get edited transaction
                 queryString = "SELECT * FROM transactions WHERE transactionID = ?";
-                let queryRes = await db.query(queryString, [req.params.id]);
+                queryRes = await db.query(queryString, [req.params.id]);
                 let transaction = queryRes[0];
         
                 res.status(200).json({
@@ -125,6 +138,10 @@ const transactionsQueries = {
                 // Delete transaction
                 queryString = "DELETE FROM transactions WHERE transactionID = ?";
                 await db.query(queryString, [req.params.id]);
+
+                // Update account balance
+                queryString = "UPDATE accounts SET balance = balance - ? WHERE accountID = ?";
+                await db.query(queryString, [queryRes[0].amount, queryRes[0].accountID]);
         
                 res.status(200).json({
                     "transactionID": parseInt(req.params.id),

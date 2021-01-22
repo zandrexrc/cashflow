@@ -1,13 +1,12 @@
 // set up modules
-const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
 
 // app configuration
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded({"extended":"true"}));
-app.use(bodyParser.json());
-app.use(bodyParser.json({type: 'application/vnd.api+json'}));
+app.use(express.json());
+app.use(express.json({type: 'application/vnd.api+json'}));
+app.use(express.urlencoded({extended: true}));
 
 // routes
 require("./routes")(app);

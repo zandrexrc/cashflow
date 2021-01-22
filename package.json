@@ -1,30 +1,32 @@
 {
   "name": "cashflow",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
+    "@date-io/date-fns": "^1.3.13",
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@material-ui/pickers": "^3.2.10",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
-    "typescript": "latest",
-    "core-js": "latest",
-    "prop-types": "latest",
-    "clsx": "latest",
-    "@material-ui/icons": "latest",
-    "@material-ui/core": "latest",
-    "material-table": "latest",
-    "cross-fetch": "latest",
-    "react-redux": "latest",
-    "redux-thunk": "latest",
-    "redux-logger": "latest",
-    "moment": "latest",
-    "chart.js": "latest",
-    "body-parser": "^1.19.0",
+    "chart.js": "^2.9.4",
+    "clsx": "^1.1.1",
+    "core-js": "^3.8.2",
+    "cross-fetch": "^3.0.6",
+    "date-fns": "^2.16.1",
     "express": "^4.17.1",
     "mysql": "^2.18.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.2",
+    "react-scripts": "^4.0.1",
+    "react-window": "^1.8.6",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "typescript": "^4.1.3",
     "util": "^0.12.1"
   },
   "scripts": {
@@ -40,8 +42,8 @@
     "extends": "react-app"
   },
   "devDependencies": {
-    "nodemon": "latest",
-    "npm-run-all": "latest"
+    "nodemon": "^2.0.7",
+    "npm-run-all": "^4.1.5"
   },
   "browserslist": {
     "production": [

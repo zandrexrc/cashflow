@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { format } from 'date-fns';
 
 
 /**
@@ -7,28 +7,18 @@ import moment from 'moment';
  * @return {string}: a string in the format "YYYY-MM-DD"
  */
 function dateStringToISO(dateString) {
-    return moment(dateString).format("YYYY-MM-DD").substring(0, 10);
+    return format(new Date(dateString), 'yyyy-MM-dd').substring(0, 10);
 }
 
 
 /**
- * Returns a string representation of a date in the specified format.
- * @param {Date} date: a Date object
- * @param {string} format: the date format 
- * @return {string}: a string in the format "MMMM YYYY"
+ * Returns a string representation of a date in the specified pattern.
+ * @param {Date | string} date: a string representation of a Date object
+ * @param {string} format: the date format pattern 
+ * @return {string}: a string in the given pattern
  */
-function printDate(date, format) {
-    return moment(date).format(format);
-}
-
-
-/**
- * Returns a string in the format 'MMMM YYYY' (e.g. 'August 2020').
- * @param {Date} date: a Date object
- * @return {string}: a string in the format "MMMM YYYY"
- */
-function printMonthName(date) {
-    return `${moment(date).format("MMMM")} ${date.getFullYear()}`
+function printDate(date, pattern) {
+    return format(new Date(date), pattern);
 }
 
 
@@ -38,7 +28,7 @@ function printMonthName(date) {
  * @return {boolean}: true if the string is a valid amount, false otherwise
  */
 function isValidCurrencyAmount(string) {
-    return /^[+-]?[1-9]\d*(\.\d+)?$/.test(string);
+    return /^[+-]?[0-9]\d*(\.\d+)?$/.test(string);
 }
 
 
@@ -56,7 +46,6 @@ function isValidCurrencyCode(code) {
 export {
     dateStringToISO,
     printDate,
-    printMonthName,
     isValidCurrencyAmount,
     isValidCurrencyCode
 };

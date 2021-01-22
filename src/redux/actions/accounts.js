@@ -1,5 +1,5 @@
 import fetch from 'cross-fetch';
-import { toggleIsFetching, setError } from './ui';
+import { toggleIsFetching, setError, showToast } from './ui';
 
 
 export function getAccounts() {
@@ -33,7 +33,8 @@ export function addAccount(newAccount) {
             dispatch(toggleIsFetching(true)); 
             try {
                 const res = await fetch(
-                    '/api/accounts', {
+                    '/api/accounts', 
+                    {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(newAccount)
@@ -50,6 +51,7 @@ export function addAccount(newAccount) {
                     type: "ADD_ACCOUNT",
                     payload: payload
                 });
+                dispatch(showToast("Successfully added account", "success"));
             }
             catch (error) {
                 dispatch(setError(error));
@@ -82,6 +84,7 @@ export function editAccount(id, newAccount) {
                     type: "EDIT_ACCOUNT",
                     payload: payload
                 });
+                dispatch(showToast("Successfully edited account", "success"));
             }
             catch (error) {
                 dispatch(setError(error));
@@ -118,6 +121,7 @@ export function deleteAccount(id) {
                     type: "DELETE_ACCOUNT",
                     payload: payload.accountID
                 });
+                dispatch(showToast("Successfully deleted account", "success"));
             }
             catch (error) {
                 dispatch(setError(error));
@@ -125,3 +129,8 @@ export function deleteAccount(id) {
         }
     }
 };
+
+export const updateAccountBalance = (id, amount) => ({
+    type: "UPDATE_ACCOUNT_BALANCE",
+    payload: {id, amount}
+});

@@ -25,7 +25,7 @@ darkTheme.palette = {
     },
     divider: 'rgba(255, 255, 255, 0.12)',
     background: {
-        paper: '#333',
+        paper: '#313131',
         default: '#212121'
     },
     action: {
