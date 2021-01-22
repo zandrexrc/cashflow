@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { App } from './App';
 import { Provider } from 'react-redux';
-import { configureStore } from './redux/store';
+import { store } from './redux/store';
 import { getTransactions } from './redux/actions/transactions';
 import { getSubscriptions } from './redux/actions/subscriptions';
 import { getAccounts } from './redux/actions/accounts';
@@ -11,9 +11,6 @@ import { getSettings } from './redux/actions/settings';
 import { setDataIsLoaded } from './redux/actions/ui';
 import * as serviceWorker from './serviceWorker';
 
-
-// Set up Redux store
-const store = configureStore();
 
 // Fetch data from the database
 async function loadData () {

@@ -1,7 +1,12 @@
+import { format } from 'date-fns';
+import { calcCategoryAmounts, calcNetIncome } from './transactionUtils';
+import { calcMonthlySubscriptions, calcYearlySubscriptions } from './subscriptionUtils';
+
 /**
  * Creates the datasets required in making an ActivityGraph.
  * @param {Array<Transaction>} transactions: a list of transactions
- * @param {number} month: the month corresponding to the transactions (1-12)
+ * @param {number} month: the month corresponding to the transactions (0-11)
+ *                         or -1, which is equivalent to the 'all months' option 
  * @param {number} year: the year corresponding to the transactions
  * @return {Object}: an object with the datasets and labels for the graph
  */
@@ -10,19 +15,33 @@ function createActivityGraphData(transactions, month, year) {
     let expenses = {};
     let labels = [];
 
-    // Initialize entries for each day of the month
-    let daysInMonth = new Date(year, month, 0).getDate();
-    for (let i = 1; i <= daysInMonth; i++) {
-        labels.push(i.toString());
-        income[i.toString()] = 0;
-        expenses[i.toString()] = 0;
-    }
-
-    // Log each transaction to its respective day/entry
-    for (let j = 0; j < transactions.length; j++) {
-        let amount = transactions[j].amount;
-        let date = new Date(transactions[j].date).getDate().toString();
-        amount < 0 ? expenses[date] += Math.abs(amount) : income[date] += amount;
+    if (month === -1) {
+        // Initialize entries for each month
+        for (let i = 0; i < 12; i++) {
+            labels.push(format(new Date(year, i, 1), 'MMM'));
+            income[i.toString()] = 0;
+            expenses[i.toString()] = 0;
+        }
+        // Log each transaction into its respective month
+        for (let j = 0; j < transactions.length; j++) {
+            let amount = transactions[j].amount;
+            let month = new Date(transactions[j].date).getMonth().toString();
+            amount < 0 ? expenses[month] += Math.abs(amount) : income[month] += amount;
+        }
+    } else {
+        // Initialize entries for each day of the month
+        let daysInMonth = new Date(year, month, 0).getDate();
+        for (let i = 1; i <= daysInMonth; i++) {
+            labels.push(`${format(new Date(year, month, 1), 'MMM')} ${i.toString()}`);
+            income[i.toString()] = 0;
+            expenses[i.toString()] = 0;
+        }
+        // Log each transaction to its respective day/entry
+        for (let j = 0; j < transactions.length; j++) {
+            let amount = transactions[j].amount;
+            let date = new Date(transactions[j].date).getDate().toString();
+            amount < 0 ? expenses[date] += Math.abs(amount) : income[date] += amount;
+        }
     }
 
     return {
@@ -54,18 +73,7 @@ function createActivityGraphData(transactions, month, year) {
  */
 function createCategoryGraphData(transactions) {
     // Log the occurences of each category
-    let categoriesCount = {};
-    for (let i = 0; i < transactions.length; i++) {
-        if (transactions[i].category) {
-            let category = transactions[i].category.toLowerCase();
-            categoriesCount[category] = categoriesCount[category] ? categoriesCount[category] + 1 : 1;
-        } else {
-            categoriesCount["uncategorized"] = 
-                categoriesCount["uncategorized"] ?
-                categoriesCount["uncategorized"] + 1 :
-                1;
-        }
-    }
+    let categoriesCount = calcCategoryAmounts(transactions);
 
     // Determine the color of each category
     let colors = [];
@@ -85,7 +93,86 @@ function createCategoryGraphData(transactions) {
 }
 
 
+/**
+ * Creates the datasets for making the bar graph in the Transactions page.
+ * @param {Array<Transaction>} transactions: a list of transactions
+ * @return {Object}: an object with the datasets and labels for the graph
+ */
+function createTransactionsGraphData(transactions) {
+    // Calculate total income and expenses
+    const { totalIncome, totalExpenses } = calcNetIncome(transactions);
+
+    return {
+        datasets: [
+            {
+                data: [totalIncome, totalExpenses],
+                backgroundColor: ['#43a047', '#f44336'],
+                maxBarThickness: 50
+            }
+        ],
+        labels: ['income', 'expenses']
+    }
+}
+
+
+/**
+ * Creates the datasets for making the pie graph in the Subscriptions page.
+ * @param {Array<Subscription>} subscriptions: a list of subscriptions
+ * @param {string} scope: the scope of the data ('monthly' or 'yearly')
+ * @return {Object}: an object with the datasets and labels for the graph
+ */
+function createSubscriptionsGraphData(subscriptions, scope) {
+    const { totalExpenses, remainingExpenses } = scope === 'monthly'
+        ? calcMonthlySubscriptions(subscriptions)
+        : calcYearlySubscriptions(subscriptions);
+    const paidExpenses = totalExpenses - remainingExpenses;
+
+    return {
+        datasets: [
+            {
+                data: [ paidExpenses, remainingExpenses ],
+                backgroundColor: ['#43a047', '#f44336'],
+                borderWidth: 1
+            }
+        ],
+        labels: ['paid', 'remaining']
+    }
+}
+
+
+/**
+ * Creates the datasets for making the bar graph in the Accounts page.
+ * @param {Array<Account>} accounts: a list of accounts
+ * @return {Object}: an object with the datasets and labels for the graph
+ */
+function createAccountsGraphData(accounts) {
+    let data = [];
+    let colors = [];
+    let labels = [];
+
+    for (let i = 0; i < accounts.length; i++) {
+        data.push(accounts[i].balance.toFixed(2));
+        labels.push(accounts[i].name);
+        colors.push(`hsl(${(i * 55) % 359}, 100%, 70%)`);
+    }
+
+    return {
+        datasets: [
+            {
+                data: data,
+                backgroundColor: colors,
+                maxBarThickness: 50,
+            }
+        ],
+        labels: labels
+    }
+}
+
+
 export {
     createActivityGraphData,
-    createCategoryGraphData
+    createCategoryGraphData,
+    createTransactionsGraphData,
+    createSubscriptionsGraphData,
+    createAccountsGraphData
 }

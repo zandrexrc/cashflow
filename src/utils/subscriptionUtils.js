@@ -1,4 +1,31 @@
-import moment from 'moment';
+import { addMonths, addYears, isPast, isValid as isValidDate, setMonth, setYear } from 'date-fns';
+import { isValidCurrencyAmount } from './miscUtils';
+
+
+/**
+ * Calculate the next billing date of a subscription.
+ * @param {string} firstBillingDate: the first date the subscription was billed
+ * @param {string} cycle: the billing cycle ('monthly', 'yearly')
+ * @return {Date}: the next billing date of the subscription
+ */
+function calcNextBillingDate(firstBillingDate, cycle) {
+    let today = new Date();
+    let nextBillingDate = new Date(firstBillingDate);
+    nextBillingDate = setYear(nextBillingDate, today.getFullYear());
+
+    if (cycle === "monthly") {
+        nextBillingDate = setMonth(nextBillingDate, today.getMonth());
+
+        if (isPast(nextBillingDate)) {
+            nextBillingDate = addMonths(nextBillingDate, 1);
+        }
+    } else {
+        if (isPast(nextBillingDate)) {
+            nextBillingDate = addYears(nextBillingDate, 1);
+        }
+    }
+    return nextBillingDate;
+}
 
 
 /**
@@ -46,13 +73,14 @@ function calcYearlySubscriptions(subscriptions) {
     let remainingExpenses = 0;
     let monthlyExpenses = 0;
     let yearlyExpenses = 0;
+    const currentMonthExpenses = calcMonthlySubscriptions(subscriptions);
 
     // Log each subscription into the correct category (monthly / yearly)
     for (let i = 0; i < subscriptions.length; i++) {
         let date = new Date(subscriptions[i].firstBillingDate);
         if (subscriptions[i].cycle === "yearly") {
             yearlyExpenses += subscriptions[i].amount;
-            if (date > today) {
+            if (isPast(date)) {
                 remainingExpenses += subscriptions[i].amount;
             }
         }
@@ -63,7 +91,7 @@ function calcYearlySubscriptions(subscriptions) {
 
     // Calculate the remaining and total expenses in the current year
     let remainingMonthsInYear = 11 - today.getMonth();
-    remainingExpenses += monthlyExpenses * remainingMonthsInYear;
+    remainingExpenses += monthlyExpenses * remainingMonthsInYear - currentMonthExpenses.remainingExpenses;
     totalExpenses = (monthlyExpenses * 12) + yearlyExpenses;
 
     // Convert expenses into positive values
@@ -74,82 +102,72 @@ function calcYearlySubscriptions(subscriptions) {
 
 
 /**
- * Calculate the next billing date of a subscription.
- * @param {Date} firstBillingDate: the first date the subscription was billed
- * @param {string} cycle: the billing cycle ('monthly', 'yearly')
- * @return {Date}: the next billing date of the subscription
+ * Determines if a subscription passes the account filter.
+ * @param {String or number} term: the account filter ("all" or accountID)
+ * @param {Subscription} subscription: a subscription object
+ * @return {boolean}: true if the subscription passes the filter, false if not
  */
-function calcNextBillingDate(firstBillingDate, cycle) {
-    let today = new Date();
-    let daysInCurrentMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-    let nextBillingDate;
-
-    if (cycle === "monthly") {
-        if (firstBillingDate.getDate() > daysInCurrentMonth) {
-            nextBillingDate = new Date(today.getFullYear(), today.getMonth(), daysInCurrentMonth);
-        } else {
-            nextBillingDate = new Date(today.getFullYear(), today.getMonth(), firstBillingDate.getDate());
-        }
-
-        if (nextBillingDate < today) {
-            nextBillingDate = new Date(today.getFullYear(), today.getMonth() + 1, firstBillingDate.getDate());
-        }
-    } else {
-        nextBillingDate = new Date(today.getFullYear(), firstBillingDate.getMonth(), firstBillingDate.getDate());
-        if (nextBillingDate < today) {
-            nextBillingDate = new Date(today.getFullYear() + 1, firstBillingDate.getMonth(), firstBillingDate.getDate());
-        }
-    }
-    return nextBillingDate;
+const filterByAccount = (term, subscription) => {
+    return term === "All" || parseInt(term) === subscription.accountID;
 }
 
-
 /**
- * Returns a string describing the time left until the next billing date 
- * of a subscription (e.g. 'today', 'tomorrow', '3 days').
- * @param {Date} firstBillingDate: the first date the subscription was billed
- * @param {string} cycle: the billing cycle ('monthly', 'yearly')
- * @return {string}: when the next billing date is due
+ * Determines if a subscription passes the category filter.
+ * @param {String} term: the category filter ("all" or category name)
+ * @param {Subscription} subscription: a subscription object
+ * @return {boolean}: true if the subscription passes the filter, false if not
  */
-function printNextBillingDate(firstBillingDate, cycle) {
-    let today = moment();
-    let billingDate = moment(calcNextBillingDate(firstBillingDate, cycle));
-    let daysFromToday = billingDate.diff(today, "days");
-    
-    if (daysFromToday === 0) {
-        return "Today";
-    } else if (daysFromToday === 1) {
-        return "Tomorrow";
-    } else if (daysFromToday < 7) {
-        return `${daysFromToday} days`;
-    } else if (daysFromToday < 30) {
-        let weeks = Math.floor(daysFromToday / 7);
-        return weeks === 1 ? "1 week" : `${weeks} weeks`;
-    } else if (daysFromToday < 330) {
-        let months = Math.floor(daysFromToday / 30);
-        return months === 1 ? "1 month" : `${months} months`;
+const filterByCategory = (term, subscription) => {
+    if (subscription.category) {
+        return term === "All" || subscription.category === term;
     } else {
-        return "1 year";
+        return term === "All" || term === "Uncategorized";
     }
 }
 
 
 /**
- * Sorts two subscriptions based on their next billing dates
- * @param {Subscription} a: a subscription object
- * @param {Subscription} b: another subscription object
- * @return {number}: the difference between the next billing dates of a and b
+ * Filter the subscriptions list based on a given set of filtering conditions.
+ * @param {Array<Subscription>} subscriptions: a list of subscriptions
+ * @param {Object} filters: the filter conditions to be used 
+ * @return {Array<Subscription>}: the filtered list of subscriptions
  */
-function sortNextBillingDates(a, b) {
-    let date1 = calcNextBillingDate(new Date(a.firstBillingDate), a.cycle);
-    let date2 = calcNextBillingDate(new Date(b.firstBillingDate), b.cycle);
-    return date1 - date2;
+function filterSubscriptions(subscriptions, filters) {
+    return subscriptions.filter(s => (
+        filterByAccount(filters.account, s) 
+        && filterByCategory(filters.category, s)
+    )).sort((a, b) => new Date(a.nextBillingDate) - new Date(b.nextBillingDate));
+}
+
+
+/**
+ * Checks if a subscription has valid values and attributes
+ * @param {Subscription} subscription: the subscription to be validated
+ * @return {boolean}: true if the subscription is valid, false otherwise
+ */
+function validateSubscription(subscription) {
+    let isValid = false;
+
+    const hasAllRequiredAttributes = 
+        subscription.subscriptionID && subscription.name 
+        && subscription.firstBillingDate && subscription.cycle 
+        && subscription.amount && subscription.accountID;
+
+    if (hasAllRequiredAttributes) {
+        const dateisValid = isValidDate(new Date(subscription.firstBillingDate));
+        const nameIsValid = subscription.name.trim().length > 0;
+        const amountIsValid = isValidCurrencyAmount(subscription.amount);
+        isValid = dateisValid && nameIsValid && amountIsValid;
+    }
+
+    return isValid;
 }
 
 
 export {
+    calcNextBillingDate,
     calcMonthlySubscriptions,
     calcYearlySubscriptions,
-    printNextBillingDate,
-    sortNextBillingDates
+    filterSubscriptions,
+    validateSubscription
 };

@@ -1,5 +1,5 @@
 import fetch from 'cross-fetch';
-import { toggleIsFetching, setError } from './ui';
+import { toggleIsFetching, setError, showToast } from './ui';
 
 
 export function getTransactions() {
@@ -51,6 +51,7 @@ export function addTransaction(newTransaction) {
                     type: "ADD_TRANSACTION",
                     payload: payload
                 });
+                dispatch(showToast("Successfully added transaction", "success"));
             }
             catch (error) {
                 dispatch(setError(error));
@@ -83,6 +84,7 @@ export function editTransaction(id, newTransaction) {
                     type: "EDIT_TRANSACTION",
                     payload: payload
                 });
+                dispatch(showToast("Successfully edited transaction", "success"));
             }
             catch (error) {
                 dispatch(setError(error));
@@ -111,6 +113,7 @@ export function deleteTransaction(id) {
                     type: "DELETE_TRANSACTION",
                     payload: payload.transactionID
                 });
+                dispatch(showToast("Successfully deleted transaction", "success"));
             }
             catch (error) {
                 dispatch(setError(error));

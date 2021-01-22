@@ -1,14 +1,16 @@
+import { store } from '../redux/store';
+import { isValidCurrencyAmount } from './miscUtils';
+
+
 /**
- * Creates a map that connects account IDs to their respective account names.
- * @param {Array<Account>} accounts: a list of accounts
- * @return {Object}: a map having accountIDs as keys and account names as values 
+ * Returns the name of the account given by the account ID
+ * @param {number} accountId: the account ID
+ * @return {string}: the name of the account (empty string if no account matched )
  */
-function getAccountNames(accounts) {
-    let lookup = {};
-    for (let i = 0; i < accounts.length; i++) {
-        lookup[accounts[i].accountID] = accounts[i].name;
-    }
-    return lookup;
+function getAccountName(accountId) {
+    const accounts = store.getState().accounts;
+    const account = accounts.find(a => a.accountID === accountId);
+    return account ? account.name : '';
 }
 
 
@@ -42,7 +44,30 @@ function calcMostUsedAccounts(accounts, transactions) {
 }
 
 
+/**
+ * Checks if an account has valid values and attributes
+ * @param {Account} account: the account to be validated
+ * @return {boolean}: true if the account is valid, false otherwise
+ */
+function validateAccount(account) {
+    let isValid = false;
+
+    const hasAllRequiredAttributes = account.accountID && account.name 
+        && account.type && account.balance;
+
+    if (hasAllRequiredAttributes) {
+        const nameIsValid = account.name.trim().length > 0;
+        const typeIsValid = account.type.trim().length > 0;
+        const balanceIsValid = isValidCurrencyAmount(account.balance);
+        isValid = nameIsValid && typeIsValid && balanceIsValid;
+    }
+
+    return isValid;
+}
+
+
 export {
-    getAccountNames,
-    calcMostUsedAccounts
+    getAccountName,
+    calcMostUsedAccounts,
+    validateAccount
 };

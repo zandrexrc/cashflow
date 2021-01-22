@@ -1,5 +1,6 @@
 import fetch from 'cross-fetch';
-import { toggleIsFetching, setError } from './ui';
+import { toggleIsFetching, setError, showToast } from './ui';
+import { calcNextBillingDate } from '../../utils';
 
 
 export function getSubscriptions() {
@@ -12,6 +13,12 @@ export function getSubscriptions() {
 
                 if (payload.error) {
                     throw (payload.error);
+                }
+
+                // Calculate next billing date
+                for (let i = 0; i < payload.length; i++) {
+                    const nextBillingDate = calcNextBillingDate(payload[i].firstBillingDate, payload[i].cycle);
+                    payload[i] = { ...payload[i], nextBillingDate }
                 }
 
                 dispatch(toggleIsFetching(false));
@@ -46,11 +53,16 @@ export function addSubscription(newSubscription) {
                     throw (payload.error);
                 }
 
+                // Calculate next billing date
+                const nextBillingDate = calcNextBillingDate(payload.firstBillingDate, payload.cycle);
+                const subscription = { ...payload, nextBillingDate }
+
                 dispatch(toggleIsFetching(false));
                 dispatch({
                     type: "ADD_SUBSCRIPTION",
-                    payload: payload
+                    payload: subscription
                 });
+                dispatch(showToast("Successfully added subscription", "success"));
             }
             catch (error) {
                 dispatch(setError(error));
@@ -75,11 +87,16 @@ export function editSubscription(id, newSubscription) {
                     throw (payload.error);
                 }
 
+                // Calculate next billing date
+                const nextBillingDate = calcNextBillingDate(payload.firstBillingDate, payload.cycle);
+                const subscription = { ...payload, nextBillingDate }
+
                 dispatch(toggleIsFetching(false));
                 dispatch({
                     type: "EDIT_SUBSCRIPTION",
-                    payload: payload
+                    payload: subscription
                 });
+                dispatch(showToast("Successfully edited subscription", "success"));
             }
             catch (error) {
                 dispatch(setError(error));
@@ -108,6 +125,7 @@ export function deleteSubscription(id) {
                     type: "DELETE_SUBSCRIPTION",
                     payload: payload.subscriptionID
                 });
+                dispatch(showToast("Successfully deleted subscription", "success"));
             }
             catch (error) {
                 dispatch(setError(error));
