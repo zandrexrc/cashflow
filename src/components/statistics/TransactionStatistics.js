@@ -149,7 +149,7 @@ const TransactionStatistics = props => {
                         >
                             {
                                 (props.chartData.datasets[0].data[0] - 
-                                props.chartData.datasets[0].data[0])
+                                props.chartData.datasets[0].data[1])
                                 .toFixed(2)
                             }
                         </Typography>

@@ -1,6 +1,6 @@
 const initialState = {
     currency: 'NOK',
-    dateFormat: 'DD.MM.YYYY',
+    dateFormat: 'dd.MM.yyyy',
     appTheme: 'light'
 };
 

@@ -18,7 +18,6 @@ import {
     Toolbar,
     Typography
 } from '@material-ui/core';
-import { isValidCurrencyCode } from '../utils';
 
 
 const useStyles = makeStyles(theme => ({
@@ -65,11 +64,15 @@ const Settings = () => {
     const setAppTheme = event => 
         setState({ ...state, appTheme: event.target.value });
 
+    const validateCurrency = currency => {
+        return currency.length > 0 && currency.length <= 3;
+    }
+
     const saveSettings = () => {
-        if (isValidCurrencyCode(state.currency)) {
+        if (validateCurrency(state.currency)) {
             dispatch(editSettings({...state}));
         } else {
-            dispatch(showToast("Invalid currency", "error"));
+            dispatch(showToast("Currency code must be 1-3 characters", "error"));
         }
     };
 
@@ -93,10 +96,10 @@ const Settings = () => {
                             </Typography>
                             <FormControl>
                                 <TextField
-                                    error={state.currency.length !== 3}
-                                    helperText="Three-letter currency code"
+                                    error={!validateCurrency(state.currency)}
+                                    helperText="Currency symbol or code (max 3 characters)"
                                     onBlur={event => setCurrency(event)}
-                                    value={state.currency}
+                                    defaultValue={state.currency}
                                 />
                             </FormControl>
                         </CardContent>
