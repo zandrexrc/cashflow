@@ -154,7 +154,7 @@ const SubscriptionDetails = props => {
                                     Account
                                 </Typography>
                                 <Typography variant="h6" align="right">
-                                    {getAccountName(props.subscription.accountID)}
+                                    {getAccountName(props.subscription.accountId)}
                                 </Typography>
                             </div>
                         </div>

@@ -1,6 +1,6 @@
 const editTransaction = (items, newItem) => {
     let updatedItems = [...items];
-    let index = updatedItems.findIndex(t => t.transactionID === newItem.transactionID);
+    let index = updatedItems.findIndex(t => t.transactionId === newItem.transactionId);
     updatedItems[index] = newItem;
     return updatedItems;
 };
@@ -14,7 +14,7 @@ export const transactions = (state = [], action) => {
         case "EDIT_TRANSACTION":
             return editTransaction(state, action.payload)
         case "DELETE_TRANSACTION":
-            return state.filter(t => t.transactionID !== action.payload)
+            return state.filter(t => t.transactionId !== action.payload)
         case "DELETE_TRANSACTIONS_IN_ACCOUNT":
             return state.filter(t => t.accountID !== action.payload)
         default:

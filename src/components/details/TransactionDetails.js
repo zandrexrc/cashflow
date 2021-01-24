@@ -126,7 +126,7 @@ const TransactionDetails = props => {
                                     Account
                                 </Typography>
                                 <Typography variant="h6" align="right">
-                                    {getAccountName(props.transaction.accountID)}
+                                    {getAccountName(props.transaction.accountId)}
                                 </Typography>
                             </div>
                         </div>

@@ -57,12 +57,12 @@ const Accounts = () => {
 
     const editData = newData => {
         newData.balance = parseFloat(newData.balance);
-        dispatch(editAccount(newData.accountID, newData));
+        dispatch(editAccount(newData.accountId, newData));
         setState({ ...state, selectedAccount: newData, formTabIsOpen: false });
     }
 
     const deleteData = () => {
-        dispatch(deleteAccount(state.selectedAccount.accountID));
+        dispatch(deleteAccount(state.selectedAccount.accountId));
         dispatch(hideDialog());
         closeDetailsTab();
     }

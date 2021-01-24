@@ -1,6 +1,6 @@
 const editSubscription = (items, newItem) => {
     let updatedItems = [...items];
-    let index = updatedItems.findIndex(s => s.subscriptionID === newItem.subscriptionID);
+    let index = updatedItems.findIndex(s => s.subscriptionId === newItem.subscriptionId);
     updatedItems[index] = newItem;
     return updatedItems;
 };
@@ -14,7 +14,7 @@ export const subscriptions = (state = [], action) => {
         case "EDIT_SUBSCRIPTION":
             return editSubscription(state, action.payload)
         case "DELETE_SUBSCRIPTION":
-            return state.filter(s => s.subscriptionID !== action.payload)
+            return state.filter(s => s.subscriptionId !== action.payload)
         case "DELETE_SUBSCRIPTIONS_IN_ACCOUNT":
             return state.filter(s => s.accountID !== action.payload)
         default:

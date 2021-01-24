@@ -123,7 +123,7 @@ export function deleteSubscription(id) {
                 dispatch(toggleIsFetching(false));
                 dispatch({
                     type: "DELETE_SUBSCRIPTION",
-                    payload: payload.subscriptionID
+                    payload: payload.subscriptionId
                 });
                 dispatch(showToast("Successfully deleted subscription", "success"));
             }

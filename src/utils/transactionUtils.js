@@ -61,12 +61,12 @@ function getTransactionYears(transactions) {
 
 /**
  * Determines if a transaction passes the account filter.
- * @param {String or number} term: the account filter ("all" or accountID)
+ * @param {String or number} term: the account filter ("all" or accountId)
  * @param {Transaction} transaction: a transaction object
  * @return {boolean}: true if the transaction passes the filter, false if not
  */
 const filterByAccount = (term, transaction) => {
-    return term === "All" || parseInt(term) === transaction.accountID;
+    return term === "All" || parseInt(term) === transaction.accountId;
 }
 
 /**
@@ -123,8 +123,8 @@ function validateTransaction(transaction) {
     let isValid = false;
 
     const hasAllRequiredAttributes = 
-        transaction.transactionID && transaction.date && transaction.description 
-        && transaction.amount && transaction.accountID;
+        transaction.transactionId && transaction.date && transaction.description 
+        && transaction.amount && transaction.accountId;
 
     if (hasAllRequiredAttributes) {
         const dateisValid = isValidDate(new Date(transaction.date));

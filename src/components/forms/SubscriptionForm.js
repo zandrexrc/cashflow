@@ -59,11 +59,11 @@ const useStyles = makeStyles(theme => ({
 
 
 const newSubscription = {
-    subscriptionID: 'abcde',
+    subscriptionId: 'abcde',
     name: '',
     firstBillingDate: new Date(),
     cycle: 'monthly',
-    accountID: 1,
+    accountId: 1,
     category: '',
     amount: 0
 };
@@ -92,8 +92,8 @@ const SubscriptionForm = props => {
     const setAmount = amount => 
         setState({subscription: { ...state.subscription, amount: amount }});
 
-    const setAccount = accountID => 
-        setState({subscription: { ...state.subscription, accountID: accountID }});
+    const setAccount = accountId => 
+        setState({subscription: { ...state.subscription, accountId: accountId }});
 
     const setCategory = category => 
         setState({subscription: { ...state.subscription, category: category }});
@@ -109,7 +109,7 @@ const SubscriptionForm = props => {
         if (subscriptionIsValid) {
             state.subscription.firstBillingDate = dateStringToISO(state.subscription.firstBillingDate);
             state.subscription.amount = parseFloat(state.subscription.amount);
-            state.subscription.accountID = parseInt(state.subscription.accountID);
+            state.subscription.accountId = parseInt(state.subscription.accountId);
             props.submit(state.subscription);
         }
     };
@@ -183,7 +183,7 @@ const SubscriptionForm = props => {
                             showUncategorized
                         />
                         <AccountSelector
-                            selectedAccount={state.subscription.accountID.toString()}
+                            selectedAccount={state.subscription.accountId.toString()}
                             setAccount={setAccount}
                         />
                     </div>

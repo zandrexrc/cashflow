@@ -69,20 +69,20 @@ const Transactions = () => {
     // Manage data
     const addData = async (newData) => {
         await dispatch(addTransaction(newData));
-        dispatch(updateAccountBalance(newData.accountID, newData.amount));
+        dispatch(updateAccountBalance(newData.accountId, newData.amount));
         setState({ ...state, filters: initialFilters, formTabIsOpen: false });
     }
 
     const editData = async (newData) => {
-        await dispatch(editTransaction(newData.transactionID, newData));
-        dispatch(updateAccountBalance(newData.accountID, (newData.amount - state.selectedTransaction.amount)));
+        await dispatch(editTransaction(newData.transactionId, newData));
+        dispatch(updateAccountBalance(newData.accountId, (newData.amount - state.selectedTransaction.amount)));
         setState({ ...state, selectedTransaction: newData, formTabIsOpen: false });
     }
 
     const deleteData = async () => {
         const oldData = state.selectedTransaction;
-        await dispatch(deleteTransaction(oldData.transactionID));
-        dispatch(updateAccountBalance(oldData.accountID, -oldData.amount));
+        await dispatch(deleteTransaction(oldData.transactionId));
+        dispatch(updateAccountBalance(oldData.accountId, -oldData.amount));
         dispatch(hideDialog());
         closeDetailsTab();
     }
