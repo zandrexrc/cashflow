@@ -1,134 +1,112 @@
-const connection = require("../connection");
+const connection = require("../database/connection");
 
 const accountsQueries = {
-    async getAccounts(res) {
+    getAccounts(res) {
         try {
-            connection.dbQuery(async (db) => {
-                let accounts = [];
-            
-                let queryString = "SELECT accountID, name, type, balance FROM accounts";
-                let queryRows = await db.query(queryString);
-                queryRows.forEach((account) => {
-                    accounts.push({
-                        "accountID": account.accountID,
-                        "name": account.name,
-                        "type": account.type,
-                        "balance": account.balance
+            connection.query(async (db) => {
+                db.serialize(() => {
+                    const stmt = `SELECT accountId, name, type, balance
+                                    FROM accounts`;
+                    db.all(stmt, function (err, rows) {
+                        if (err) {
+                            throw err;
+                        }
+                        res.status(200).json(rows);
                     });
                 });
-            
-                res.status(200).json(accounts);
             });
         } catch (err) {
-            res.status(400).json({
+            res.status(404).json({
                 "error": "Failed to retrieve all accounts."
             });
         }
     },
-    
-    
-    async addAccount(req, res) {
+
+    addAccount(req, res) {
         try {
-            await connection.dbQuery(async (db) => {
-                let queryString = "INSERT INTO accounts(name, type, balance) " +
-                                "VALUES (?, ?, ?)";
-                await db.query(
-                    queryString,
-                    [
+            connection.query(async (db) => {
+                db.serialize(() => {
+                    const stmt = `INSERT INTO accounts (name, type, balance) 
+                                    VALUES (?, ?, ?)`;
+                    const params = [
                         req.body.name,
                         req.body.type,
                         req.body.balance
-                    ]
-                );
-        
-                // Get created account
-                queryString = "SELECT * FROM accounts WHERE accountID = " +
-                            "(SELECT MAX(accountID) FROM accounts)";
-                let queryRes = await db.query(queryString);
-                let account = queryRes[0];
-        
-                res.status(200).json({
-                    "accountID": account.accountID,
-                    "name": account.name,
-                    "type": account.type,
-                    "balance": account.balance
+                    ];
+                    
+                    db.run(stmt, params, function (err) {
+                        if (err) {
+                            throw err;
+                        }
+                        res.status(201).json({
+                            "accountId": this.lastID,
+                            "name": req.body.name,
+                            "type": req.body.type,
+                            "balance": req.body.balance
+                        });
+                    });
                 });
             });
         } catch (err) {
-            res.status(400).json({
+            res.status(500).json({
                 "error": "Failed to create a new account."
             });
         }
     },
-    
-    
-    async editAccount(req, res) {
+
+    editAccount(req, res) {
         try {
-            await connection.dbQuery(async (db) => {
-                let queryString = "UPDATE accounts " +
-                                "SET name = ?, type = ?, balance = ? " +
-                                "WHERE accountID = ?";
-                await db.query(
-                    queryString,
-                    [
+            connection.query(async (db) => {
+                db.serialize(() => {
+                    const stmt = `UPDATE accounts 
+                                    SET name = ?, type = ?, balance = ? 
+                                    WHERE accountID = ?`;
+                    const params = [
                         req.body.name,
                         req.body.type,
                         req.body.balance,
                         req.params.id
-                    ]
-                );
-        
-                // Get edited account
-                queryString = "SELECT * FROM accounts WHERE accountID = ?";
-                let queryRes = await db.query(queryString, [req.params.id]);
-                let account = queryRes[0];
-        
-                res.status(200).json({
-                    "accountID": account.accountID,
-                    "name": account.name,
-                    "type": account.type,
-                    "balance": account.balance
+                    ];
+                    
+                    db.run(stmt, params, function (err) {
+                        if (err) {
+                            throw err;
+                        }
+                    }).get(`SELECT * FROM accounts WHERE accountID = ?`, 
+                            [req.params.id], function (err, row) {
+                        if (err) {
+                            throw err;
+                        }
+                        res.status(201).json(row);
+                    });
                 });
-            })
+            });
         } catch (err) {
-            res.status(400).json({
+            res.status(500).json({
                 "error": "Failed to edit the account."
             });
         }
     },
-    
-    
-    async deleteAccount(req, res) {
-        try {
-            await connection.dbQuery(async (db) => {
-                let accountID = req.params.id;
 
-                // Throw error if account to be deleted does not exist
-                let queryString = "SELECT * FROM accounts WHERE accountID = ?";
-                let queryRes = await db.query(queryString, [accountID]);
-                if (queryRes.length === 0) {
-                    throw (queryRes);
-                }
-        
-                // Delete related transactions
-                queryString = "DELETE FROM transactions WHERE accountID = ?";
-                await db.query(queryString, [accountID]);
-        
-                // Delete related subscriptions
-                queryString = "DELETE FROM subscriptions WHERE accountID = ?";
-                await db.query(queryString, [accountID]);
-        
-                // Delete account
-                queryString = "DELETE FROM accounts WHERE accountID = ?";
-                await db.query(queryString, [accountID]);
-        
-                res.status(200).json({
-                    "accountID": parseInt(accountID),
-                    "deleted": true
+    deleteAccount(req, res) {
+        try {
+            connection.query(async (db) => {
+                db.serialize(() => {
+                    const stmt = `DELETE FROM accounts WHERE accountId = ?`;
+                    
+                    db.run(stmt, req.params.id, function (err) {
+                        if (err) {
+                            throw (err);
+                        }
+                        res.status(200).json({
+                            "accountId": parseInt(req.params.id),
+                            "deleted": true
+                        });
+                    });
                 });
-            })
+            });
         } catch (err) {
-            res.status(400).json({
+            res.status(500).json({
                 "error": "Failed to delete the account."
             });
         }

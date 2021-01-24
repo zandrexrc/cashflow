@@ -1,155 +1,121 @@
-const connection = require("../connection");
+const connection = require("../database/connection");
 
 const transactionsQueries = {
-    async getTransactions(res) {
+    getTransactions(res) {
         try {
-            connection.dbQuery(async (db) => {
-                let transactions = [];
-            
-                let queryString = "SELECT transactionID, date, description, " +
-                                "accountID, category, amount FROM transactions";
-                let queryRows = await db.query(queryString);
-                queryRows.forEach((transaction) => {
-                    transactions.push({
-                        "transactionID": transaction.transactionID,
-                        "date": transaction.date,
-                        "description": transaction.description,
-                        "accountID": transaction.accountID,
-                        "category": transaction.category,
-                        "amount": transaction.amount
+            connection.query(async (db) => {
+                db.serialize(() => {
+                    const stmt = `SELECT transactionId, date, description, 
+                                    accountId, category, amount 
+                                    FROM transactions`;
+                    db.all(stmt, function (err, rows) {
+                        if (err) {
+                            throw err;
+                        }
+                        res.status(200).json(rows);
                     });
                 });
-            
-                res.status(200).json(transactions);
             });
         } catch (err) {
-            res.status(400).json({
+            res.status(404).json({
                 "error": "Failed to retrieve all transactions."
             });
         }
     },
-    
-    
-    async addTransaction(req, res) {
+
+    addTransaction(req, res) {
         try {
-            await connection.dbQuery(async (db) => {
-                let queryString = "INSERT INTO transactions(date, description, " +
-                                "accountID, category, amount) " +
-                                "VALUES (?, ?, ?, ?, ?)";
-                await db.query(
-                    queryString,
-                    [
+            connection.query(async (db) => {
+                db.serialize(() => {
+                    const stmt = `INSERT INTO transactions (date, description, 
+                                    accountId, category, amount) 
+                                    VALUES (?, ?, ?, ?, ?)`;
+                    const params = [
                         req.body.date,
                         req.body.description,
-                        req.body.accountID,
+                        req.body.accountId,
                         req.body.category,
                         req.body.amount
-                    ]
-                );
-
-                // Update account balance
-                queryString = "UPDATE accounts SET balance = balance + ? WHERE accountID = ?";
-                await db.query(queryString, [req.body.amount, req.body.accountID]);
-        
-                // Get created transaction
-                queryString = "SELECT * FROM transactions WHERE transactionID = " +
-                            "(SELECT MAX(transactionID) FROM transactions)";
-                let queryRes = await db.query(queryString);
-                let transaction = queryRes[0];
-        
-                res.status(200).json({
-                    "transactionID": transaction.transactionID,
-                    "date": transaction.date,
-                    "description": transaction.description,
-                    "accountID": transaction.accountID,
-                    "category": transaction.category,
-                    "amount": transaction.amount
+                    ];
+                    
+                    db.run(stmt, params, function (err) {
+                        if (err) {
+                            throw err;
+                        }
+                        res.status(201).json({
+                            "transactionId": this.lastID,
+                            "date": req.body.date,
+                            "description": req.body.description,
+                            "accountId": parseInt(req.body.accountId),
+                            "category": req.body.category,
+                            "amount": parseFloat(req.body.amount)
+                        });
+                    });
                 });
             });
         } catch (err) {
-            res.status(400).json({
+            res.status(500).json({
                 "error": "Failed to create a new transaction."
             });
         }
     },
-    
-    
-    async editTransaction(req, res) {
-        try {
-            await connection.dbQuery(async (db) => {
-                // Get old transaction
-                let queryString = "SELECT amount FROM transactions WHERE transactionID = ?";
-                let queryRes = await db.query(queryString, [req.params.id]);
-                let oldAmount = queryRes[0].amount;
 
-                queryString = "UPDATE transactions " +
-                            "SET date = ?, description = ?, accountID = ?, " +
-                            "category = ?, amount = ? " +
-                            "WHERE transactionID = ?";
-                await db.query(
-                    queryString,
-                    [
+    editTransaction(req, res) {
+        try {
+            connection.query(async (db) => {
+                db.serialize(() => {
+                    const stmt = `UPDATE transactions 
+                                    SET date = ?, description = ?, 
+                                    accountId = ?, category = ?, amount = ? 
+                                    WHERE transactionId = ?`;
+                    const params = [
                         req.body.date,
                         req.body.description,
-                        req.body.accountID,
+                        req.body.accountId,
                         req.body.category,
                         req.body.amount,
                         req.params.id
-                    ]
-                );
-
-                // Update account balance
-                queryString = "UPDATE accounts SET balance = balance + ? WHERE accountID = ?";
-                await db.query(queryString, [(parseFloat(req.body.amount) - parseFloat(oldAmount)), req.body.accountID]);
-        
-                // Get edited transaction
-                queryString = "SELECT * FROM transactions WHERE transactionID = ?";
-                queryRes = await db.query(queryString, [req.params.id]);
-                let transaction = queryRes[0];
-        
-                res.status(200).json({
-                    "transactionID": transaction.transactionID,
-                    "date": transaction.date,
-                    "description": transaction.description,
-                    "accountID": transaction.accountID,
-                    "category": transaction.category,
-                    "amount": transaction.amount
+                    ];
+                    
+                    db.run(stmt, params, function (err) {
+                        if (err) {
+                            throw err;
+                        }
+                    }).get(`SELECT * FROM transactions WHERE transactionId = ?`, 
+                            [req.params.id], function (err, row) {
+                        if (err) {
+                            throw err;
+                        }
+                        res.status(201).json(row);
+                    });
                 });
-            })
+            });
         } catch (err) {
-            res.status(400).json({
+            res.status(500).json({
                 "error": "Failed to edit the transaction."
             });
         }
     },
-    
-    
-    async deleteTransaction(req, res) {
+
+    deleteTransaction(req, res) {
         try {
-            await connection.dbQuery(async (db) => {
-
-                // Throw error if transaction to be deleted does not exist
-                let queryString = "SELECT * FROM transactions WHERE transactionID = ?";
-                let queryRes = await db.query(queryString, [req.params.id]);
-                if (queryRes.length === 0) {
-                    throw (queryRes);
-                }
-
-                // Delete transaction
-                queryString = "DELETE FROM transactions WHERE transactionID = ?";
-                await db.query(queryString, [req.params.id]);
-
-                // Update account balance
-                queryString = "UPDATE accounts SET balance = balance - ? WHERE accountID = ?";
-                await db.query(queryString, [queryRes[0].amount, queryRes[0].accountID]);
-        
-                res.status(200).json({
-                    "transactionID": parseInt(req.params.id),
-                    "deleted": true
+            connection.query(async (db) => {
+                db.serialize(() => {
+                    const stmt = `DELETE FROM transactions WHERE transactionId = ?`;
+                    
+                    db.run(stmt, req.params.id, function (err) {
+                        if (err) {
+                            throw (err);
+                        }
+                        res.status(200).json({
+                            "transactionId": parseInt(req.params.id),
+                            "deleted": true
+                        });
+                    });
                 });
-            })
+            });
         } catch (err) {
-            res.status(400).json({
+            res.status(500).json({
                 "error": "Failed to delete the transaction."
             });
         }
