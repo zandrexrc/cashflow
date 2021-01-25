@@ -31,9 +31,10 @@
     "util": "^0.12.1"
   },
   "scripts": {
-    "start": "npm-run-all --parallel start:server start:web",
-    "start:web": "react-scripts start",
+    "start": "node src/server/index.js",
+    "start:dev": "npm-run-all --parallel start:server start:web",
     "start:server": "nodemon --watch src/server src/server/index.js",
+    "start:web": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

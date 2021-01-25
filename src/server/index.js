@@ -1,15 +1,21 @@
 // set up modules
 const express = require("express");
 const app = express();
+const path = require("path");
 
 // app configuration
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.resolve(__dirname, '../../build')));
 app.use(express.json());
 app.use(express.json({type: 'application/vnd.api+json'}));
 app.use(express.urlencoded({extended: true}));
 
-// routes
+// API endpoints
 require("./routes")(app);
+
+// Root 
+app.get("/", function(req, res) {
+    res.sendFile(path.resolve(__dirname, '../../build', 'index.html'));
+});
 
 // listen
 const port = require("./config")["port"];
