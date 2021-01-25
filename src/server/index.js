@@ -12,12 +12,12 @@ app.use(express.urlencoded({extended: true}));
 // API endpoints
 require("./routes")(app);
 
-// Root 
+// root 
 app.get("/", function(req, res) {
     res.sendFile(path.resolve(__dirname, '../../build', 'index.html'));
 });
 
 // listen
-const port = require("./config")["port"];
+const port = 8080;
 app.listen(port);
 console.log(`Listening to port ${port}`);
