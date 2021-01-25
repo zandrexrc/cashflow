@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { ListContainer } from './ListContainer';
-import { printDate } from '../../utils';
+import { printDate, transactionsToCsv } from '../../utils';
 
 
 const renderRow = props => {
@@ -50,6 +50,7 @@ const TransactionList = props => {
     return (
         <ListContainer
             currency={props.currency}
+            export={() => transactionsToCsv(props.transactions)}
             items={props.transactions}
             openDetailsTab={props.openDetailsTab}
             openFormTab={props.openFormTab}

@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import SearchIcon from "@material-ui/icons/Search";
 import AddIcon from "@material-ui/icons/Add";
-import { IconButton, InputAdornment, TextField } from '@material-ui/core';
+import MoreVert from '@material-ui/icons/MoreVert';
+import { IconButton, InputAdornment, Menu, MenuItem, TextField } from '@material-ui/core';
 import { FixedSizeList } from 'react-window';
 
 
@@ -77,6 +78,7 @@ const useStyles = makeStyles(theme => ({
 const ListContainer = props => {
     const classes = useStyles();
 
+    // Display search matches
     const [displayedItems, setDisplayedItems] = React.useState(props.items);
 
     React.useEffect(() => {
@@ -90,6 +92,15 @@ const ListContainer = props => {
             (item.description && filter.test(item.description))
         ));
     }
+
+    // Dropdown menu
+    const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
+ 
+    const showMenu = event => 
+        setMenuAnchorEl(event.currentTarget);
+ 
+    const hideMenu = () => 
+        setMenuAnchorEl(null);
 
     return (
         <div className={classes.root}>
@@ -109,9 +120,23 @@ const ListContainer = props => {
                         }}
                         onChange={event => search(event.target.value)}
                     />
-                    <IconButton onClick={props.openFormTab}>
-                        <AddIcon fontSize="small" />
-                    </IconButton>
+                    <div className="buttons">
+                        <IconButton onClick={props.openFormTab}>
+                            <AddIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={showMenu}>
+                            <MoreVert fontSize="small" />
+                        </IconButton>
+                        <Menu
+                            anchorEl={menuAnchorEl}
+                            keepMounted
+                            open={Boolean(menuAnchorEl)}
+                            onClose={hideMenu}
+                        >
+                            <MenuItem onClick={hideMenu}>Import from CSV</MenuItem>
+                            <MenuItem onClick={props.export}>Download as CSV</MenuItem>
+                        </Menu>
+                    </div>
                 </div>
             }
             <FixedSizeList
@@ -136,6 +161,7 @@ const ListContainer = props => {
 ListContainer.propTypes = {
     children: PropTypes.func.isRequired,
     currency: PropTypes.string.isRequired,
+    export: PropTypes.func,
     items: PropTypes.array.isRequired,
     openDetailsTab: PropTypes.func,
     openFormTab: PropTypes.func,
