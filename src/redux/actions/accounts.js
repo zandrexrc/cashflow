@@ -111,15 +111,15 @@ export function deleteAccount(id) {
                 dispatch(toggleIsFetching(false));
                 dispatch({
                     type: "DELETE_TRANSACTIONS_IN_ACCOUNT",
-                    payload: payload.accountID
+                    payload: payload.accountId
                 });
                 dispatch({
                     type: "DELETE_SUBSCRIPTIONS_IN_ACCOUNT",
-                    payload: payload.accountID
+                    payload: payload.accountId
                 });
                 dispatch({
                     type: "DELETE_ACCOUNT",
-                    payload: payload.accountID
+                    payload: payload.accountId
                 });
                 dispatch(showToast("Successfully deleted account", "success"));
             }

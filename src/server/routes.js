@@ -78,12 +78,4 @@ module.exports = function(app) {
     console.log("edit settings");
     queries.settings.editSettings(req, res);
   });
-
-
-  // ROOT ==================================================
-  app.get("/", function(req, res) {
-    res.json({
-        message: "you shouldnt be here"
-    });
-  });
 };

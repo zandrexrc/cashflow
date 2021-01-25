@@ -111,7 +111,7 @@ export function deleteTransaction(id) {
                 dispatch(toggleIsFetching(false));
                 dispatch({
                     type: "DELETE_TRANSACTION",
-                    payload: payload.transactionID
+                    payload: payload.transactionId
                 });
                 dispatch(showToast("Successfully deleted transaction", "success"));
             }

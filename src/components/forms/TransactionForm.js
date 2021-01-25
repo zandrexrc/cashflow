@@ -53,11 +53,11 @@ const useStyles = makeStyles(theme => ({
 
 
 const newTransaction = {
-    transactionID: 'abcde',
+    transactionId: 'abcde',
     date: new Date(),
     description: '',
     amount: 0,
-    accountID: 1,
+    accountId: 1,
     category: ''
 };
 
@@ -82,8 +82,8 @@ const TransactionForm = props => {
     const setAmount = amount => 
         setState({transaction: { ...state.transaction, amount: amount }});
 
-    const setAccount = accountID => 
-        setState({transaction: { ...state.transaction, accountID: accountID }});
+    const setAccount = accountId => 
+        setState({transaction: { ...state.transaction, accountId: accountId }});
 
     const setCategory = category => 
         setState({transaction: { ...state.transaction, category: category }});
@@ -101,8 +101,10 @@ const TransactionForm = props => {
         if (transactionIsValid) {
             state.transaction.date = dateStringToISO(state.transaction.date);
             state.transaction.amount = parseFloat(state.transaction.amount);
-            state.transaction.accountID = parseInt(state.transaction.accountID);
+            state.transaction.accountId = parseInt(state.transaction.accountId);
             props.submit(state.transaction);
+        } else {
+            console.log(state.transaction);
         }
     };
 
@@ -161,7 +163,7 @@ const TransactionForm = props => {
                             showUncategorized
                         />
                         <AccountSelector
-                            selectedAccount={state.transaction.accountID.toString()}
+                            selectedAccount={state.transaction.accountId.toString()}
                             setAccount={setAccount}
                         />
                     </div>

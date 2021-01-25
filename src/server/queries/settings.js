@@ -1,42 +1,51 @@
-const connection = require("../connection");
+const connection = require("../database/connection");
 
 const settingsQueries = {
-    async getSettings(res) {
+    getSettings(res) {
         try {
-            connection.dbQuery(async (db) => {
-                let queryString = "SELECT userSettings FROM settings";
-                let queryRes = await db.query(queryString);
-            
-                res.status(200).json(JSON.parse(queryRes[0].userSettings));
+            connection.query(async (db) => {
+                db.serialize(() => {
+                    const stmt = `SELECT userSettings FROM settings`;
+                    db.get(stmt, function (err, row) {
+                        if (err) {
+                            throw err;
+                        }
+                        const userSettings = JSON.parse(row.userSettings);
+                        res.status(200).json(userSettings);
+                    });
+                });
             });
         } catch (err) {
-            res.status(400).json({
+            res.status(404).json({
                 "error": "Failed to retrieve settings."
             });
         }
     },
-    
-    async editSettings(req, res) {
-        try {
-            await connection.dbQuery(async (db) => {
-                let settingsString = JSON.stringify({
-                    currency: req.body.currency,
-                    dateFormat: req.body.dateFormat,
-                    appTheme: req.body.appTheme,
-                });
-        
-                let queryString = "UPDATE settings SET userSettings = ? WHERE userID = ?";
-                await db.query(queryString, [settingsString, 1]);
 
-                // Get edited settings
-                queryString = "SELECT userSettings FROM settings";
-                let queryRes = await db.query(queryString, [req.params.id]);
-        
-                res.status(200).json(JSON.parse(queryRes[0].userSettings));
-            })
+    editSettings(req, res) {
+        try {
+            connection.query(async (db) => {
+                db.serialize(() => {
+                    const stmt = `UPDATE settings SET userSettings = ? WHERE userId = ?`;
+                    const settingsString = JSON.stringify(req.body);
+                    
+                    db.run(stmt, [settingsString, 1], function (err) {
+                        if (err) {
+                            throw err;
+                        }
+                    }).get(`SELECT userSettings FROM settings WHERE userId = ?`, 
+                            1, function (err, row) {
+                        if (err) {
+                            throw err;
+                        }
+                        const userSettings = JSON.parse(row.userSettings);
+                        res.status(201).json(userSettings);
+                    });
+                });
+            });
         } catch (err) {
-            res.status(400).json({
-                "error": "Failed to edit settings."
+            res.status(500).json({
+                "error": "Failed to edit the settings."
             });
         }
     }

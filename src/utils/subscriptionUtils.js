@@ -103,12 +103,12 @@ function calcYearlySubscriptions(subscriptions) {
 
 /**
  * Determines if a subscription passes the account filter.
- * @param {String or number} term: the account filter ("all" or accountID)
+ * @param {String or number} term: the account filter ("all" or accountId)
  * @param {Subscription} subscription: a subscription object
  * @return {boolean}: true if the subscription passes the filter, false if not
  */
 const filterByAccount = (term, subscription) => {
-    return term === "All" || parseInt(term) === subscription.accountID;
+    return term === "All" || parseInt(term) === subscription.accountId;
 }
 
 /**
@@ -149,9 +149,9 @@ function validateSubscription(subscription) {
     let isValid = false;
 
     const hasAllRequiredAttributes = 
-        subscription.subscriptionID && subscription.name 
+        subscription.subscriptionId && subscription.name 
         && subscription.firstBillingDate && subscription.cycle 
-        && subscription.amount && subscription.accountID;
+        && subscription.amount && subscription.accountId;
 
     if (hasAllRequiredAttributes) {
         const dateisValid = isValidDate(new Date(subscription.firstBillingDate));

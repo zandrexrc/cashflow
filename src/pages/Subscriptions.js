@@ -77,12 +77,12 @@ const Subscriptions = () => {
     }
 
     const editData = newData => {
-        dispatch(editSubscription(newData.subscriptionID, newData));
+        dispatch(editSubscription(newData.subscriptionId, newData));
         setState({ ...state, selectedSubscription: newData, formTabIsOpen: false });
     }
 
     const deleteData = () => {
-        dispatch(deleteSubscription(state.selectedSubscription.subscriptionID));
+        dispatch(deleteSubscription(state.selectedSubscription.subscriptionId));
         dispatch(hideDialog());
         closeDetailsTab();
     }

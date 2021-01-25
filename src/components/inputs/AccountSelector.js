@@ -21,7 +21,7 @@ const AccountSelector = props => {
                     <MenuItem value={"All"}>All</MenuItem>
                 }
                 {accounts.map((obj, index) => (
-                    <MenuItem key={index} value={obj.accountID.toString()}>
+                    <MenuItem key={index} value={obj.accountId.toString()}>
                         {obj.name}
                     </MenuItem>
                 ))}

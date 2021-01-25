@@ -9,7 +9,7 @@ import { isValidCurrencyAmount } from './miscUtils';
  */
 function getAccountName(accountId) {
     const accounts = store.getState().accounts;
-    const account = accounts.find(a => a.accountID === accountId);
+    const account = accounts.find(a => a.accountId === accountId);
     return account ? account.name : '';
 }
 
@@ -24,7 +24,7 @@ function calcMostUsedAccounts(accounts, transactions) {
     // Track the number of occurences of each account
     let accountsCounter = {};
     for (let i = 0; i < transactions.length; i++) {
-        let id = transactions[i].accountID;
+        let id = transactions[i].accountId;
         accountsCounter[id] = accountsCounter[id] ? accountsCounter[id] + 1 : 1;
     }
 
@@ -52,7 +52,7 @@ function calcMostUsedAccounts(accounts, transactions) {
 function validateAccount(account) {
     let isValid = false;
 
-    const hasAllRequiredAttributes = account.accountID && account.name 
+    const hasAllRequiredAttributes = account.accountId && account.name 
         && account.type && account.balance;
 
     if (hasAllRequiredAttributes) {
