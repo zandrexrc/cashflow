@@ -58,8 +58,6 @@ function accountsToCsv(accounts) {
 
     // Convert pre-processed accounts to csv
     const csv = papa.unparse(preProcessedAccounts);
-
-    // Export csv
     exportCsv(csv, 'accounts.csv');
 }
 
@@ -87,8 +85,6 @@ function subscriptionsToCsv(subscriptions) {
 
     // Convert pre-processed subscriptions to csv
     const csv = papa.unparse(preProcessedSubscriptions);
-
-    // Export csv
     exportCsv(csv, 'subscriptions.csv');
 }
 
@@ -115,9 +111,53 @@ function transactionsToCsv(transactions) {
 
     // Convert pre-processed transactions to csv
     const csv = papa.unparse(preProcessedTransactions);
-
-    // Export csv
     exportCsv(csv, 'transactions.csv');
+}
+
+
+/**
+ * Generates a sample csv file.
+ * @param {string} type: the type of data ('account' | 'subscription' | 'transaction') 
+ * @return {string}: a csv file
+ */
+function generateSampleCsv(type) {
+    let data = [];
+
+    switch (type) {
+        case 'account':
+            data = [{
+                name: 'Personal',
+                type: 'Checking',
+                balance: 4200.42
+            }];
+            break
+        case 'subscription':
+            data = [{
+                name: 'Netflix',
+                firstBillingDate: '2020-07-11',
+                cycle: 'monthly',
+                account: 'Personal',
+                category: 'Entertainment',
+                amount: -89,
+            }];
+            break
+        case 'transaction':
+            data = [{
+                date: '2020-07-11',
+                description: 'Lunch with Alice and Bob',
+                account: 'Personal',
+                category: 'Food',
+                amount: -99.99
+            }];
+            break
+        default:
+            data = [];
+    }
+
+    // Convert data to csv
+    const csv = papa.unparse(data);
+    const blob = new Blob([csv]);
+    return URL.createObjectURL(blob, { type: 'text/plain' });
 }
 
 
@@ -125,4 +165,5 @@ export {
     accountsToCsv,
     subscriptionsToCsv,
     transactionsToCsv,
+    generateSampleCsv,
 };

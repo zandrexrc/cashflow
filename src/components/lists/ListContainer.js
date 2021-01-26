@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import SearchIcon from "@material-ui/icons/Search";
-import AddIcon from "@material-ui/icons/Add";
+import SearchIcon from '@material-ui/icons/Search';
+import AddIcon from '@material-ui/icons/Add';
 import MoreVert from '@material-ui/icons/MoreVert';
+import PublishIcon from '@material-ui/icons/Publish';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import { IconButton, InputAdornment, Menu, MenuItem, TextField } from '@material-ui/core';
 import { FixedSizeList } from 'react-window';
+import { ImportFileDialog } from '../inputs/ImportFileDialog';
 
 
 const useStyles = makeStyles(theme => ({
@@ -102,6 +105,18 @@ const ListContainer = props => {
     const hideMenu = () => 
         setMenuAnchorEl(null);
 
+    // Import file dialog
+    const [importFileDialogIsOpen, setImportFileDialogIsOpen] = React.useState(false);
+
+    const toggleImportFileDialog = () => {
+        hideMenu();
+        setImportFileDialogIsOpen(!importFileDialogIsOpen);
+    }
+
+    const processImportedFile = (file) => {
+        setImportFileDialogIsOpen(false);
+    }
+
     return (
         <div className={classes.root}>
             {
@@ -133,8 +148,12 @@ const ListContainer = props => {
                             open={Boolean(menuAnchorEl)}
                             onClose={hideMenu}
                         >
-                            <MenuItem onClick={hideMenu}>Import from CSV</MenuItem>
-                            <MenuItem onClick={props.export}>Download as CSV</MenuItem>
+                            <MenuItem onClick={toggleImportFileDialog}>
+                                <PublishIcon fontSize="small" /> Import from CSV
+                            </MenuItem>
+                            <MenuItem onClick={props.export}>
+                                <GetAppIcon fontSize="small" /> Download as CSV
+                            </MenuItem>
                         </Menu>
                     </div>
                 </div>
@@ -153,16 +172,27 @@ const ListContainer = props => {
             >
                 {props.children}
             </FixedSizeList>
+            {
+                props.sampleFile && 
+                <ImportFileDialog
+                    cancel={toggleImportFileDialog}
+                    submit={processImportedFile}
+                    isOpen={importFileDialogIsOpen}
+                    sampleFile={props.sampleFile}
+                />
+            }
         </div>
-    )
+    )   
 }
 
 // PropTypes
 ListContainer.propTypes = {
     children: PropTypes.func.isRequired,
     currency: PropTypes.string.isRequired,
+    import: PropTypes.func,
     export: PropTypes.func,
     items: PropTypes.array.isRequired,
+    sampleFile: PropTypes.string,
     openDetailsTab: PropTypes.func,
     openFormTab: PropTypes.func,
 };

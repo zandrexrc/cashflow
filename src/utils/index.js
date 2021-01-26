@@ -35,4 +35,5 @@ export {
     accountsToCsv,
     subscriptionsToCsv,
     transactionsToCsv,
+    generateSampleCsv,
 } from './csvUtils';

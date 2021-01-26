@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { ListContainer } from './ListContainer';
-import { printDate, subscriptionsToCsv } from '../../utils';
+import { printDate, subscriptionsToCsv, generateSampleCsv } from '../../utils';
 
 
 const renderRow = props => {
@@ -54,6 +54,7 @@ const SubscriptionList = props => {
             items={props.subscriptions}
             openDetailsTab={props.openDetailsTab}
             openFormTab={props.openFormTab}
+            sampleFile={generateSampleCsv('subscription')}
         >
             {renderRow}
         </ListContainer>
