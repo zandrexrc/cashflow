@@ -15,6 +15,38 @@ function getAccountName(accountId) {
 
 
 /**
+ * Creates a mapping of accountIDs to their respective account names
+ * @return {Object}: a map of account IDs and names
+ */
+function getAccountNames() {
+    const accounts = store.getState().accounts;
+    const accountNames = {};
+
+    for(let i = 0; i < accounts.length; i++) {
+        accountNames[accounts[i].accountId] = accounts[i].name;
+    }
+
+    return accountNames;
+}
+
+
+/**
+ * Creates a mapping of account names to their respective account IDs
+ * @return {Object}: a map of account names and IDs
+ */
+function getAccountIds() {
+    const accounts = store.getState().accounts;
+    const accountIds = {};
+
+    for(let i = 0; i < accounts.length; i++) {
+        accountIds[accounts[i].name] = accounts[i].accountId;
+    }
+
+    return accountIds;
+}
+
+
+/**
  * Returns the two most used accounts based on the given transactions.
  * @param {Array<Account>} accounts: a list of accounts
  * @param {Array<Transaction>} transactions: a list of transactions
@@ -68,6 +100,8 @@ function validateAccount(account) {
 
 export {
     getAccountName,
+    getAccountNames,
+    getAccountIds,
     calcMostUsedAccounts,
     validateAccount
 };

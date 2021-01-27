@@ -114,6 +114,7 @@ const ListContainer = props => {
     }
 
     const processImportedFile = (file) => {
+        props.import(file);
         setImportFileDialogIsOpen(false);
     }
 

@@ -1,21 +1,5 @@
 import papa from 'papaparse';
-import { store } from '../redux/store';
-
-
-/**
- * Creates a mapping of accountIDs to their respective account names
- * @return {Object}: a map of account IDs and names
- */
-function getAccountNames() {
-    const accounts = store.getState().accounts;
-    const accountNames = {};
-
-    for(let i = 0; i < accounts.length; i++) {
-        accountNames[accounts[i].accountId] = accounts[i].name;
-    }
-
-    return accountNames;
-}
+import { getAccountNames, getAccountIds } from './accountUtils';
 
 
 /**
@@ -157,7 +141,39 @@ function generateSampleCsv(type) {
     // Convert data to csv
     const csv = papa.unparse(data);
     const blob = new Blob([csv]);
-    return URL.createObjectURL(blob, { type: 'text/plain' });
+    return URL.createObjectURL(blob, { type: 'text/csv' });
+}
+
+
+/**
+ * Processes a list of transactions into a CSV string.
+ * @param {File} csv: a list of transaction objects
+ * @return {string}: the transactions in a csv format
+ */
+function csvToTransactions(csv) {
+    const accountIds = getAccountIds();
+
+    // Parse file
+    let rowCount = 1;
+    let parsedTransactions = [];
+    let errors = [];
+    papa.parse(csv, {
+        header: true,
+        dynamicTyping: true,
+        worker: true,
+        step: function (result, parser) {
+            rowCount += 1;
+            // Validate row
+            if (result.errors.length > 0) {
+                parser.abort();
+            }
+            console.log(result.data);
+            console.log(rowCount);
+        },
+        complete: function () {
+            console.log('Parsing complete!', rowCount);
+        }
+    });
 }
 
 
@@ -166,4 +182,5 @@ export {
     subscriptionsToCsv,
     transactionsToCsv,
     generateSampleCsv,
+    csvToTransactions,
 };
