@@ -113,11 +113,6 @@ const ListContainer = props => {
         setImportFileDialogIsOpen(!importFileDialogIsOpen);
     }
 
-    const processImportedFile = (file) => {
-        props.import(file);
-        setImportFileDialogIsOpen(false);
-    }
-
     return (
         <div className={classes.root}>
             {
@@ -152,7 +147,7 @@ const ListContainer = props => {
                             <MenuItem onClick={toggleImportFileDialog}>
                                 <PublishIcon fontSize="small" /> Import from CSV
                             </MenuItem>
-                            <MenuItem onClick={props.export}>
+                            <MenuItem onClick={props.exportData}>
                                 <GetAppIcon fontSize="small" /> Download as CSV
                             </MenuItem>
                         </Menu>
@@ -177,7 +172,7 @@ const ListContainer = props => {
                 props.sampleFile && 
                 <ImportFileDialog
                     cancel={toggleImportFileDialog}
-                    submit={processImportedFile}
+                    importData={props.importData}
                     isOpen={importFileDialogIsOpen}
                     sampleFile={props.sampleFile}
                 />
@@ -190,8 +185,8 @@ const ListContainer = props => {
 ListContainer.propTypes = {
     children: PropTypes.func.isRequired,
     currency: PropTypes.string.isRequired,
-    import: PropTypes.func,
-    export: PropTypes.func,
+    importData: PropTypes.func,
+    exportData: PropTypes.func,
     items: PropTypes.array.isRequired,
     sampleFile: PropTypes.string,
     openDetailsTab: PropTypes.func,

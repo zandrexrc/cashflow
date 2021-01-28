@@ -1,13 +1,13 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAccount, editAccount, deleteAccount } from '../redux/actions/accounts';
-import { showDialog, hideDialog } from '../redux/actions/ui';
+import { addAccount, editAccount, deleteAccount, addMultipleAccounts } from '../redux/actions/accounts';
+import { setError, showDialog, hideDialog } from '../redux/actions/ui';
 import { makeStyles } from '@material-ui/core/styles';
 import { AccountDetails } from '../components/details/AccountDetails';
 import { AccountForm } from '../components/forms/AccountForm';
 import { AccountList } from '../components/lists/AccountList';
 import { AccountStatistics } from '../components/statistics/AccountStatistics';
-import { createAccountsGraphData } from '../utils';
+import { createAccountsGraphData, csvToAccounts } from '../utils';
 
 
 // Styles
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 const Accounts = () => {
     // Fetch items from Redux store
     const dispatch = useDispatch();
-    const accounts = useSelector(state => state.accounts);
+    const accounts = useSelector(state => state.accounts).sort((a, b) => b.balance - a.balance);
     const currency = useSelector(state => state.settings.currency);
 
     const [state, setState] = React.useState({
@@ -70,6 +70,16 @@ const Accounts = () => {
     const alertDelete = () => {
         dispatch(showDialog('Delete account?', deleteData));
     }
+
+    const importData = file => {
+        csvToAccounts(file, (error, result) => {
+            if (error) {
+                dispatch(setError(error));
+            } else {
+                dispatch(addMultipleAccounts(result));
+            }
+        });
+    }
     
 
     // Apply styles
@@ -81,6 +91,7 @@ const Accounts = () => {
             <AccountList
                 accounts={accounts}
                 currency={currency}
+                importData={importData}
                 openDetailsTab={openDetailsTab}
                 openFormTab={toggleFormTab}
             />

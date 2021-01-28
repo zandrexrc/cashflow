@@ -84,8 +84,7 @@ function calcMostUsedAccounts(accounts, transactions) {
 function validateAccount(account) {
     let isValid = false;
 
-    const hasAllRequiredAttributes = account.accountId && account.name 
-        && account.type && account.balance;
+    const hasAllRequiredAttributes = account.name && account.type && account.balance;
 
     if (hasAllRequiredAttributes) {
         const nameIsValid = account.name.trim().length > 0;

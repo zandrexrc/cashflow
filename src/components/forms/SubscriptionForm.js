@@ -59,7 +59,6 @@ const useStyles = makeStyles(theme => ({
 
 
 const newSubscription = {
-    subscriptionId: 'abcde',
     name: '',
     firstBillingDate: new Date(),
     cycle: 'monthly',

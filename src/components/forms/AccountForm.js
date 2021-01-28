@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import { IconButton, Paper, Slide, TextField } from '@material-ui/core';
-import { isValidCurrencyAmount, validateAccount } from '../../utils';
+import { getAccountNames, isValidCurrencyAmount, validateAccount } from '../../utils';
 
 
 const useStyles = makeStyles(theme => ({
@@ -50,7 +50,6 @@ const useStyles = makeStyles(theme => ({
 
 
 const newAccount = {
-    accountID: 'abcde',
     name: '',
     type: '',
     balance: 0,
@@ -59,6 +58,7 @@ const newAccount = {
 
 const AccountForm = props => {
     const classes = useStyles();
+    const accountNames = Object.values(getAccountNames());
 
     const [state, setState] = React.useState({
         account: newAccount
@@ -77,16 +77,27 @@ const AccountForm = props => {
     const setBalance = balance => 
         setState({account: { ...state.account, balance: balance }});
 
+    const [nameError, setNameError] = React.useState('Must be filled out');
+
+    const changeName = name => {
+        if (name.trim().length === 0) {
+            setNameError('Must be filled out');
+        } else if (accountNames.includes(name)) {
+            setNameError('An account with the same name already exists');
+        } else {
+            setNameError('');
+            setName(name);
+        }
+    };
+
     const cancelChanges = () => {
         setState({account: props.account ? props.account : newAccount});
         props.close()
     };
 
     const saveChanges = () => {
-        // Validate account
         const accountIsValid = validateAccount(state.account);
 
-        // Submit form only if transaction is valid
         if (accountIsValid) {
             state.account.balance = parseFloat(state.account.balance);
             props.submit(state.account);
@@ -122,12 +133,9 @@ const AccountForm = props => {
                         margin="normal"
                         fullWidth
                         defaultValue={state.account.name}
-                        onBlur={event => setName(event.target.value)}
-                        error={state.account.name.trim().length === 0}
-                        helperText={
-                            state.account.name.trim().length === 0
-                            ? 'Must be filled out' : ''
-                        }
+                        onBlur={event => changeName(event.target.value)}
+                        error={Boolean(nameError)}
+                        helperText={nameError}
                     />
                    <TextField
                         type="number"

@@ -1,14 +1,14 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateAccountBalance } from '../redux/actions/accounts';
-import { addTransaction, editTransaction, deleteTransaction } from '../redux/actions/transactions';
-import { showDialog, hideDialog } from '../redux/actions/ui';
+import { addTransaction, editTransaction, deleteTransaction, addMultipleTransactions } from '../redux/actions/transactions';
+import { setError, showDialog, hideDialog } from '../redux/actions/ui';
 import { makeStyles } from '@material-ui/core/styles';
 import { TransactionDetails } from '../components/details/TransactionDetails';
 import { TransactionForm } from '../components/forms/TransactionForm';
 import { TransactionList } from '../components/lists/TransactionList';
 import { TransactionStatistics } from '../components/statistics/TransactionStatistics';
-import { filterTransactions, createTransactionsGraphData } from '../utils';
+import { createTransactionsGraphData, csvToTransactions, filterTransactions } from '../utils';
 
 
  // Styles
@@ -91,6 +91,16 @@ const Transactions = () => {
         dispatch(showDialog('Delete transaction?', deleteData));
     }
 
+    const importData = file => {
+        csvToTransactions(file, (error, result) => {
+            if (error) {
+                dispatch(setError(error));
+            } else {
+                dispatch(addMultipleTransactions(result));
+            }
+        });
+    }
+
     // Apply styles
     const classes = useStyles();
 
@@ -103,6 +113,7 @@ const Transactions = () => {
             />
             <TransactionList
                 currency={currency}
+                importData={importData}
                 openDetailsTab={openDetailsTab}
                 openFormTab={toggleFormTab}
                 transactions={displayedTransactions}

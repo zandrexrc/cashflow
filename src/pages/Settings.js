@@ -23,6 +23,7 @@ import {
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
+        height: '100vh',
         maxWidth: '100%',
         backgroundColor: theme.palette.background.default,
         '& .MuiToolbar-root': {

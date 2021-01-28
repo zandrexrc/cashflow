@@ -21,15 +21,25 @@ const ImportFileDialog = props => {
     const classes = useStyles();
     const [uploadedFile, setUploadedFile] = React.useState(null);
 
+    const closeDialog = () => {
+        props.cancel();
+        setUploadedFile(null);
+    };
+
     const chooseFile = () => {
         document.querySelector('#fileInput').click();
+    };
+
+    const submitFile = () => {
+        props.importData(uploadedFile);
+        closeDialog();
     };
 
     return (
         <Dialog 
             className={classes.root}
             open={props.isOpen} 
-            onClose={props.cancel}
+            onClose={closeDialog}
         >
             <DialogTitle>
                 Import data from file
@@ -53,7 +63,7 @@ const ImportFileDialog = props => {
                     <ul className="list">
                         <li>The file must be a valid csv file</li>
                         <li>Please don't upload a large file to avoid crashing the app!</li>
-                        <li>Kindly limit the file to a maximum of 100 lines.</li>
+                        <li>Kindly limit the file to a maximum of 1000 rows.</li>
                     </ul>
                     <input 
                         id="fileInput"
@@ -75,18 +85,14 @@ const ImportFileDialog = props => {
                     Choose a file
                 </Button>
                 <span>
-                    {
-                        uploadedFile
-                        ? uploadedFile.name
-                        : 'No file selected.'
-                    }
+                    { uploadedFile ? uploadedFile.name : 'No file selected.' }
                 </span>
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.cancel} color="primary">
+                <Button onClick={closeDialog} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={() => props.submit(uploadedFile)} color="primary">
+                <Button onClick={submitFile} color="primary">
                     Submit
                 </Button>
             </DialogActions>
@@ -97,7 +103,7 @@ const ImportFileDialog = props => {
 // PropTypes
 ImportFileDialog.propTypes = {
     cancel: PropTypes.func.isRequired,
-    submit: PropTypes.func.isRequired,
+    importData: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
     sampleFile: PropTypes.any.isRequired,
 };

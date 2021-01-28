@@ -42,7 +42,8 @@ const AccountList = props => {
     return (
         <ListContainer
             currency={props.currency}
-            export={() => accountsToCsv(props.accounts)}
+            importData={props.importData}
+            exportData={() => accountsToCsv(props.accounts)}
             items={props.accounts}
             openDetailsTab={props.openDetailsTab}
             openFormTab={props.openFormTab}
@@ -57,6 +58,7 @@ const AccountList = props => {
 AccountList.propTypes = {
     accounts: PropTypes.array.isRequired,
     currency: PropTypes.string.isRequired,
+    importData: PropTypes.func.isRequired,
     openDetailsTab: PropTypes.func.isRequired,
     openFormTab: PropTypes.func.isRequired
 };

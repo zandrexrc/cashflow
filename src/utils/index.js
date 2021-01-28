@@ -34,9 +34,11 @@ export {
     isValidCurrencyCode 
 } from './miscUtils';
 export {
+    generateSampleCsv,
     accountsToCsv,
     subscriptionsToCsv,
     transactionsToCsv,
-    generateSampleCsv,
+    csvToAccounts,
+    csvToSubscriptions,
     csvToTransactions,
 } from './csvUtils';

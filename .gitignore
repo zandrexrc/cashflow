@@ -24,4 +24,4 @@ yarn-debug.log*
 yarn-error.log*
 
 # dev database
-/src/server/cashflow.db
+/src/server/database/cashflow.db

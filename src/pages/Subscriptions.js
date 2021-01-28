@@ -1,13 +1,13 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addSubscription, editSubscription, deleteSubscription } from '../redux/actions/subscriptions';
-import { showDialog, hideDialog } from '../redux/actions/ui';
+import { addSubscription, editSubscription, deleteSubscription, addMultipleSubscriptions } from '../redux/actions/subscriptions';
+import { setError, showDialog, hideDialog } from '../redux/actions/ui';
 import { makeStyles } from '@material-ui/core/styles';
 import { SubscriptionDetails } from '../components/details/SubscriptionDetails';
 import { SubscriptionForm } from '../components/forms/SubscriptionForm';
 import { SubscriptionList } from '../components/lists/SubscriptionList';
 import { SubscriptionStatistics } from '../components/statistics/SubscriptionStatistics';
-import { createSubscriptionsGraphData, filterSubscriptions } from '../utils';
+import { createSubscriptionsGraphData, csvToSubscriptions, filterSubscriptions } from '../utils';
 
 
  // Styles
@@ -90,6 +90,16 @@ const Subscriptions = () => {
     const alertDelete = () => {
         dispatch(showDialog('Delete subscription?', deleteData));
     }
+
+    const importData = file => {
+        csvToSubscriptions(file, (error, result) => {
+            if (error) {
+                dispatch(setError(error));
+            } else {
+                dispatch(addMultipleSubscriptions(result));
+            }
+        });
+    }
     
     // Apply styles
     const classes = useStyles();
@@ -105,6 +115,7 @@ const Subscriptions = () => {
             />
             <SubscriptionList
                 currency={currency}
+                importData={importData}
                 openDetailsTab={openDetailsTab}
                 openFormTab={toggleFormTab}
                 subscriptions={displayedSubscriptions}

@@ -1,5 +1,53 @@
 import papa from 'papaparse';
-import { getAccountNames, getAccountIds } from './accountUtils';
+import { getAccountNames, getAccountIds, validateAccount } from './accountUtils';
+import { validateSubscription } from './subscriptionUtils';
+import { validateTransaction } from './transactionUtils';
+
+
+/**
+ * Generates a sample csv file.
+ * @param {string} type: the type of data ('account' | 'subscription' | 'transaction') 
+ * @return {string}: a csv file
+ */
+function generateSampleCsv(type) {
+    let data = [];
+
+    switch (type) {
+        case 'account':
+            data = [{
+                name: 'Personal',
+                type: 'Checking',
+                balance: 4200.42
+            }];
+            break
+        case 'subscription':
+            data = [{
+                name: 'Netflix',
+                firstBillingDate: '2020-07-11',
+                cycle: 'monthly',
+                account: 'Personal',
+                category: 'Entertainment',
+                amount: -89,
+            }];
+            break
+        case 'transaction':
+            data = [{
+                date: '2020-07-11',
+                description: 'Lunch with Alice and Bob',
+                account: 'Personal',
+                category: 'Food',
+                amount: -99.99
+            }];
+            break
+        default:
+            data = [];
+    }
+
+    // Convert data to csv
+    const csv = papa.unparse(data);
+    const blob = new Blob([csv]);
+    return URL.createObjectURL(blob, { type: 'text/csv' });
+}
 
 
 /**
@@ -14,7 +62,7 @@ function exportCsv(csv, title) {
 
     // Create a download link
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob, { type: 'text/plain' });
+    a.href = URL.createObjectURL(blob, { type: 'text/csv' });
     a.download = title;
 
     // Programatically click the link to start download
@@ -100,87 +148,171 @@ function transactionsToCsv(transactions) {
 
 
 /**
- * Generates a sample csv file.
- * @param {string} type: the type of data ('account' | 'subscription' | 'transaction') 
- * @return {string}: a csv file
+ * Parses account objects from a csv file.
+ * @param {File} csv: the csv file to parse
+ * @param {function} submitData: a callback function for submitting the parsed data
+ * @return {null}: results are passed in a callback function
  */
-function generateSampleCsv(type) {
-    let data = [];
+function csvToAccounts(csv, submitData) {
+    const accountIds = getAccountIds();
 
-    switch (type) {
-        case 'account':
-            data = [{
-                name: 'Personal',
-                type: 'Checking',
-                balance: 4200.42
-            }];
-            break
-        case 'subscription':
-            data = [{
-                name: 'Netflix',
-                firstBillingDate: '2020-07-11',
-                cycle: 'monthly',
-                account: 'Personal',
-                category: 'Entertainment',
-                amount: -89,
-            }];
-            break
-        case 'transaction':
-            data = [{
-                date: '2020-07-11',
-                description: 'Lunch with Alice and Bob',
-                account: 'Personal',
-                category: 'Food',
-                amount: -99.99
-            }];
-            break
-        default:
-            data = [];
-    }
+    // Parse file
+    let rowCount = 1;
+    let parsedAccounts = [];
+    let error;
+    papa.parse(csv, {
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+        worker: true,
+        step: function (result, parser) {
+            rowCount += 1;
+            let account = result.data;
 
-    // Convert data to csv
-    const csv = papa.unparse(data);
-    const blob = new Blob([csv]);
-    return URL.createObjectURL(blob, { type: 'text/csv' });
+            // Abort early if there are parsing errors
+            if (result.errors.length > 0) {
+                error = `Error in row ${rowCount}: Parsing error.`;
+                parser.abort();
+                return;
+            }
+
+            // Validate data
+            if (account.name && accountIds[account.name]) {
+                error = `Error in row ${rowCount}: An account with the same name already exists.`;
+                parser.abort();
+                return;
+            }
+
+            const isValid = validateAccount(account);
+            if (isValid) {
+                parsedAccounts.push(account);
+            } else {
+                error = `Error in row ${rowCount}: Invalid account details.`;
+                parser.abort();
+                return;
+            }
+        },
+        complete: function () {
+            submitData(error, parsedAccounts);
+        }
+    });
 }
 
 
 /**
- * Processes a list of transactions into a CSV string.
- * @param {File} csv: a list of transaction objects
- * @return {string}: the transactions in a csv format
+ * Parses subscription objects from a csv file.
+ * @param {File} csv: the csv file to parse
+ * @param {function} submitData: a callback function for submitting the parsed data
+ * @return {null}: results are passed in a callback function
  */
-function csvToTransactions(csv) {
+function csvToSubscriptions(csv, submitData) {
+    const accountIds = getAccountIds();
+
+    // Parse file
+    let rowCount = 1;
+    let parsedSubscriptions = [];
+    let error;
+    papa.parse(csv, {
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+        worker: true,
+        step: function (result, parser) {
+            rowCount += 1;
+            let subscription = result.data;
+
+            // Abort early if there are parsing errors
+            if (result.errors.length > 0) {
+                error = `Error in row ${rowCount}: Parsing error.`;
+                parser.abort();
+                return;
+            }
+
+            // Validate data
+            if (accountIds[subscription.account]) {
+                subscription.accountId = accountIds[subscription.account];
+            } else {
+                error = `Error in row ${rowCount}: Invalid account name.`;
+                parser.abort();
+                return;
+            }
+
+            const isValid = validateSubscription(subscription);
+            if (isValid) {
+                parsedSubscriptions.push(subscription);
+            } else {
+                error = `Error in row ${rowCount}: Invalid subscription details.`;
+                parser.abort();
+                return;
+            }
+        },
+        complete: function () {
+            submitData(error, parsedSubscriptions);
+        }
+    });
+}
+
+
+/**
+ * Parses transaction objects from a csv file.
+ * @param {File} csv: the csv file to parse
+ * @param {function} submitData: a callback function for submitting the parsed data
+ * @return {null}: results are passed in a callback function
+ */
+function csvToTransactions(csv, submitData) {
     const accountIds = getAccountIds();
 
     // Parse file
     let rowCount = 1;
     let parsedTransactions = [];
-    let errors = [];
+    let error = '';
     papa.parse(csv, {
         header: true,
         dynamicTyping: true,
+        skipEmptyLines: true,
         worker: true,
         step: function (result, parser) {
             rowCount += 1;
-            // Validate row
+            let transaction = result.data;
+
+            // Abort early if there are parsing errors
             if (result.errors.length > 0) {
+                error = `Error in row ${rowCount}: Parsing error.`;
                 parser.abort();
+                return;
             }
-            console.log(result.data);
-            console.log(rowCount);
+
+            // Validate data
+            if (accountIds[transaction.account]) {
+                transaction.accountId = accountIds[transaction.account];
+            } else {
+                error = `Error in row ${rowCount}: Invalid account name.`;
+                parser.abort();
+                return;
+            }
+
+            const isValid = validateTransaction(transaction);
+            if (isValid) {
+                parsedTransactions.push(transaction);
+            } else {
+                error = `Error in row ${rowCount}: Invalid transaction details.`;
+                parser.abort();
+                return;
+            }
         },
         complete: function () {
-            console.log('Parsing complete!', rowCount);
+            submitData(error, parsedTransactions);
         }
     });
 }
 
 
 export {
+    generateSampleCsv,
     accountsToCsv,
     subscriptionsToCsv,
     transactionsToCsv,
-    generateSampleCsv,
+    csvToAccounts,
+    csvToSubscriptions,
     csvToTransactions,
 };
