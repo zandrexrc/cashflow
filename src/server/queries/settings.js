@@ -1,4 +1,9 @@
 const connection = require("../database/connection");
+const initialSettings = {
+    currency: 'NOK',
+    dateFormat: 'dd.MM.yyyy',
+    appTheme: 'light'
+};
 
 const settingsQueries = {
     getSettings(res) {
@@ -10,7 +15,7 @@ const settingsQueries = {
                         throw err;
                     }
                 });
-                const userSettings = JSON.parse(result.userSettings);
+                const userSettings = result ? JSON.parse(result.userSettings) : initialSettings;
                 res.status(200).json(userSettings);
             });
         } catch (err) {
