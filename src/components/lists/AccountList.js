@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { ListContainer } from './ListContainer';
+import { accountsToCsv, generateSampleCsv } from '../../utils';
 
 
 const renderRow = props => {
@@ -41,9 +42,12 @@ const AccountList = props => {
     return (
         <ListContainer
             currency={props.currency}
+            importData={props.importData}
+            exportData={() => accountsToCsv(props.accounts)}
             items={props.accounts}
             openDetailsTab={props.openDetailsTab}
             openFormTab={props.openFormTab}
+            sampleFile={generateSampleCsv('account')}
         >
             {renderRow}
         </ListContainer>
@@ -54,6 +58,7 @@ const AccountList = props => {
 AccountList.propTypes = {
     accounts: PropTypes.array.isRequired,
     currency: PropTypes.string.isRequired,
+    importData: PropTypes.func.isRequired,
     openDetailsTab: PropTypes.func.isRequired,
     openFormTab: PropTypes.func.isRequired
 };

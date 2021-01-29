@@ -1,10 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import SearchIcon from "@material-ui/icons/Search";
-import AddIcon from "@material-ui/icons/Add";
-import { IconButton, InputAdornment, TextField } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
+import AddIcon from '@material-ui/icons/Add';
+import MoreVert from '@material-ui/icons/MoreVert';
+import PublishIcon from '@material-ui/icons/Publish';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import { IconButton, InputAdornment, Menu, MenuItem, TextField } from '@material-ui/core';
 import { FixedSizeList } from 'react-window';
+import { ImportFileDialog } from '../inputs/ImportFileDialog';
 
 
 const useStyles = makeStyles(theme => ({
@@ -77,6 +81,7 @@ const useStyles = makeStyles(theme => ({
 const ListContainer = props => {
     const classes = useStyles();
 
+    // Display search matches
     const [displayedItems, setDisplayedItems] = React.useState(props.items);
 
     React.useEffect(() => {
@@ -89,6 +94,23 @@ const ListContainer = props => {
             (item.name && filter.test(item.name)) ||
             (item.description && filter.test(item.description))
         ));
+    }
+
+    // Dropdown menu
+    const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
+ 
+    const showMenu = event => 
+        setMenuAnchorEl(event.currentTarget);
+ 
+    const hideMenu = () => 
+        setMenuAnchorEl(null);
+
+    // Import file dialog
+    const [importFileDialogIsOpen, setImportFileDialogIsOpen] = React.useState(false);
+
+    const toggleImportFileDialog = () => {
+        hideMenu();
+        setImportFileDialogIsOpen(!importFileDialogIsOpen);
     }
 
     return (
@@ -109,9 +131,27 @@ const ListContainer = props => {
                         }}
                         onChange={event => search(event.target.value)}
                     />
-                    <IconButton onClick={props.openFormTab}>
-                        <AddIcon fontSize="small" />
-                    </IconButton>
+                    <div className="buttons">
+                        <IconButton onClick={props.openFormTab}>
+                            <AddIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={showMenu}>
+                            <MoreVert fontSize="small" />
+                        </IconButton>
+                        <Menu
+                            anchorEl={menuAnchorEl}
+                            keepMounted
+                            open={Boolean(menuAnchorEl)}
+                            onClose={hideMenu}
+                        >
+                            <MenuItem onClick={toggleImportFileDialog}>
+                                <PublishIcon fontSize="small" /> Import from CSV
+                            </MenuItem>
+                            <MenuItem onClick={props.exportData}>
+                                <GetAppIcon fontSize="small" /> Download as CSV
+                            </MenuItem>
+                        </Menu>
+                    </div>
                 </div>
             }
             <FixedSizeList
@@ -128,15 +168,27 @@ const ListContainer = props => {
             >
                 {props.children}
             </FixedSizeList>
+            {
+                props.sampleFile && 
+                <ImportFileDialog
+                    cancel={toggleImportFileDialog}
+                    importData={props.importData}
+                    isOpen={importFileDialogIsOpen}
+                    sampleFile={props.sampleFile}
+                />
+            }
         </div>
-    )
+    )   
 }
 
 // PropTypes
 ListContainer.propTypes = {
     children: PropTypes.func.isRequired,
     currency: PropTypes.string.isRequired,
+    importData: PropTypes.func,
+    exportData: PropTypes.func,
     items: PropTypes.array.isRequired,
+    sampleFile: PropTypes.string,
     openDetailsTab: PropTypes.func,
     openFormTab: PropTypes.func,
 };

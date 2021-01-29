@@ -16,7 +16,9 @@ export const transactions = (state = [], action) => {
         case "DELETE_TRANSACTION":
             return state.filter(t => t.transactionId !== action.payload)
         case "DELETE_TRANSACTIONS_IN_ACCOUNT":
-            return state.filter(t => t.accountID !== action.payload)
+            return state.filter(t => t.accountId !== action.payload)
+        case "ADD_MULTIPLE_TRANSACTIONS":
+            return state.concat(action.payload)
         default:
             return state
     }

@@ -23,6 +23,8 @@ export const accounts = (state = [], action) => {
             return state.filter(a => a.accountId !== action.payload)
         case "UPDATE_ACCOUNT_BALANCE":
             return updateBalance(state, action.payload.id, action.payload.amount)
+        case "ADD_MULTIPLE_ACCOUNTS":
+            return state.concat(action.payload)
         default:
             return state
     }

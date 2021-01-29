@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { ListContainer } from './ListContainer';
-import { printDate } from '../../utils';
+import { generateSampleCsv, printDate, subscriptionsToCsv } from '../../utils';
 
 
 const renderRow = props => {
@@ -50,9 +50,12 @@ const SubscriptionList = props => {
     return (
         <ListContainer
             currency={props.currency}
+            importData={props.importData}
+            exportData={() => subscriptionsToCsv(props.subscriptions)}
             items={props.subscriptions}
             openDetailsTab={props.openDetailsTab}
             openFormTab={props.openFormTab}
+            sampleFile={generateSampleCsv('subscription')}
         >
             {renderRow}
         </ListContainer>
@@ -62,6 +65,7 @@ const SubscriptionList = props => {
 // PropTypes
 SubscriptionList.propTypes = {
     currency: PropTypes.string.isRequired,
+    importData: PropTypes.func.isRequired,
     openDetailsTab: PropTypes.func.isRequired,
     openFormTab: PropTypes.func.isRequired,
     subscriptions: PropTypes.array.isRequired,

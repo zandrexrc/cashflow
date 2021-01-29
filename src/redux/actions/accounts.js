@@ -134,3 +134,36 @@ export const updateAccountBalance = (id, amount) => ({
     type: "UPDATE_ACCOUNT_BALANCE",
     payload: {id, amount}
 });
+
+export function addMultipleAccounts(newAccounts) {
+    return async (dispatch, getState) => {
+        if (!getState().isFetching) {
+            dispatch(toggleIsFetching(true)); 
+            try {
+                const res = await fetch(
+                    '/api/accounts-group', 
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newAccounts)
+                    }
+                );
+                const payload = await res.json();
+
+                if (payload.error) {
+                    throw (payload.error);
+                }
+
+                dispatch(toggleIsFetching(false));
+                dispatch({
+                    type: "ADD_MULTIPLE_ACCOUNTS",
+                    payload: payload
+                });
+                dispatch(showToast("Successfully added account", "success"));
+            }
+            catch (error) {
+                dispatch(setError(error));
+            }
+        }
+    }
+};

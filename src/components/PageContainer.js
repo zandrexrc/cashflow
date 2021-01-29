@@ -13,6 +13,7 @@ import { Error } from '../pages/Error';
 // Styles
 const useStyles = makeStyles(theme => ({
   root: {
+    position: 'relative',
     display: 'flex',
     flexFlow: 'row wrap',
     justifyContent: 'center',
@@ -20,18 +21,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     height: '100vh',
     marginLeft: '200px',
-    "& .content": {
-      position: 'relative',
-      display: 'flex',
-      flexFlow: 'row wrap',
-      justifyContent: 'center',
-      alignItems: 'flex-start',
-      width: '100%',
-      height: '100%',
-      padding: 0,
-      margin: 0,
-      backgroundColor: theme.palette.background.default,
-    },
+    backgroundColor: theme.palette.background.default,
   },
 }));
 
@@ -42,37 +32,33 @@ const PageContainer = props => {
   return (
     props.error ?
     <div className={classes.root}>
-      <div className="content">
-        <Error error={props.error} />
-      </div>
+      <Error error={props.error} />
     </div> :
     <div className={classes.root}>
-      <div className="content">
-        {
-          props.activePage === 0 &&
-          <Overview />
-        }
-        {
-          props.activePage === 1 &&
-          <Transactions />
-        }
-        {
-          props.activePage === 2 &&
-          <Subscriptions />
-        }
-        {
-          props.activePage === 3 &&
-          <Accounts />
-        }
-        {
-          props.activePage === 4 &&
-          <Statistics />
-        }
-        {
-          props.activePage === 5 &&
-          <Settings />
-        }
-      </div>
+      {
+        props.activePage === 0 &&
+        <Overview />
+      }
+      {
+        props.activePage === 1 &&
+        <Transactions />
+      }
+      {
+        props.activePage === 2 &&
+        <Subscriptions />
+      }
+      {
+        props.activePage === 3 &&
+        <Accounts />
+      }
+      {
+        props.activePage === 4 &&
+        <Statistics />
+      }
+      {
+        props.activePage === 5 &&
+        <Settings />
+      }
     </div>
   );
 }

@@ -1,19 +1,22 @@
 const connection = require("../database/connection");
+const initialSettings = {
+    currency: 'NOK',
+    dateFormat: 'dd.MM.yyyy',
+    appTheme: 'light'
+};
 
 const settingsQueries = {
     getSettings(res) {
         try {
             connection.query(async (db) => {
-                db.serialize(() => {
-                    const stmt = `SELECT userSettings FROM settings`;
-                    db.get(stmt, function (err, row) {
-                        if (err) {
-                            throw err;
-                        }
-                        const userSettings = JSON.parse(row.userSettings);
-                        res.status(200).json(userSettings);
-                    });
+                const stmt = `SELECT userSettings FROM settings`;
+                const result = await db.get(stmt, function (err) {
+                    if (err) {
+                        throw err;
+                    }
                 });
+                const userSettings = result ? JSON.parse(result.userSettings) : initialSettings;
+                res.status(200).json(userSettings);
             });
         } catch (err) {
             res.status(404).json({
@@ -25,23 +28,20 @@ const settingsQueries = {
     editSettings(req, res) {
         try {
             connection.query(async (db) => {
-                db.serialize(() => {
-                    const stmt = `UPDATE settings SET userSettings = ? WHERE userId = ?`;
-                    const settingsString = JSON.stringify(req.body);
-                    
-                    db.run(stmt, [settingsString, 1], function (err) {
-                        if (err) {
-                            throw err;
-                        }
-                    }).get(`SELECT userSettings FROM settings WHERE userId = ?`, 
-                            1, function (err, row) {
-                        if (err) {
-                            throw err;
-                        }
-                        const userSettings = JSON.parse(row.userSettings);
-                        res.status(201).json(userSettings);
-                    });
+                const stmt = `UPDATE settings SET userSettings = ? WHERE userId = ?`;
+                const settingsString = JSON.stringify(req.body);
+                
+                await db.run(stmt, [settingsString, 1], function (err) {
+                    if (err) {
+                        throw err;
+                    }
                 });
+                const result = await db.get(
+                    `SELECT userSettings FROM settings WHERE userId = ?`, 
+                    [1]
+                );
+                const userSettings = JSON.parse(result.userSettings);
+                res.status(201).json(userSettings);
             });
         } catch (err) {
             res.status(500).json({

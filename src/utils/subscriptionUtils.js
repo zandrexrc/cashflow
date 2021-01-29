@@ -148,16 +148,16 @@ function filterSubscriptions(subscriptions, filters) {
 function validateSubscription(subscription) {
     let isValid = false;
 
-    const hasAllRequiredAttributes = 
-        subscription.subscriptionId && subscription.name 
+    const hasAllRequiredAttributes = subscription.name 
         && subscription.firstBillingDate && subscription.cycle 
         && subscription.amount && subscription.accountId;
 
     if (hasAllRequiredAttributes) {
         const dateisValid = isValidDate(new Date(subscription.firstBillingDate));
+        const cycleIsValid = subscription.cycle === 'monthly' || subscription.cycle === 'yearly';
         const nameIsValid = subscription.name.trim().length > 0;
         const amountIsValid = isValidCurrencyAmount(subscription.amount);
-        isValid = dateisValid && nameIsValid && amountIsValid;
+        isValid = dateisValid && cycleIsValid && nameIsValid && amountIsValid;
     }
 
     return isValid;

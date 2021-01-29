@@ -53,7 +53,6 @@ const useStyles = makeStyles(theme => ({
 
 
 const newTransaction = {
-    transactionId: 'abcde',
     date: new Date(),
     description: '',
     amount: 0,

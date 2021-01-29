@@ -123,7 +123,7 @@ function validateTransaction(transaction) {
     let isValid = false;
 
     const hasAllRequiredAttributes = 
-        transaction.transactionId && transaction.date && transaction.description 
+        transaction.date && transaction.description 
         && transaction.amount && transaction.accountId;
 
     if (hasAllRequiredAttributes) {

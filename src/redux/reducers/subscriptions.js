@@ -16,7 +16,9 @@ export const subscriptions = (state = [], action) => {
         case "DELETE_SUBSCRIPTION":
             return state.filter(s => s.subscriptionId !== action.payload)
         case "DELETE_SUBSCRIPTIONS_IN_ACCOUNT":
-            return state.filter(s => s.accountID !== action.payload)
+            return state.filter(s => s.accountId !== action.payload)
+        case "ADD_MULTIPLE_SUBSCRIPTIONS":
+            return state.concat(action.payload)
         default:
             return state
     }

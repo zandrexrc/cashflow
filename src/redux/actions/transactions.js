@@ -121,3 +121,36 @@ export function deleteTransaction(id) {
         }
     }
 };
+
+export function addMultipleTransactions(newTransactions) {
+    return async (dispatch, getState) => {
+        if (!getState().isFetching) {
+            dispatch(toggleIsFetching(true));
+            try {
+                const res = await fetch(
+                    '/api/transactions-group', 
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newTransactions)
+                    }
+                );
+                const payload = await res.json();
+
+                if (payload.error) {
+                    throw (payload.error);
+                }
+
+                dispatch(toggleIsFetching(false));
+                dispatch({
+                    type: "ADD_MULTIPLE_TRANSACTIONS",
+                    payload: payload
+                });
+                dispatch(showToast("Successfully added transactions", "success"));
+            }
+            catch (error) {
+                dispatch(setError(error));
+            }
+        }
+    }
+};
