@@ -22,6 +22,7 @@ const useStyles = makeStyles({
 const MonthYearSelector = props => {
     const transactions = useSelector(state => state.transactions);
     const transactionYears = getTransactionYears(transactions);
+    const currentYear = new Date().getFullYear();
     const classes = useStyles();
 
     return (
@@ -58,6 +59,12 @@ const MonthYearSelector = props => {
                     value={props.selectedDate.year}
                     onChange={event => props.setYear(event.target.value)}
                 >
+                    {
+                        !transactionYears.includes(currentYear) &&
+                        <MenuItem value={currentYear}>
+                            {currentYear}
+                        </MenuItem>
+                    }
                     {transactionYears.map((year, index) => (
                         <MenuItem key={index} value={year}>
                             {year}
