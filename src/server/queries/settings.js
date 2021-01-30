@@ -2,7 +2,8 @@ const connection = require("../database/connection");
 const initialSettings = {
     currency: 'NOK',
     dateFormat: 'dd.MM.yyyy',
-    appTheme: 'light'
+    appTheme: 'light',
+    firstTimeUser: true
 };
 
 const settingsQueries = {
