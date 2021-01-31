@@ -1,5 +1,15 @@
 import fetch from 'cross-fetch';
 import { toggleIsFetching, setError, showToast } from './ui';
+import { 
+    GET_ACCOUNTS, 
+    ADD_ACCOUNT, 
+    EDIT_ACCOUNT, 
+    DELETE_ACCOUNT, 
+    DELETE_SUBSCRIPTIONS_IN_ACCOUNT, 
+    DELETE_TRANSACTIONS_IN_ACCOUNT, 
+    UPDATE_ACCOUNT_BALANCE,
+    ADD_MULTIPLE_ACCOUNTS
+} from '../../constants';
 
 
 export function getAccounts() {
@@ -16,7 +26,7 @@ export function getAccounts() {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "GET_ACCOUNTS",
+                    type: GET_ACCOUNTS,
                     payload: payload
                 });
             }
@@ -48,7 +58,7 @@ export function addAccount(newAccount) {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "ADD_ACCOUNT",
+                    type: ADD_ACCOUNT,
                     payload: payload
                 });
                 dispatch(showToast("Successfully added account", "success"));
@@ -81,7 +91,7 @@ export function editAccount(id, newAccount) {
                 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "EDIT_ACCOUNT",
+                    type: EDIT_ACCOUNT,
                     payload: payload
                 });
                 dispatch(showToast("Successfully edited account", "success"));
@@ -110,15 +120,15 @@ export function deleteAccount(id) {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "DELETE_TRANSACTIONS_IN_ACCOUNT",
+                    type: DELETE_TRANSACTIONS_IN_ACCOUNT,
                     payload: payload.accountId
                 });
                 dispatch({
-                    type: "DELETE_SUBSCRIPTIONS_IN_ACCOUNT",
+                    type: DELETE_SUBSCRIPTIONS_IN_ACCOUNT,
                     payload: payload.accountId
                 });
                 dispatch({
-                    type: "DELETE_ACCOUNT",
+                    type: DELETE_ACCOUNT,
                     payload: payload.accountId
                 });
                 dispatch(showToast("Successfully deleted account", "success"));
@@ -131,7 +141,7 @@ export function deleteAccount(id) {
 };
 
 export const updateAccountBalance = (id, amount) => ({
-    type: "UPDATE_ACCOUNT_BALANCE",
+    type: UPDATE_ACCOUNT_BALANCE,
     payload: {id, amount}
 });
 
@@ -156,7 +166,7 @@ export function addMultipleAccounts(newAccounts) {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "ADD_MULTIPLE_ACCOUNTS",
+                    type: ADD_MULTIPLE_ACCOUNTS,
                     payload: payload
                 });
                 dispatch(showToast("Successfully added account", "success"));

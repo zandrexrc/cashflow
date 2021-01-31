@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { ListContainer } from './ListContainer';
 import { generateSampleCsv, printDate, transactionsToCsv } from '../../utils';
+import { DATE_FORMAT_SHORT_MONTH } from '../../constants';
 
 
 const renderRow = props => {
@@ -18,7 +19,7 @@ const renderRow = props => {
         >
             <div className="listItemDate">
                 <Typography variant="overline">
-                    {printDate(transaction.date, 'MMM')}
+                    {printDate(transaction.date, DATE_FORMAT_SHORT_MONTH)}
                 </Typography>
                 <Typography variant="h5">
                     {new Date(transaction.date).getDate()}

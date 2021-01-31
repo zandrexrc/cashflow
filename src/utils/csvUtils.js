@@ -2,6 +2,7 @@ import papa from 'papaparse';
 import { getAccountNames, getAccountIds, validateAccount } from './accountUtils';
 import { validateSubscription } from './subscriptionUtils';
 import { validateTransaction } from './transactionUtils';
+import { SampleAccount, SampleSubscription, SampleTransaction } from '../constants';
 
 
 /**
@@ -14,30 +15,13 @@ function generateSampleCsv(type) {
 
     switch (type) {
         case 'account':
-            data = [{
-                name: 'Personal',
-                type: 'Checking',
-                balance: 4200.42
-            }];
+            data = [SampleAccount, SampleAccount];
             break
         case 'subscription':
-            data = [{
-                name: 'Netflix',
-                firstBillingDate: '2020-07-11',
-                cycle: 'monthly',
-                account: 'Personal',
-                category: 'Entertainment',
-                amount: -89,
-            }];
+            data = [SampleSubscription, SampleSubscription];
             break
         case 'transaction':
-            data = [{
-                date: '2020-07-11',
-                description: 'Lunch with Alice and Bob',
-                account: 'Personal',
-                category: 'Food',
-                amount: -99.99
-            }];
+            data = [SampleTransaction, SampleTransaction];
             break
         default:
             data = [];

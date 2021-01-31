@@ -8,6 +8,7 @@ import { DateSelector } from '../inputs/DateSelector';
 import { AccountSelector } from '../inputs/AccountSelector';
 import { CategorySelector } from '../inputs/CategorySelector';
 import { dateStringToISO, validateTransaction, isValidCurrencyAmount } from '../../utils';
+import { EmptyTransaction } from '../../constants';
 
 
 const useStyles = makeStyles(theme => ({
@@ -52,24 +53,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const newTransaction = {
-    date: new Date(),
-    description: '',
-    amount: 0,
-    accountId: 1,
-    category: ''
-};
-
-
 const TransactionForm = props => {
     const classes = useStyles();
 
     const [state, setState] = React.useState({
-        transaction: newTransaction
+        transaction: { ...EmptyTransaction }
     });
 
     React.useEffect(() => {
-        setState({transaction: props.transaction ? props.transaction : newTransaction});
+        setState({transaction: props.transaction ? props.transaction : { ...EmptyTransaction }});
     }, [props.transaction, setState]);
 
     const setDate = date =>
@@ -88,7 +80,7 @@ const TransactionForm = props => {
         setState({transaction: { ...state.transaction, category: category }});
 
     const cancelChanges = () => {
-        setState({transaction: props.transaction ? props.transaction : newTransaction});
+        setState({transaction: props.transaction ? props.transaction : { ...EmptyTransaction }});
         props.close();
     };
 

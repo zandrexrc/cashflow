@@ -1,5 +1,6 @@
 import fetch from 'cross-fetch';
 import { toggleIsFetching, setError, showToast } from './ui';
+import { GET_SETTINGS, EDIT_SETTINGS } from '../../constants';
 
 
 export function getSettings() {
@@ -16,7 +17,7 @@ export function getSettings() {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "GET_SETTINGS",
+                    type: GET_SETTINGS,
                     payload: payload
                 });
             }
@@ -48,7 +49,7 @@ export function editSettings(newSettings) {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "EDIT_SETTINGS",
+                    type: EDIT_SETTINGS,
                     payload: payload
                 });
                 dispatch(showToast("Settings saved", "success"));

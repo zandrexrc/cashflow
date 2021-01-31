@@ -1,5 +1,12 @@
 import fetch from 'cross-fetch';
 import { toggleIsFetching, setError, showToast } from './ui';
+import {
+    GET_TRANSACTIONS,
+    ADD_TRANSACTION,
+    EDIT_TRANSACTION,
+    DELETE_TRANSACTION,
+    ADD_MULTIPLE_TRANSACTIONS
+} from '../../constants';
 
 
 export function getTransactions() {
@@ -16,7 +23,7 @@ export function getTransactions() {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "GET_TRANSACTIONS",
+                    type: GET_TRANSACTIONS,
                     payload: payload
                 });
             }
@@ -48,7 +55,7 @@ export function addTransaction(newTransaction) {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "ADD_TRANSACTION",
+                    type: ADD_TRANSACTION,
                     payload: payload
                 });
                 dispatch(showToast("Successfully added transaction", "success"));
@@ -81,7 +88,7 @@ export function editTransaction(id, newTransaction) {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "EDIT_TRANSACTION",
+                    type: EDIT_TRANSACTION,
                     payload: payload
                 });
                 dispatch(showToast("Successfully edited transaction", "success"));
@@ -110,7 +117,7 @@ export function deleteTransaction(id) {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "DELETE_TRANSACTION",
+                    type: DELETE_TRANSACTION,
                     payload: payload.transactionId
                 });
                 dispatch(showToast("Successfully deleted transaction", "success"));
@@ -143,7 +150,7 @@ export function addMultipleTransactions(newTransactions) {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "ADD_MULTIPLE_TRANSACTIONS",
+                    type: ADD_MULTIPLE_TRANSACTIONS,
                     payload: payload
                 });
                 dispatch(showToast("Successfully added transactions", "success"));

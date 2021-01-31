@@ -8,6 +8,7 @@ import { DateSelector } from '../inputs/DateSelector';
 import { AccountSelector } from '../inputs/AccountSelector';
 import { CategorySelector } from '../inputs/CategorySelector';
 import { dateStringToISO, isValidCurrencyAmount, validateSubscription } from '../../utils';
+import { EmptySubscription } from '../../constants';
 
 
 const useStyles = makeStyles(theme => ({
@@ -58,25 +59,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const newSubscription = {
-    name: '',
-    firstBillingDate: new Date(),
-    cycle: 'monthly',
-    accountId: 1,
-    category: '',
-    amount: 0
-};
-
-
 const SubscriptionForm = props => {
     const classes = useStyles();
 
     const [state, setState] = React.useState({
-        subscription: newSubscription
+        subscription: { ...EmptySubscription }
     });
 
     React.useEffect(() => {
-        setState({subscription: props.subscription ? props.subscription : newSubscription});
+        setState({subscription: props.subscription ? props.subscription : { ...EmptySubscription }});
     }, [props.subscription, setState]);
 
     const setFirstBillingDate = date =>
@@ -98,7 +89,7 @@ const SubscriptionForm = props => {
         setState({subscription: { ...state.subscription, category: category }});
 
     const cancelChanges = () => {
-        setState({subscription: props.subscription ? props.subscription : newSubscription});
+        setState({subscription: props.subscription ? props.subscription : { ...EmptySubscription }});
         props.close();
     };
 

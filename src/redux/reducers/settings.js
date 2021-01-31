@@ -1,14 +1,10 @@
-const initialState = {
-    currency: 'NOK',
-    dateFormat: 'dd.MM.yyyy',
-    appTheme: 'light'
-};
+import { GET_SETTINGS, EDIT_SETTINGS, InitialSettings } from '../../constants';
 
-export const settings = (state = initialState, action) => {
+export const settings = (state = InitialSettings, action) => {
     switch (action.type) {
-        case "GET_SETTINGS":
+        case GET_SETTINGS:
             return action.payload
-        case "EDIT_SETTINGS":
+        case EDIT_SETTINGS:
             return action.payload
         default:
             return state

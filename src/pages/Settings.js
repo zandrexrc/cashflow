@@ -18,6 +18,7 @@ import {
     Toolbar,
     Typography
 } from '@material-ui/core';
+import { DateFormats } from '../constants';
 
 
 const useStyles = makeStyles(theme => ({
@@ -49,11 +50,11 @@ const Settings = () => {
     const settings = useSelector(state => state.settings);
 
     // Local component state
-    const [state, setState] = React.useState({
-        appTheme: settings.appTheme,
-        currency: settings.currency,
-        dateFormat: settings.dateFormat,
-    });
+    const [state, setState] = React.useState({ ...settings });
+
+    React.useEffect(() => {
+        setState({ ...settings });
+    }, [settings]);
 
     // Manage local state
     const setCurrency = event => 
@@ -71,7 +72,7 @@ const Settings = () => {
 
     const saveSettings = () => {
         if (validateCurrency(state.currency)) {
-            dispatch(editSettings({...state}));
+            dispatch(editSettings(state));
         } else {
             dispatch(showToast("Currency code must be 1-3 characters", "error"));
         }
@@ -118,15 +119,13 @@ const Settings = () => {
                                     onChange={event => setDateFormat(event)}
                                     value={state.dateFormat}
                                 >
-                                    <MenuItem value="dd.MM.yyyy">DD.MM.YYYY</MenuItem>
-                                    <MenuItem value="dd-MM-yyyy">DD-MM-YYYY</MenuItem>
-                                    <MenuItem value="dd/MM/yyyy">DD/MM/YYYY</MenuItem>
-                                    <MenuItem value="MM.dd.yyyy">MM.DD.YYYY</MenuItem>
-                                    <MenuItem value="MM-dd-yyyy">MM-DD-YYYY</MenuItem>
-                                    <MenuItem value="MM/dd/yyyy">MM/DD/YYYY</MenuItem>
-                                    <MenuItem value="yyyy.MM.dd">YYYY.MM.DD</MenuItem>
-                                    <MenuItem value="yyyy-MM-dd">YYYY-MM-DD</MenuItem>
-                                    <MenuItem value="yyyy/MM/dd">YYYY/MM/DD</MenuItem>
+                                    {
+                                        DateFormats.map((format, index) => (
+                                            <MenuItem key={index} value={format}>
+                                                {format.toUpperCase()}
+                                            </MenuItem>
+                                        ))
+                                    }
                                 </Select>
                             </FormControl>
                         </CardContent>

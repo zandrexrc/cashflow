@@ -1,3 +1,12 @@
+import { 
+    GET_ACCOUNTS,
+    ADD_ACCOUNT,
+    EDIT_ACCOUNT,
+    DELETE_ACCOUNT,
+    UPDATE_ACCOUNT_BALANCE,
+    ADD_MULTIPLE_ACCOUNTS
+} from '../../constants';
+
 const editAccount = (items, newItem) => {
     let updatedItems = [...items];
     let index = updatedItems.findIndex(a => a.accountId === newItem.accountId);
@@ -13,17 +22,17 @@ const updateBalance = (items, id, amount) => {
 
 export const accounts = (state = [], action) => {
     switch (action.type) {
-        case "GET_ACCOUNTS":
+        case GET_ACCOUNTS:
             return action.payload
-        case "ADD_ACCOUNT":
+        case ADD_ACCOUNT:
             return [...state, action.payload]
-        case "EDIT_ACCOUNT":
+        case EDIT_ACCOUNT:
             return editAccount(state, action.payload)
-        case "DELETE_ACCOUNT":
+        case DELETE_ACCOUNT:
             return state.filter(a => a.accountId !== action.payload)
-        case "UPDATE_ACCOUNT_BALANCE":
+        case UPDATE_ACCOUNT_BALANCE:
             return updateBalance(state, action.payload.id, action.payload.amount)
-        case "ADD_MULTIPLE_ACCOUNTS":
+        case ADD_MULTIPLE_ACCOUNTS:
             return state.concat(action.payload)
         default:
             return state

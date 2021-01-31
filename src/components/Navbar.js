@@ -8,41 +8,18 @@ import DateRangeIcon from '@material-ui/icons/DateRange';
 import SettingsIcon from '@material-ui/icons/Settings';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { Navigation } from '../constants';
 
 
-// Set up navigation icons and labels
-const nav = [
-    {
-      id: 0,
-      name: 'Overview',
-      icon: <AssignmentIcon />
-    },
-    {
-      id: 1,
-      name: 'Transactions',
-      icon: <CreditCardIcon />
-    },
-    {
-      id: 2,
-      name: 'Subscriptions',
-      icon: <DateRangeIcon />
-    },
-    {
-      id: 3,
-      name: 'Accounts',
-      icon: <AccountBalanceIcon />
-    },
-    {
-      id: 4,
-      name: 'Statistics',
-      icon: <TimelineIcon />
-    },
-    {
-      id: 5,
-      name: 'Settings',
-      icon: <SettingsIcon />
-    }
-];
+// Set up navigation icons
+const navIcons = {
+    'Overview': <AssignmentIcon />,
+    'Transactions': <CreditCardIcon />,
+    'Subscriptions': <DateRangeIcon />,
+    'Accounts': <AccountBalanceIcon />,
+    'Statistics': <TimelineIcon />,
+    'Settings': <SettingsIcon />,
+};
 
 
 const useStyles = makeStyles(theme => ({
@@ -88,15 +65,15 @@ const Navbar = props => {
                 <span className="logoText">Cashflow</span>
             </Typography>
             <List>
-                {nav.map((navObj) => (
+                {Navigation.map((nav) => (
                     <ListItem  
                         button
-                        key={navObj.id}
-                        onClick={() => props.setActivePage(navObj.id)}
-                        selected={props.activePage === navObj.id}
+                        key={nav.id}
+                        onClick={() => props.setActivePage(nav.id)}
+                        selected={props.activePage === nav.id}
                     >
-                        <ListItemIcon>{navObj.icon}</ListItemIcon>
-                        <ListItemText primary={navObj.name} />
+                        <ListItemIcon>{navIcons[nav.name]}</ListItemIcon>
+                        <ListItemText primary={nav.name} />
                     </ListItem>
                 ))}
             </List>

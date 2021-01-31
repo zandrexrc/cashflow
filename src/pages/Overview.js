@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button, Card, CardActions, CardContent, Divider, Grid, Typography } from '@material-ui/core';
 import { LineChart } from '../components/charts/LineChart';
 import { calcMonthlySubscriptions, calcMostUsedAccounts, calcNetIncome, createActivityGraphData, printDate } from '../utils';
+import { DATE_FORMAT_MONTH_YEAR } from '../constants';
 
 
  const useStyles = makeStyles(theme => ({
@@ -60,7 +61,7 @@ const Overview = () => {
                                     Monthly overview
                                 </Typography>
                                 <Typography variant="h2">
-                                    {printDate(today, 'MMMM yyyy')}
+                                    {printDate(today, DATE_FORMAT_MONTH_YEAR)}
                                 </Typography>
                             </CardContent>
                         </Card>

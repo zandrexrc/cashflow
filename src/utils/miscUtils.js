@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { DATE_FORMAT_ISO } from '../constants';
 
 
 /**
@@ -7,7 +8,7 @@ import { format } from 'date-fns';
  * @return {string}: a string in the format "YYYY-MM-DD"
  */
 function dateStringToISO(dateString) {
-    return format(new Date(dateString), 'yyyy-MM-dd').substring(0, 10);
+    return format(new Date(dateString), DATE_FORMAT_ISO);
 }
 
 

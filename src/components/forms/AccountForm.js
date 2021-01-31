@@ -5,6 +5,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import { IconButton, Paper, Slide, TextField } from '@material-ui/core';
 import { getAccountNames, isValidCurrencyAmount, validateAccount } from '../../utils';
+import { EmptyAccount } from '../../constants';
 
 
 const useStyles = makeStyles(theme => ({
@@ -49,25 +50,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const newAccount = {
-    name: '',
-    type: '',
-    balance: 0,
-};
-
-
 const AccountForm = props => {
     const classes = useStyles();
     const accountNames = Object.values(getAccountNames());
 
     const [state, setState] = React.useState({
-        account: newAccount
+        account: { ...EmptyAccount }
     });
     
     const [nameError, setNameError] = React.useState('Required');
 
     React.useEffect(() => {
-        setState({account: props.account ? props.account : newAccount});
+        setState({account: props.account ? props.account : { ...EmptyAccount }});
         setNameError(props.account ? '' : 'Required' );
     }, [props.account, setState]);
 
@@ -92,7 +86,7 @@ const AccountForm = props => {
     };
 
     const cancelChanges = () => {
-        setState({account: props.account ? props.account : newAccount});
+        setState({account: props.account ? props.account : { ...EmptyAccount }});
         setNameError('');
         props.close()
     };

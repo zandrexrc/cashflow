@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { FormControl, Select, MenuItem } from '@material-ui/core';
 import { getTransactionYears } from '../../utils';
+import { MonthNames } from '../../constants';
 
 
 const useStyles = makeStyles({
@@ -38,18 +39,11 @@ const MonthYearSelector = props => {
                         props.enableSelectAll &&
                         <MenuItem value={-1}>All-year</MenuItem>
                     }
-                    <MenuItem value={0}>January</MenuItem>
-                    <MenuItem value={1}>February</MenuItem>
-                    <MenuItem value={2}>March</MenuItem>
-                    <MenuItem value={3}>April</MenuItem>
-                    <MenuItem value={4}>May</MenuItem>
-                    <MenuItem value={5}>June</MenuItem>
-                    <MenuItem value={6}>July</MenuItem>
-                    <MenuItem value={7}>August</MenuItem>
-                    <MenuItem value={8}>September</MenuItem>
-                    <MenuItem value={9}>October</MenuItem>
-                    <MenuItem value={10}>November</MenuItem>
-                    <MenuItem value={11}>December</MenuItem>
+                    {
+                        MonthNames.map((month, index) => (
+                            <MenuItem key={index} value={index}>{month}</MenuItem>
+                        ))
+                    }
                 </Select>
             </FormControl>
             <FormControl>

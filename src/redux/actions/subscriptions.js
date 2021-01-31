@@ -1,6 +1,13 @@
 import fetch from 'cross-fetch';
 import { toggleIsFetching, setError, showToast } from './ui';
 import { calcNextBillingDate } from '../../utils';
+import {
+    GET_SUBSCRIPTIONS,
+    ADD_SUBSCRIPTION,
+    EDIT_SUBSCRIPTION,
+    DELETE_SUBSCRIPTION,
+    ADD_MULTIPLE_SUBSCRIPTIONS
+} from '../../constants';
 
 
 export function getSubscriptions() {
@@ -23,7 +30,7 @@ export function getSubscriptions() {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "GET_SUBSCRIPTIONS",
+                    type: GET_SUBSCRIPTIONS,
                     payload: payload
                 });
             }
@@ -59,7 +66,7 @@ export function addSubscription(newSubscription) {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "ADD_SUBSCRIPTION",
+                    type: ADD_SUBSCRIPTION,
                     payload: subscription
                 });
                 dispatch(showToast("Successfully added subscription", "success"));
@@ -93,7 +100,7 @@ export function editSubscription(id, newSubscription) {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "EDIT_SUBSCRIPTION",
+                    type: EDIT_SUBSCRIPTION,
                     payload: subscription
                 });
                 dispatch(showToast("Successfully edited subscription", "success"));
@@ -122,7 +129,7 @@ export function deleteSubscription(id) {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "DELETE_SUBSCRIPTION",
+                    type: DELETE_SUBSCRIPTION,
                     payload: payload.subscriptionId
                 });
                 dispatch(showToast("Successfully deleted subscription", "success"));
@@ -161,7 +168,7 @@ export function addMultipleSubscriptions(newSubscriptions) {
 
                 dispatch(toggleIsFetching(false));
                 dispatch({
-                    type: "ADD_MULTIPLE_SUBSCRIPTIONS",
+                    type: ADD_MULTIPLE_SUBSCRIPTIONS,
                     payload: payload
                 });
                 dispatch(showToast("Successfully added subscription", "success"));
