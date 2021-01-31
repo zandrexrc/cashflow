@@ -1,4 +1,5 @@
-import loading from './loading.gif';
+import loadingLight from './loading-light.gif';
+import loadingDark from './loading-dark.gif';
 import onboarding01 from './onboarding01.png';
 import onboarding02 from './onboarding02.png';
 import onboarding03 from './onboarding03.png';
@@ -17,4 +18,4 @@ const onboardingImages = [
     onboarding07
 ];
 
-export { loading, onboardingImages };
+export { loadingLight, loadingDark, onboardingImages };

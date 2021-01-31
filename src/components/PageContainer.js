@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Overview } from '../pages/Overview';
 import { Transactions } from '../pages/Transactions';
 import { Subscriptions } from '../pages/Subscriptions';
@@ -8,6 +8,7 @@ import { Accounts } from '../pages/Accounts';
 import { Statistics } from '../pages/Statistics';
 import { Settings } from '../pages/Settings';
 import { Error } from '../pages/Error';
+import { loadingLight, loadingDark } from '../assets/images';
 
 
 // Styles
@@ -28,36 +29,47 @@ const useStyles = makeStyles(theme => ({
 
 const PageContainer = props => {
   const classes = useStyles();
+  const theme = useTheme();
   
   return (
-    props.error ?
+    props.isFetching ?
     <div className={classes.root}>
-      <Error error={props.error} />
+      <img 
+        src={theme.palette.type === 'light' ? loadingLight : loadingDark } 
+        alt="loading" 
+        width="100px" 
+      />
     </div> :
     <div className={classes.root}>
       {
-        props.activePage === 0 &&
-        <Overview />
-      }
-      {
-        props.activePage === 1 &&
-        <Transactions />
-      }
-      {
-        props.activePage === 2 &&
-        <Subscriptions />
-      }
-      {
-        props.activePage === 3 &&
-        <Accounts />
-      }
-      {
-        props.activePage === 4 &&
-        <Statistics />
-      }
-      {
-        props.activePage === 5 &&
-        <Settings />
+        props.error ?
+        <Error error={props.error} /> :
+        <>
+          {
+            props.activePage === 0 &&
+            <Overview />
+          }
+          {
+            props.activePage === 1 &&
+            <Transactions />
+          }
+          {
+            props.activePage === 2 &&
+            <Subscriptions />
+          }
+          {
+            props.activePage === 3 &&
+            <Accounts />
+          }
+          {
+            props.activePage === 4 &&
+            <Statistics />
+          }
+          {
+            props.activePage === 5 &&
+            <Settings />
+          }
+        </>
       }
     </div>
   );
@@ -67,6 +79,7 @@ const PageContainer = props => {
 PageContainer.propTypes = {
   activePage: PropTypes.number.isRequired,
   error: PropTypes.string,
+  isFetching: PropTypes.bool.isRequired,
 };
 
 export { PageContainer };

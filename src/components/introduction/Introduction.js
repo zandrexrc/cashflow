@@ -9,23 +9,9 @@ import { Offboarding } from './Offboarding';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        display: 'flex',
-        flexFlow: 'column nowrap',
-        justifyContent: 'center',
-        alignItems: 'center',
         width: '100%',
         height: '100vh',
-        minWidth: '500px',
-        maxHeight: '100vh',
         backgroundColor: theme.palette.background.default,
-        "& .icon": {
-            color: theme.palette.primary.main,
-            fontSize: '5em',
-            marginBottom: '20px',
-        },
-        "& .button": {
-            marginTop: '20px',
-        },
     }
 }));
 
@@ -38,7 +24,7 @@ const Introduction = () => {
     const [activeIndex, setActiveIndex] = React.useState(0);
 
     return (
-        <div>
+        <div className={classes.root}>
             {
                 activeIndex === 0 &&
                 <Onboarding next={() => setActiveIndex(1)} />

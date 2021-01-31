@@ -63,9 +63,12 @@ const AccountForm = props => {
     const [state, setState] = React.useState({
         account: newAccount
     });
+    
+    const [nameError, setNameError] = React.useState('Required');
 
     React.useEffect(() => {
         setState({account: props.account ? props.account : newAccount});
+        setNameError(props.account ? '' : 'Required' );
     }, [props.account, setState]);
 
     const setName = name =>
@@ -77,12 +80,10 @@ const AccountForm = props => {
     const setBalance = balance => 
         setState({account: { ...state.account, balance: balance }});
 
-    const [nameError, setNameError] = React.useState('Must be filled out');
-
     const changeName = name => {
         if (name.trim().length === 0) {
             setNameError('Must be filled out');
-        } else if (accountNames.includes(name)) {
+        } else if (!state.account.accountId && accountNames.includes(name)) {
             setNameError('An account with the same name already exists');
         } else {
             setNameError('');
@@ -92,13 +93,14 @@ const AccountForm = props => {
 
     const cancelChanges = () => {
         setState({account: props.account ? props.account : newAccount});
+        setNameError('');
         props.close()
     };
 
     const saveChanges = () => {
         const accountIsValid = validateAccount(state.account);
 
-        if (accountIsValid) {
+        if (accountIsValid && !nameError) {
             state.account.balance = parseFloat(state.account.balance);
             props.submit(state.account);
         }

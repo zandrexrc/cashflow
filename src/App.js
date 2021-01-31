@@ -2,13 +2,13 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActivePage, hideDialog, hideToast } from './redux/actions/ui';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { Box, CircularProgress } from '@material-ui/core';
 import { Navbar } from './components/Navbar';
 import { PageContainer } from './components/PageContainer';
 import { Dialog } from './components/alerts/Dialog';
 import { Toast } from './components/alerts/Toast';
 import { Introduction } from './components/introduction/Introduction';
 import { getTheme } from './themes';
+import { loadingLight } from './assets/images';
 import './App.css';
 
 
@@ -21,15 +21,16 @@ function App() {
   const dialogState = useSelector(state => state.dialogState);
   const error = useSelector(state => state.error);
   const firstTimeUser = useSelector(state => state.settings.firstTimeUser);
+  const isFetching = useSelector(state => state.isFetching);
   const toastState = useSelector(state => state.toastState);
 
   return (
     <ThemeProvider theme={getTheme(appTheme)}>
       {
         !dataIsLoaded &&
-        <Box className="App">
-          <CircularProgress />
-        </Box>
+        <div className="App">
+          <img src={loadingLight} alt="loading" width="100px" />
+        </div>
       }
       {
         dataIsLoaded && firstTimeUser &&
@@ -37,7 +38,7 @@ function App() {
       }
       {
         dataIsLoaded && !firstTimeUser &&
-        <Box className="App">
+        <div className="App">
           <Navbar
             activePage={activePage}
             setActivePage={id => dispatch(setActivePage(id))}
@@ -45,6 +46,7 @@ function App() {
           <PageContainer
             activePage={activePage}
             error={error}
+            isFetching={isFetching}
           />
           <Dialog
             cancel={() => dispatch(hideDialog())}
@@ -58,7 +60,7 @@ function App() {
             message={toastState.message}
             severity={toastState.severity}
           />
-        </Box>
+        </div>
       }
     </ThemeProvider>
   );
