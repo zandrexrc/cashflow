@@ -129,6 +129,7 @@ const Transactions = () => {
             />
             <TransactionForm
                 close={toggleFormTab}
+                currency={currency}
                 isOpen={state.formTabIsOpen}
                 submit={state.selectedTransaction ? editData : addData}
                 transaction={state.selectedTransaction}

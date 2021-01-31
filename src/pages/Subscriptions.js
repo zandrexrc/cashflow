@@ -131,6 +131,7 @@ const Subscriptions = () => {
             />
             <SubscriptionForm
                 close={toggleFormTab}
+                currency={currency}
                 isOpen={state.formTabIsOpen}
                 submit={state.selectedSubscription ? editData : addData}
                 subscription={state.selectedSubscription}

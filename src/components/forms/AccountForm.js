@@ -82,7 +82,7 @@ const AccountForm = props => {
 
     const changeName = name => {
         if (name.trim().length === 0) {
-            setNameError('Must be filled out');
+            setNameError('Required');
         } else if (!state.account.accountId && accountNames.includes(name)) {
             setNameError('An account with the same name already exists');
         } else {
@@ -121,13 +121,12 @@ const AccountForm = props => {
                     <TextField
                         label="Type"
                         margin="normal"
-                        variant="outlined"
                         defaultValue={state.account.type}
                         onBlur={event => setType(event.target.value)}
                         error={state.account.type.trim().length === 0}
                         helperText={
                             state.account.type.trim().length === 0
-                            ? 'Must be filled out' : ''
+                            ? 'Required' : ''
                         }
                     />
                     <TextField
@@ -140,8 +139,6 @@ const AccountForm = props => {
                         helperText={nameError}
                     />
                    <TextField
-                        type="number"
-                        inputProps={{step: 0.01}}
                         label="Balance"
                         margin="normal"
                         variant="filled"
@@ -153,6 +150,7 @@ const AccountForm = props => {
                             !isValidCurrencyAmount(state.account.balance)
                             ? 'Invalid amount' : ''
                         }
+                        InputProps={{ endAdornment: props.currency }}
                     />
                 </div>
             </Paper>
@@ -163,6 +161,7 @@ const AccountForm = props => {
 // PropTypes
 AccountForm.propTypes = {
     account: PropTypes.object,
+    currency: PropTypes.string.isRequired,
     close: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
     submit: PropTypes.func.isRequired,

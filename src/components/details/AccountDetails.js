@@ -42,8 +42,9 @@ const useStyles = makeStyles(theme => ({
             },
             "& .MuiTypography-body1": {
                 margin: '20px 0',
-                padding: '10px',
-                border: `1px solid ${theme.palette.text.secondary}`
+                padding: '5px 10px',
+                border: `1px solid ${theme.palette.text.secondary}`,
+                textTransform: 'uppercase',
             },
             "& .MuiTypography-h5": {
                 minHeight: '1.4em',
@@ -51,17 +52,9 @@ const useStyles = makeStyles(theme => ({
                 margin: '10px 0',
                 overflow: 'auto',
             },
-            "& .icon": {
-                marginRight: '10px'
+            "& .MuiTypography-h3": {
+                fontWeight: 'bold',
             },
-            "& .tags": {
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginTop: '20px',
-                paddingTop: '20px',
-                borderTop: `1px solid ${theme.palette.text.secondary}`
-            }
         },
     }
 }));

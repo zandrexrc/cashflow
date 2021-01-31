@@ -105,6 +105,7 @@ const Accounts = () => {
             />
             <AccountForm
                 close={toggleFormTab}
+                currency={currency}
                 isOpen={state.formTabIsOpen}
                 submit={state.selectedAccount ? editData : addData}
                 account={state.selectedAccount}

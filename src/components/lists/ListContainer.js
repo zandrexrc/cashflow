@@ -6,7 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import MoreVert from '@material-ui/icons/MoreVert';
 import PublishIcon from '@material-ui/icons/Publish';
 import GetAppIcon from '@material-ui/icons/GetApp';
-import { IconButton, InputAdornment, Menu, MenuItem, TextField } from '@material-ui/core';
+import { IconButton, InputAdornment, Menu, MenuItem, TextField, Typography } from '@material-ui/core';
 import { FixedSizeList } from 'react-window';
 import { ImportFileDialog } from '../inputs/ImportFileDialog';
 
@@ -27,6 +27,13 @@ const useStyles = makeStyles(theme => ({
             alignItems: 'center',
             padding: '0 10px 0 20px',
             borderBottom: `1px solid ${theme.palette.divider}`,
+        },
+        "& .emptyList": {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: 'calc(100vh - 64px)',
         },
         "& .list": {
             width: '100%',
@@ -145,29 +152,39 @@ const ListContainer = props => {
                             onClose={hideMenu}
                         >
                             <MenuItem onClick={toggleImportFileDialog}>
-                                <PublishIcon fontSize="small" /> Import from CSV
+                                <PublishIcon fontSize="small" />
+                                <span style={{marginLeft: '10px'}}>Import from CSV</span>
                             </MenuItem>
                             <MenuItem onClick={props.exportData}>
-                                <GetAppIcon fontSize="small" /> Download as CSV
+                                <GetAppIcon fontSize="small" /> 
+                                <span style={{marginLeft: '10px'}}>Download as CSV</span>
                             </MenuItem>
                         </Menu>
                     </div>
                 </div>
             }
-            <FixedSizeList
-                className="list"
-                height={window.innerHeight - 64}
-                width='100%'
-                itemSize={70}
-                itemCount={displayedItems.length}
-                itemData={{
-                    items: displayedItems,
-                    currency: props.currency,
-                    openDetailsTab: props.openDetailsTab
-                }}
-            >
-                {props.children}
-            </FixedSizeList>
+            {
+                displayedItems.length === 0 ?
+                <div className="emptyList">
+                    <Typography variant="h6" color="textSecondary">
+                        No records to display.
+                    </Typography>
+                </div> :
+                <FixedSizeList
+                    className="list"
+                    height={window.innerHeight - 64}
+                    width='100%'
+                    itemSize={70}
+                    itemCount={displayedItems.length}
+                    itemData={{
+                        items: displayedItems,
+                        currency: props.currency,
+                        openDetailsTab: props.openDetailsTab
+                    }}
+                >
+                    {props.children}
+                </FixedSizeList>
+            }
             {
                 props.sampleFile && 
                 <ImportFileDialog

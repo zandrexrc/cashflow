@@ -52,6 +52,9 @@ const useStyles = makeStyles(theme => ({
                 margin: '10px 0',
                 overflow: 'auto',
             },
+            "& .MuiTypography-h3": {
+                fontWeight: 'bold',
+            },
             "& .icon": {
                 marginRight: '10px'
             },

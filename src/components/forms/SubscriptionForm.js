@@ -155,12 +155,10 @@ const SubscriptionForm = props => {
                         error={state.subscription.name.trim().length === 0}
                         helperText={
                             state.subscription.name.trim().length === 0
-                            ? 'Must be filled out' : ''
+                            ? 'Required' : ''
                         }
                     />
                    <TextField
-                        type="number"
-                        inputProps={{step: 0.01}}
                         label="Amount"
                         margin="normal"
                         variant="filled"
@@ -172,6 +170,7 @@ const SubscriptionForm = props => {
                             !isValidCurrencyAmount(state.subscription.amount)
                             ? 'Invalid amount' : ''
                         }
+                        InputProps={{ endAdornment: props.currency }}
                     />
                     <div className="tags">
                         <CategorySelector
@@ -195,6 +194,7 @@ const SubscriptionForm = props => {
 // PropTypes
 SubscriptionForm.propTypes = {
     close: PropTypes.func.isRequired,
+    currency: PropTypes.string.isRequired,
     isOpen: PropTypes.bool.isRequired,
     submit: PropTypes.func.isRequired,
     subscription: PropTypes.object,

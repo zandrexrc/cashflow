@@ -8,7 +8,7 @@ const useStyles = makeStyles(theme => ({
     root: {
         '& .list': {
             fontSize: '0.8em',
-            color: theme.palette.text.secondary,
+            color: theme.palette.text.primary,
         },
         '& .inputButton': {
             marginRight: '10px',

@@ -135,12 +135,10 @@ const TransactionForm = props => {
                         error={state.transaction.description.trim().length === 0}
                         helperText={
                             state.transaction.description.trim().length === 0
-                            ? 'Must be filled out' : ''
+                            ? 'Required' : ''
                         }
                     />
                    <TextField
-                        type="number"
-                        inputProps={{step: 0.01}}
                         label="Amount"
                         margin="normal"
                         variant="filled"
@@ -152,6 +150,7 @@ const TransactionForm = props => {
                             !isValidCurrencyAmount(state.transaction.amount)
                             ? 'Invalid amount' : ''
                         }
+                        InputProps={{ endAdornment: props.currency }}
                     />
                     <div className="tags">
                         <CategorySelector
@@ -175,6 +174,7 @@ const TransactionForm = props => {
 // PropTypes
 TransactionForm.propTypes = {
     close: PropTypes.func.isRequired,
+    currency: PropTypes.string.isRequired,
     isOpen: PropTypes.bool.isRequired,
     submit: PropTypes.func.isRequired,
     transaction: PropTypes.object,
