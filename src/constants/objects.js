@@ -15,7 +15,7 @@ export const EmptySubscription = Object.freeze({
     name: '',
     firstBillingDate: '',
     cycle: 'monthly',
-    accountId: 0,
+    accountId: null,
     category: '',
     amount: 0,
 });
@@ -32,7 +32,7 @@ export const SampleSubscription = Object.freeze({
 export const EmptyTransaction = Object.freeze({
     date: '',
     description: '',
-    accountId: 0,
+    accountId: null,
     category: '',
     amount: 0,
 });

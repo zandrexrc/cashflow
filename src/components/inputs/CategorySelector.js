@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { TextField } from '@material-ui/core';
+import { Popper, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { getCategories } from '../../utils';
 
@@ -37,7 +37,14 @@ const CategorySelector = props => {
                     { ...params }
                 />
             )}
-            style={{minWidth: '50%'}}
+            PopperComponent={props => 
+                <Popper 
+                    {...props} 
+                    style={{width: 'fit-content'}} 
+                    placement="bottom-start"
+                />
+            }
+            style={{minWidth: '40%'}}
         />
     )
 }

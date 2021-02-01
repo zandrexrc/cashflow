@@ -7,8 +7,8 @@ import { IconButton, Paper, Slide, TextField } from '@material-ui/core';
 import { DateSelector } from '../inputs/DateSelector';
 import { AccountSelector } from '../inputs/AccountSelector';
 import { CategorySelector } from '../inputs/CategorySelector';
-import { dateStringToISO, validateTransaction, isValidCurrencyAmount } from '../../utils';
-import { EmptyTransaction } from '../../constants';
+import { dateStringToISO, validateTransaction, isValidCurrencyAmount, printDate } from '../../utils';
+import { EmptyTransaction, DATE_FORMAT_ISO } from '../../constants';
 
 
 const useStyles = makeStyles(theme => ({
@@ -55,14 +55,19 @@ const useStyles = makeStyles(theme => ({
 
 const TransactionForm = props => {
     const classes = useStyles();
+    const currentDate = printDate(new Date(), DATE_FORMAT_ISO);
 
     const [state, setState] = React.useState({
         transaction: { ...EmptyTransaction }
     });
 
     React.useEffect(() => {
-        setState({transaction: props.transaction ? props.transaction : { ...EmptyTransaction }});
-    }, [props.transaction, setState]);
+        setState({
+            transaction: props.transaction 
+            ? props.transaction 
+            : { ...EmptyTransaction, date: currentDate }
+        });
+    }, [props.transaction, currentDate, setState]);
 
     const setDate = date =>
         setState({transaction: { ...state.transaction, date: date }});
@@ -94,8 +99,6 @@ const TransactionForm = props => {
             state.transaction.amount = parseFloat(state.transaction.amount);
             state.transaction.accountId = parseInt(state.transaction.accountId);
             props.submit(state.transaction);
-        } else {
-            console.log(state.transaction);
         }
     };
 
@@ -153,7 +156,11 @@ const TransactionForm = props => {
                             showUncategorized
                         />
                         <AccountSelector
-                            selectedAccount={state.transaction.accountId.toString()}
+                            selectedAccount={
+                                state.transaction.accountId
+                                ? state.transaction.accountId.toString()
+                                : ''
+                            }
                             setAccount={setAccount}
                         />
                     </div>

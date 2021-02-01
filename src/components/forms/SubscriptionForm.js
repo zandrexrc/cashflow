@@ -7,8 +7,8 @@ import { FormControl, IconButton, InputLabel, MenuItem, Paper, Select, Slide, Te
 import { DateSelector } from '../inputs/DateSelector';
 import { AccountSelector } from '../inputs/AccountSelector';
 import { CategorySelector } from '../inputs/CategorySelector';
-import { dateStringToISO, isValidCurrencyAmount, validateSubscription } from '../../utils';
-import { EmptySubscription } from '../../constants';
+import { dateStringToISO, isValidCurrencyAmount, printDate, validateSubscription } from '../../utils';
+import { EmptySubscription, DATE_FORMAT_ISO } from '../../constants';
 
 
 const useStyles = makeStyles(theme => ({
@@ -61,14 +61,18 @@ const useStyles = makeStyles(theme => ({
 
 const SubscriptionForm = props => {
     const classes = useStyles();
+    const currentDate = printDate(new Date(), DATE_FORMAT_ISO);
 
     const [state, setState] = React.useState({
         subscription: { ...EmptySubscription }
     });
 
     React.useEffect(() => {
-        setState({subscription: props.subscription ? props.subscription : { ...EmptySubscription }});
-    }, [props.subscription, setState]);
+        setState({
+            subscription: props.subscription 
+            ? props.subscription 
+            : { ...EmptySubscription, firstBillingDate: currentDate }});
+    }, [props.subscription, currentDate, setState]);
 
     const setFirstBillingDate = date =>
         setState({subscription: { ...state.subscription, firstBillingDate: date }});
@@ -172,7 +176,11 @@ const SubscriptionForm = props => {
                             showUncategorized
                         />
                         <AccountSelector
-                            selectedAccount={state.subscription.accountId.toString()}
+                            selectedAccount={
+                                state.subscription.accountId 
+                                ? state.subscription.accountId.toString() 
+                                : ''
+                            }
                             setAccount={setAccount}
                         />
                     </div>

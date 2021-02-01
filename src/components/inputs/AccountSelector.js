@@ -6,21 +6,26 @@ import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mate
 
 const AccountSelector = props => {
     const accounts = useSelector(state => state.accounts);
-    const defaultValue = accounts[0] ? accounts[0].accountId.toString() : '';
-    const selectValue = props.selectedAccount === '0' ? defaultValue : props.selectedAccount;
 
-    let error ='';
+    let error;
     if (accounts.length === 0) {
         error = 'No account found. Please create an account first.';
+    } else if (!props.selectedAccount) {
+        error = 'Required.'
+    } else {
+        error = '';
     }
 
     return (
-        <FormControl error={error.length > 0 && !props.enableSelectAll}>
+        <FormControl 
+            error={error.length > 0 && !props.enableSelectAll}
+            style={{minWidth: '40%'}}
+        >
             <InputLabel id="account-filter-label">Account</InputLabel>
             <Select
                 labelId="account-filter-label"
                 id="account-filter"
-                value={selectValue}
+                value={props.selectedAccount}
                 onChange={event => props.setAccount(event.target.value)}
             >
                 {
@@ -43,7 +48,7 @@ const AccountSelector = props => {
 
 // PropTypes
 AccountSelector.propTypes = {
-    selectedAccount: PropTypes.string.isRequired,
+    selectedAccount: PropTypes.string,
     setAccount: PropTypes.func.isRequired,
     enableSelectAll: PropTypes.bool,
 };
