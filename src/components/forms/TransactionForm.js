@@ -8,7 +8,7 @@ import { DateSelector } from '../inputs/DateSelector';
 import { AccountSelector } from '../inputs/AccountSelector';
 import { CategorySelector } from '../inputs/CategorySelector';
 import { dateStringToISO, validateTransaction, isValidCurrencyAmount, printDate } from '../../utils';
-import { EmptyTransaction, DATE_FORMAT_ISO } from '../../constants';
+import { DATE_FORMAT_ISO } from '../../constants';
 
 
 const useStyles = makeStyles(theme => ({
@@ -53,21 +53,25 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
+const newTransaction = {
+    date: printDate(new Date(), DATE_FORMAT_ISO),
+    description: '',
+    accountId: null,
+    category: '',
+    amount: 0,
+};
+
+
 const TransactionForm = props => {
     const classes = useStyles();
-    const currentDate = printDate(new Date(), DATE_FORMAT_ISO);
 
     const [state, setState] = React.useState({
-        transaction: { ...EmptyTransaction }
+        transaction: newTransaction
     });
 
     React.useEffect(() => {
-        setState({
-            transaction: props.transaction 
-            ? props.transaction 
-            : { ...EmptyTransaction, date: currentDate }
-        });
-    }, [props.transaction, currentDate, setState]);
+        setState({transaction: props.transaction ? props.transaction : newTransaction});
+    }, [props.transaction, setState]);
 
     const setDate = date =>
         setState({transaction: { ...state.transaction, date: date }});
@@ -85,7 +89,7 @@ const TransactionForm = props => {
         setState({transaction: { ...state.transaction, category: category }});
 
     const cancelChanges = () => {
-        setState({transaction: props.transaction ? props.transaction : { ...EmptyTransaction }});
+        setState({transaction: props.transaction ? props.transaction : newTransaction});
         props.close();
     };
 

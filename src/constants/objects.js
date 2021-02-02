@@ -1,9 +1,4 @@
 // Accounts
-export const EmptyAccount = Object.freeze({
-    name: '',
-    type: '',
-    balance: 0,
-});
 export const SampleAccount = Object.freeze({
     name: 'Personal',
     type: 'Checking',
@@ -11,14 +6,6 @@ export const SampleAccount = Object.freeze({
 });
 
 // Subscriptions
-export const EmptySubscription = Object.freeze({
-    name: '',
-    firstBillingDate: '',
-    cycle: 'monthly',
-    accountId: null,
-    category: '',
-    amount: 0,
-});
 export const SampleSubscription = Object.freeze({
     name: 'Netflix',
     firstBillingDate: '2020-07-11',
@@ -29,13 +16,6 @@ export const SampleSubscription = Object.freeze({
 });
 
 // Transactions
-export const EmptyTransaction = Object.freeze({
-    date: '',
-    description: '',
-    accountId: null,
-    category: '',
-    amount: 0,
-});
 export const SampleTransaction = Object.freeze({
     date: '2020-07-11',
     description: 'Lunch with Alice and Bob',

@@ -8,7 +8,7 @@ import { DateSelector } from '../inputs/DateSelector';
 import { AccountSelector } from '../inputs/AccountSelector';
 import { CategorySelector } from '../inputs/CategorySelector';
 import { dateStringToISO, isValidCurrencyAmount, printDate, validateSubscription } from '../../utils';
-import { EmptySubscription, DATE_FORMAT_ISO } from '../../constants';
+import { DATE_FORMAT_ISO } from '../../constants';
 
 
 const useStyles = makeStyles(theme => ({
@@ -59,20 +59,26 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
+const newSubscription = {
+    name: '',
+    firstBillingDate: printDate(new Date(), DATE_FORMAT_ISO),
+    cycle: 'monthly',
+    accountId: null,
+    category: '',
+    amount: 0,
+};
+
+
 const SubscriptionForm = props => {
     const classes = useStyles();
-    const currentDate = printDate(new Date(), DATE_FORMAT_ISO);
 
     const [state, setState] = React.useState({
-        subscription: { ...EmptySubscription }
+        subscription: newSubscription
     });
 
     React.useEffect(() => {
-        setState({
-            subscription: props.subscription 
-            ? props.subscription 
-            : { ...EmptySubscription, firstBillingDate: currentDate }});
-    }, [props.subscription, currentDate, setState]);
+        setState({subscription: props.subscription ? props.subscription : newSubscription});
+    }, [props.subscription, setState]);
 
     const setFirstBillingDate = date =>
         setState({subscription: { ...state.subscription, firstBillingDate: date }});
@@ -93,7 +99,7 @@ const SubscriptionForm = props => {
         setState({subscription: { ...state.subscription, category: category }});
 
     const cancelChanges = () => {
-        setState({subscription: props.subscription ? props.subscription : { ...EmptySubscription }});
+        setState({subscription: props.subscription ? props.subscription : newSubscription});
         props.close();
     };
 
