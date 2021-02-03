@@ -1,10 +1,9 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActivePage, hideDialog, hideToast } from './redux/actions/ui';
+import { setActivePage, hideToast } from './redux/actions/ui';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { Navbar } from './components/Navbar';
 import { PageContainer } from './components/PageContainer';
-import { Dialog } from './components/alerts/Dialog';
 import { Toast } from './components/alerts/Toast';
 import { Introduction } from './components/introduction/Introduction';
 import { getTheme } from './themes';
@@ -18,7 +17,6 @@ function App() {
   const activePage = useSelector(state => state.activePage);
   const appTheme = useSelector(state => state.settings.appTheme);
   const dataIsLoaded = useSelector(state => state.dataIsLoaded);
-  const dialogState = useSelector(state => state.dialogState);
   const error = useSelector(state => state.error);
   const firstTimeUser = useSelector(state => state.settings.firstTimeUser);
   const isFetching = useSelector(state => state.isFetching);
@@ -47,12 +45,6 @@ function App() {
             activePage={activePage}
             error={error}
             isFetching={isFetching}
-          />
-          <Dialog
-            cancel={() => dispatch(hideDialog())}
-            confirm={dialogState.confirm}
-            isOpen={dialogState.isOpen}
-            title={dialogState.message}
           />
           <Toast
             close={() => dispatch(hideToast())}

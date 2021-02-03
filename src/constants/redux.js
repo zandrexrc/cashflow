@@ -31,7 +31,5 @@ export const SET_ACTIVE_PAGE = "SET_ACTIVE_PAGE";
 export const TOGGLE_IS_FETCHING = "TOGGLE_IS_FETCHING";
 export const SET_DATA_IS_LOADED = "SET_DATA_IS_LOADED";
 export const SET_ERROR = "SET_ERROR";
-export const SHOW_DIALOG = "SHOW_DIALOG";
-export const HIDE_DIALOG = "HIDE_DIALOG";
 export const SHOW_TOAST = "SHOW_TOAST";
 export const HIDE_TOAST = "HIDE_TOAST";

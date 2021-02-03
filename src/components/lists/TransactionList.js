@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { ListContainer } from './ListContainer';
-import { generateSampleCsv, printDate, transactionsToCsv } from '../../utils';
+import { printDate } from '../../utils';
 import { DATE_FORMAT_SHORT_MONTH } from '../../constants';
 
 
@@ -51,12 +51,11 @@ const TransactionList = props => {
     return (
         <ListContainer
             currency={props.currency}
-            importData={props.importData}
-            exportData={() => transactionsToCsv(props.transactions)}
+            exportData={props.exportData}
             items={props.transactions}
             openDetailsTab={props.openDetailsTab}
             openFormTab={props.openFormTab}
-            sampleFile={generateSampleCsv('transaction')}
+            openImportFileDialog={props.openImportFileDialog}
         >
             {renderRow}
         </ListContainer>
@@ -66,9 +65,10 @@ const TransactionList = props => {
 // PropTypes
 TransactionList.propTypes = {
     currency: PropTypes.string.isRequired,
-    importData: PropTypes.func.isRequired,
+    exportData: PropTypes.func.isRequired,
     openDetailsTab: PropTypes.func.isRequired,
     openFormTab: PropTypes.func.isRequired,
+    openImportFileDialog: PropTypes.func.isRequired,
     transactions: PropTypes.array.isRequired,
 };
 

@@ -2,32 +2,14 @@ import papa from 'papaparse';
 import { getAccountNames, getAccountIds, validateAccount } from './accountUtils';
 import { validateSubscription } from './subscriptionUtils';
 import { validateTransaction } from './transactionUtils';
-import { SampleAccount, SampleSubscription, SampleTransaction } from '../constants';
 
 
 /**
- * Generates a sample csv file.
- * @param {string} type: the type of data ('account' | 'subscription' | 'transaction') 
+ * Generates a csv file from an array of objects.
+ * @param {Array<Transaction|Subscription|Account>} data: an array of objects
  * @return {string}: a csv file
  */
-function generateSampleCsv(type) {
-    let data = [];
-
-    switch (type) {
-        case 'account':
-            data = [SampleAccount, SampleAccount];
-            break
-        case 'subscription':
-            data = [SampleSubscription, SampleSubscription];
-            break
-        case 'transaction':
-            data = [SampleTransaction, SampleTransaction];
-            break
-        default:
-            data = [];
-    }
-
-    // Convert data to csv
+function generateSampleCsv(data) {
     const csv = papa.unparse(data);
     const blob = new Blob([csv]);
     return URL.createObjectURL(blob, { type: 'text/csv' });
@@ -59,7 +41,7 @@ function exportCsv(csv, title) {
 /**
  * Processes a list of accounts into a CSV string.
  * @param {Array<Account>} accounts: a list of account objects
- * @return {string}: the accounts in a csv format
+ * @return {null}: a csv file is automatically downloaded
  */
 function accountsToCsv(accounts) {
     // Remove the accountId
@@ -81,7 +63,7 @@ function accountsToCsv(accounts) {
 /**
  * Processes a list of subscriptions into a CSV string.
  * @param {Array<Subscription>} subscriptions: a list of subscription objects
- * @return {string}: the subscriptions in a csv format
+ * @return {null}: a csv file is automatically downloaded
  */
 function subscriptionsToCsv(subscriptions) {
     const accountNames = getAccountNames();
@@ -108,7 +90,7 @@ function subscriptionsToCsv(subscriptions) {
 /**
  * Processes a list of transactions into a CSV string.
  * @param {Array<Transaction>} transactions: a list of transaction objects
- * @return {string}: the transactions in a csv format
+ * @return {null}: a csv file is automatically downloaded
  */
 function transactionsToCsv(transactions) {
     const accountNames = getAccountNames();

@@ -3,8 +3,6 @@ import {
     TOGGLE_IS_FETCHING,
     SET_DATA_IS_LOADED,
     SET_ERROR,
-    SHOW_DIALOG,
-    HIDE_DIALOG,
     SHOW_TOAST,
     HIDE_TOAST
 } from '../../constants';
@@ -27,16 +25,6 @@ export const setDataIsLoaded = () => ({
 export const setError = error => ({
     type: SET_ERROR,
     payload: error
-});
-
-export const showDialog = (message, confirm) => ({
-    type: SHOW_DIALOG,
-    payload: {message, confirm}
-});
-
-export const hideDialog = () => ({
-    type: HIDE_DIALOG,
-    payload: null
 });
 
 export const showToast = (message, severity) => ({

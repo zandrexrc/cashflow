@@ -1,17 +1,19 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addSubscription, editSubscription, deleteSubscription, addMultipleSubscriptions } from '../redux/actions/subscriptions';
-import { setError, showDialog, hideDialog } from '../redux/actions/ui';
+import { setError } from '../redux/actions/ui';
 import { makeStyles } from '@material-ui/core/styles';
 import { SubscriptionDetails } from '../components/details/SubscriptionDetails';
 import { SubscriptionForm } from '../components/forms/SubscriptionForm';
 import { SubscriptionList } from '../components/lists/SubscriptionList';
 import { SubscriptionStatistics } from '../components/statistics/SubscriptionStatistics';
-import { createSubscriptionsGraphData, csvToSubscriptions, filterSubscriptions } from '../utils';
+import { ConfirmationDialog } from '../components/alerts/ConfirmationDialog';
+import { ImportFileDialog } from '../components/inputs/ImportFileDialog';
+import { createSubscriptionsGraphData, csvToSubscriptions, filterSubscriptions, generateSampleCsv, subscriptionsToCsv } from '../utils';
+import { SampleSubscription } from '../constants';
 
 
- // Styles
- const useStyles = makeStyles({
+const useStyles = makeStyles({
     root: {
         display: 'flex',
         flexFlow: 'row nowrap',
@@ -20,75 +22,86 @@ import { createSubscriptionsGraphData, csvToSubscriptions, filterSubscriptions }
     }
 });
 
+const initialFilters = {
+    account: 'All',
+    category: 'All',
+    date: {
+        month: new Date().getMonth(),
+        year: new Date().getFullYear(),
+    }
+};
 
 const Subscriptions = () => {
+    const classes = useStyles();
+
+    // Local state
+    const [filters, setFilters] = React.useState(initialFilters);
+    const [selectedSubscription, setSelectedSubscription] = React.useState(null);
+    const [ui, setUi] = React.useState({
+        chartScope: 'monthly',
+        confirmationDialogIsOpen: false,
+        detailsTabIsOpen: false,
+        formTabIsOpen: false,
+        importFileDialogIsOpen: false,
+    });
+
     // Fetch items from Redux store
     const dispatch = useDispatch();
     const currency = useSelector(state => state.settings.currency);
     const dateFormat = useSelector(state => state.settings.dateFormat);
     const subscriptions = useSelector(state => state.subscriptions);
-
-    // Local state
-    const initialFilters = {
-        account: 'All',
-        category: 'All',
-        date: {
-            month: new Date().getMonth(),
-            year: new Date().getFullYear(),
-        }
-    };
-
-    const [state, setState] = React.useState({
-        filters: initialFilters,
-        detailsTabIsOpen: false,
-        formTabIsOpen: false,
-        selectedSubscription: null,
-        chartScope: 'monthly'
-    });
-
-    const displayedSubscriptions = filterSubscriptions(subscriptions, state.filters);
-    const chartData = createSubscriptionsGraphData(displayedSubscriptions, state.chartScope);
+    const displayedSubscriptions = filterSubscriptions(subscriptions, filters);
+    const chartData = createSubscriptionsGraphData(displayedSubscriptions, ui.chartScope);
+    const sampleFile = generateSampleCsv([SampleSubscription, SampleSubscription]);
 
     // Manage state
-    const setFilters = newFilters => {
-        setState({ ...state, filters: newFilters });
-    };
-
     const openDetailsTab = subscription => {
-        setState({ ...state, detailsTabIsOpen: true, selectedSubscription: subscription });
+        setSelectedSubscription(subscription);
+        setUi({ ...ui, detailsTabIsOpen: true });
     };
 
     const closeDetailsTab = () => {
-        setState({ ...state, detailsTabIsOpen: false, selectedSubscription: null });
+        setSelectedSubscription(null);
+        setUi({ ...ui, detailsTabIsOpen: false });
     };
 
     const toggleFormTab = () => {
-        setState({ ...state, formTabIsOpen: !state.formTabIsOpen });
+        setUi({ ...ui, formTabIsOpen: !ui.formTabIsOpen });
     };
 
-    const setChartScope = (scope) => {
-        setState({ ...state, chartScope: scope });
-    } 
+    const toggleConfirmationDialog = () => {
+        setUi({ ...ui, confirmationDialogIsOpen: !ui.confirmationDialogIsOpen });
+    };
+
+    const toggleImportFileDialog = () => {
+        setUi({ ...ui, importFileDialogIsOpen: !ui.importFileDialogIsOpen });
+    };
+
+    const setChartScope = scope => {
+        setUi({ ...ui, chartScope: scope });
+    }; 
 
     // Manage data
     const addData = newData => {
         dispatch(addSubscription(newData));
-        setState({ ...state, filters: initialFilters, formTabIsOpen: false });
+        setFilters(initialFilters);
+        toggleFormTab();
     }
 
     const editData = newData => {
         dispatch(editSubscription(newData.subscriptionId, newData));
-        setState({ ...state, selectedSubscription: newData, formTabIsOpen: false });
+        setSelectedSubscription(newData);
+        toggleFormTab();
     }
 
     const deleteData = () => {
-        dispatch(deleteSubscription(state.selectedSubscription.subscriptionId));
-        dispatch(hideDialog());
+        dispatch(deleteSubscription(selectedSubscription.subscriptionId));
+        toggleConfirmationDialog();
         closeDetailsTab();
     }
 
-    const alertDelete = () => {
-        dispatch(showDialog('Delete subscription?', deleteData));
+    const exportData = () => {
+        subscriptionsToCsv(displayedSubscriptions);
     }
 
     const importData = file => {
@@ -101,40 +114,50 @@ const Subscriptions = () => {
         });
     }
     
-    // Apply styles
-    const classes = useStyles();
-    
     return (
         <div className={classes.root}>
             <SubscriptionStatistics
                 chartData={chartData}
-                chartScope={state.chartScope}
-                filters={state.filters}
+                chartScope={ui.chartScope}
+                filters={filters}
                 setChartScope={setChartScope}
                 setFilters={setFilters}
             />
             <SubscriptionList
                 currency={currency}
-                importData={importData}
+                exportData={exportData}
                 openDetailsTab={openDetailsTab}
                 openFormTab={toggleFormTab}
+                openImportFileDialog={toggleImportFileDialog}
                 subscriptions={displayedSubscriptions}
             />
             <SubscriptionDetails
                 close={closeDetailsTab}
                 currency={currency}
                 dateFormat={dateFormat}
-                deleteItem={alertDelete}
-                isOpen={state.detailsTabIsOpen}
+                deleteItem={toggleConfirmationDialog}
+                isOpen={ui.detailsTabIsOpen}
                 openFormTab={toggleFormTab}
-                subscription={state.selectedSubscription}
+                subscription={selectedSubscription}
             />
             <SubscriptionForm
                 close={toggleFormTab}
                 currency={currency}
-                isOpen={state.formTabIsOpen}
-                submit={state.selectedSubscription ? editData : addData}
-                subscription={state.selectedSubscription}
+                isOpen={ui.formTabIsOpen}
+                submit={selectedSubscription ? editData : addData}
+                subscription={selectedSubscription}
+            />
+            <ConfirmationDialog 
+                cancel={toggleConfirmationDialog}
+                confirm={deleteData}
+                isOpen={ui.confirmationDialogIsOpen}
+                title="Delete subscription?"
+            />
+            <ImportFileDialog
+                cancel={toggleImportFileDialog}
+                importData={importData}
+                isOpen={ui.importFileDialogIsOpen}
+                sampleFile={sampleFile}
             />
         </div>
     );

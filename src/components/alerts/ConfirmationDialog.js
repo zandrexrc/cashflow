@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dialog as MuiDialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@material-ui/core';
 
 
-const Dialog = props => {
+const ConfirmationDialog = props => {
     return (
         <MuiDialog 
             open={props.isOpen} 
@@ -31,11 +31,11 @@ const Dialog = props => {
 }
 
 // PropTypes
-Dialog.propTypes = {
+ConfirmationDialog.propTypes = {
     cancel: PropTypes.func.isRequired,
     confirm: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
 };
 
-export { Dialog };
+export { ConfirmationDialog };

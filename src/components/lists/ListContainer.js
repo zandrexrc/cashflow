@@ -8,7 +8,6 @@ import PublishIcon from '@material-ui/icons/Publish';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import { IconButton, InputAdornment, Menu, MenuItem, TextField, Typography } from '@material-ui/core';
 import { FixedSizeList } from 'react-window';
-import { ImportFileDialog } from '../inputs/ImportFileDialog';
 
 
 const useStyles = makeStyles(theme => ({
@@ -112,14 +111,6 @@ const ListContainer = props => {
     const hideMenu = () => 
         setMenuAnchorEl(null);
 
-    // Import file dialog
-    const [importFileDialogIsOpen, setImportFileDialogIsOpen] = React.useState(false);
-
-    const toggleImportFileDialog = () => {
-        hideMenu();
-        setImportFileDialogIsOpen(!importFileDialogIsOpen);
-    }
-
     return (
         <div className={classes.root}>
             {
@@ -151,7 +142,7 @@ const ListContainer = props => {
                             open={Boolean(menuAnchorEl)}
                             onClose={hideMenu}
                         >
-                            <MenuItem onClick={toggleImportFileDialog}>
+                            <MenuItem onClick={props.openImportFileDialog}>
                                 <PublishIcon fontSize="small" />
                                 <span style={{marginLeft: '10px'}}>Import from CSV</span>
                             </MenuItem>
@@ -185,15 +176,6 @@ const ListContainer = props => {
                     {props.children}
                 </FixedSizeList>
             }
-            {
-                props.sampleFile && 
-                <ImportFileDialog
-                    cancel={toggleImportFileDialog}
-                    importData={props.importData}
-                    isOpen={importFileDialogIsOpen}
-                    sampleFile={props.sampleFile}
-                />
-            }
         </div>
     )   
 }
@@ -202,12 +184,11 @@ const ListContainer = props => {
 ListContainer.propTypes = {
     children: PropTypes.func.isRequired,
     currency: PropTypes.string.isRequired,
-    importData: PropTypes.func,
     exportData: PropTypes.func,
     items: PropTypes.array.isRequired,
-    sampleFile: PropTypes.string,
     openDetailsTab: PropTypes.func,
     openFormTab: PropTypes.func,
+    openImportFileDialog: PropTypes.func,
 };
 
 export { ListContainer };
