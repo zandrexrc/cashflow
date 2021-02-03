@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { Link, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles({
     root: {
@@ -25,7 +25,7 @@ const Error = props => {
                 {props.error}
             </Typography>
             <Typography variant="body1" color="textSecondary">
-                Please refresh the page.
+                <Link href="/">Click here to refresh the page.</Link>
             </Typography>
         </div>
     );

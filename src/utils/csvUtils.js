@@ -137,14 +137,14 @@ function csvToAccounts(csv, submitData) {
 
             // Abort early if there are parsing errors
             if (result.errors.length > 0) {
-                error = `Error in row ${rowCount}: Parsing error.`;
+                error = 'Parsing error.';
                 parser.abort();
                 return;
             }
 
             // Validate data
             if (account.name && accountIds[account.name]) {
-                error = `Error in row ${rowCount}: An account with the same name already exists.`;
+                error = 'An account with the same name already exists.';
                 parser.abort();
                 return;
             }
@@ -153,13 +153,16 @@ function csvToAccounts(csv, submitData) {
             if (isValid) {
                 parsedAccounts.push(account);
             } else {
-                error = `Error in row ${rowCount}: Invalid account details.`;
+                error = 'Invalid account details.';
                 parser.abort();
                 return;
             }
         },
         complete: function () {
-            submitData(error, parsedAccounts);
+            let fullErrorMessage = error 
+                ? `An error occured while parsing the file. (Row ${rowCount}: ${error})` 
+                : '';
+            submitData(fullErrorMessage, parsedAccounts);
         }
     });
 }
@@ -189,7 +192,7 @@ function csvToSubscriptions(csv, submitData) {
 
             // Abort early if there are parsing errors
             if (result.errors.length > 0) {
-                error = `Error in row ${rowCount}: Parsing error.`;
+                error = 'Parsing error.';
                 parser.abort();
                 return;
             }
@@ -198,7 +201,7 @@ function csvToSubscriptions(csv, submitData) {
             if (accountIds[subscription.account]) {
                 subscription.accountId = accountIds[subscription.account];
             } else {
-                error = `Error in row ${rowCount}: Invalid account name.`;
+                error = 'Invalid account name.';
                 parser.abort();
                 return;
             }
@@ -207,13 +210,16 @@ function csvToSubscriptions(csv, submitData) {
             if (isValid) {
                 parsedSubscriptions.push(subscription);
             } else {
-                error = `Error in row ${rowCount}: Invalid subscription details.`;
+                error = 'Invalid subscription details.';
                 parser.abort();
                 return;
             }
         },
         complete: function () {
-            submitData(error, parsedSubscriptions);
+            let fullErrorMessage = error 
+                ? `An error occured while parsing the file. (Row ${rowCount}: ${error})` 
+                : '';
+            submitData(fullErrorMessage, parsedSubscriptions);
         }
     });
 }
@@ -243,7 +249,7 @@ function csvToTransactions(csv, submitData) {
 
             // Abort early if there are parsing errors
             if (result.errors.length > 0) {
-                error = `Error in row ${rowCount}: Parsing error.`;
+                error = 'Parsing error.';
                 parser.abort();
                 return;
             }
@@ -252,7 +258,7 @@ function csvToTransactions(csv, submitData) {
             if (accountIds[transaction.account]) {
                 transaction.accountId = accountIds[transaction.account];
             } else {
-                error = `Error in row ${rowCount}: Invalid account name.`;
+                error = 'Invalid account name.';
                 parser.abort();
                 return;
             }
@@ -261,13 +267,16 @@ function csvToTransactions(csv, submitData) {
             if (isValid) {
                 parsedTransactions.push(transaction);
             } else {
-                error = `Error in row ${rowCount}: Invalid transaction details.`;
+                error = 'Invalid transaction details.';
                 parser.abort();
                 return;
             }
         },
         complete: function () {
-            submitData(error, parsedTransactions);
+            let fullErrorMessage = error 
+                ? `An error occured while parsing the file. (Row ${rowCount}: ${error})` 
+                : '';
+            submitData(fullErrorMessage, parsedTransactions);
         }
     });
 }
