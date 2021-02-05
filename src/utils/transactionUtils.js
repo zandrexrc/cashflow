@@ -1,5 +1,6 @@
-import { isValid as isValidDate } from 'date-fns';
-import { isValidCurrencyAmount } from './miscUtils';
+import {isValid as isValidDate} from 'date-fns';
+
+import {isValidCurrencyAmount} from './miscUtils';
 
 
 /**
@@ -8,14 +9,14 @@ import { isValidCurrencyAmount } from './miscUtils';
  * @return {Array<string>}: a list of categories
  */
 function getCategories(transactions) {
-    let categories = [];
-    for (let i = 0; i < transactions.length; i++) {
-        let category = transactions[i].category;
-        if (category && !categories.includes(category)) {
-            categories.push(category);
-        }
+  const categories = [];
+  for (let i = 0; i < transactions.length; i++) {
+    const category = transactions[i].category;
+    if (category && !categories.includes(category)) {
+      categories.push(category);
     }
-    return categories;
+  }
+  return categories;
 }
 
 
@@ -25,20 +26,20 @@ function getCategories(transactions) {
  * @return {Object}: an object containing all categories and their total amounts
  */
 function calcCategoryAmounts(transactions) {
-    let categoryAmounts = {};
-    for (let i = 0; i < transactions.length; i++) {
-        if (transactions[i].category) {
-            let category = transactions[i].category.toLowerCase();
-            categoryAmounts[category] = categoryAmounts[category] 
-                ? categoryAmounts[category] + transactions[i].amount 
-                : transactions[i].amount;
-        } else {
-            categoryAmounts["uncategorized"] = categoryAmounts["uncategorized"] 
-                ? categoryAmounts["uncategorized"] + transactions[i].amount 
-                : transactions[i].amount;
-        }
+  const categoryAmounts = {};
+  for (let i = 0; i < transactions.length; i++) {
+    if (transactions[i].category) {
+      const category = transactions[i].category.toLowerCase();
+      categoryAmounts[category] = categoryAmounts[category] ?
+                categoryAmounts[category] + transactions[i].amount :
+                transactions[i].amount;
+    } else {
+      categoryAmounts['uncategorized'] = categoryAmounts['uncategorized'] ?
+                categoryAmounts['uncategorized'] + transactions[i].amount :
+                transactions[i].amount;
     }
-    return categoryAmounts;
+  }
+  return categoryAmounts;
 }
 
 
@@ -48,26 +49,26 @@ function calcCategoryAmounts(transactions) {
  * @return {Array<number>}: a list of years
  */
 function getTransactionYears(transactions) {
-    let years = [];
-    for (let i = 0; i < transactions.length; i++) {
-        let year = parseInt(transactions[i].date.substring(0, 4));
-        if (!years.includes(year)) {
-            years.push(year);
-        }
+  const years = [];
+  for (let i = 0; i < transactions.length; i++) {
+    const year = parseInt(transactions[i].date.substring(0, 4));
+    if (!years.includes(year)) {
+      years.push(year);
     }
-    return years;
+  }
+  return years;
 }
 
 
 /**
  * Determines if a transaction passes the account filter.
- * @param {String or number} term: the account filter ("all" or accountId)
+ * @param {String | number} term: the account filter ("all" or accountId)
  * @param {Transaction} transaction: a transaction object
  * @return {boolean}: true if the transaction passes the filter, false if not
  */
 const filterByAccount = (term, transaction) => {
-    return term === "All" || parseInt(term) === transaction.accountId;
-}
+  return term === 'All' || parseInt(term) === transaction.accountId;
+};
 
 /**
  * Determines if a transaction passes the category filter.
@@ -76,12 +77,12 @@ const filterByAccount = (term, transaction) => {
  * @return {boolean}: true if the transaction passes the filter, false if not
  */
 const filterByCategory = (term, transaction) => {
-    if (transaction.category) {
-        return term === "All" || transaction.category === term;
-    } else {
-        return term === "All" || term === "Uncategorized";
-    }
-}
+  if (transaction.category) {
+    return term === 'All' || transaction.category === term;
+  } else {
+    return term === 'All' || term === 'Uncategorized';
+  }
+};
 
 /**
  * Determines if a transaction passes the date filter.
@@ -90,27 +91,27 @@ const filterByCategory = (term, transaction) => {
  * @return {boolean}: true if the transaction passes the filter, false if not
  */
 const filterByDate = (term, transaction) => {
-    const date = new Date(transaction.date);
-    if (term.month === -1) {
-        return term.year === date.getFullYear();
-    } else {
-        return term.month === date.getMonth() &&
+  const date = new Date(transaction.date);
+  if (term.month === -1) {
+    return term.year === date.getFullYear();
+  } else {
+    return term.month === date.getMonth() &&
             term.year === date.getFullYear();
-    }
-}
+  }
+};
 
 /**
  * Filter the transactions list based on a given set of filtering conditions.
  * @param {Array<Transaction>} transactions: a list of transactions
- * @param {Object} filters: the filter conditions to be used 
+ * @param {Object} filters: the filter conditions to be used
  * @return {Array<Transaction>}: the filtered list of transactions
  */
 function filterTransactions(transactions, filters) {
-    return transactions.filter(t => (
-        filterByAccount(filters.account, t) &&
+  return transactions.filter((t) => (
+    filterByAccount(filters.account, t) &&
         filterByCategory(filters.category, t) &&
-        filterByDate(filters.date, t) 
-    )).sort((a, b) => new Date(b.date) - new Date(a.date));
+        filterByDate(filters.date, t)
+  )).sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
 
@@ -120,20 +121,20 @@ function filterTransactions(transactions, filters) {
  * @return {boolean}: true if the transaction is valid, false otherwise
  */
 function validateTransaction(transaction) {
-    let isValid = false;
+  let isValid = false;
 
-    const hasAllRequiredAttributes = 
-        transaction.date && transaction.description 
-        && transaction.amount && transaction.accountId;
+  const hasAllRequiredAttributes =
+        transaction.date && transaction.description &&
+        transaction.amount && transaction.accountId;
 
-    if (hasAllRequiredAttributes) {
-        const dateisValid = isValidDate(new Date(transaction.date));
-        const descriptionIsValid = transaction.description.trim().length > 0;
-        const amountIsValid = isValidCurrencyAmount(transaction.amount);
-        isValid = dateisValid && descriptionIsValid && amountIsValid;
-    }
+  if (hasAllRequiredAttributes) {
+    const dateisValid = isValidDate(new Date(transaction.date));
+    const descriptionIsValid = transaction.description.trim().length > 0;
+    const amountIsValid = isValidCurrencyAmount(transaction.amount);
+    isValid = dateisValid && descriptionIsValid && amountIsValid;
+  }
 
-    return isValid;
+  return isValid;
 }
 
 
@@ -143,24 +144,24 @@ function validateTransaction(transaction) {
  * @return {Object}: an object containing the income, expenses, and net income
  */
 function calcNetIncome(transactions) {
-    let totalIncome = 0;
-    let totalExpenses = 0;
+  let totalIncome = 0;
+  let totalExpenses = 0;
 
-    for (let i = 0; i < transactions.length; i++) {
-        let amount = transactions[i].amount;
+  for (let i = 0; i < transactions.length; i++) {
+    const amount = transactions[i].amount;
         amount < 0 ? totalExpenses += Math.abs(amount) : totalIncome += amount;
-    }
+  }
 
-    let netIncome = totalIncome - totalExpenses;
-    return { totalIncome, totalExpenses, netIncome };
+  const netIncome = totalIncome - totalExpenses;
+  return {totalIncome, totalExpenses, netIncome};
 }
 
 
 export {
-    getTransactionYears,
-    getCategories,
-    calcCategoryAmounts,
-    filterTransactions,
-    validateTransaction,
-    calcNetIncome
+  getTransactionYears,
+  getCategories,
+  calcCategoryAmounts,
+  filterTransactions,
+  validateTransaction,
+  calcNetIncome,
 };

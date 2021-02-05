@@ -1,13 +1,14 @@
-const sqlite3 = require('sqlite3').verbose();
-const { open } = require('sqlite');
 const path = require('path');
+
+const {open} = require('sqlite');
+const sqlite3 = require('sqlite3').verbose();
 
 const connection = {
 
   async openDb(filename) {
     return open({
       filename,
-      driver: sqlite3.Database
+      driver: sqlite3.Database,
     });
   },
 
@@ -22,7 +23,7 @@ const connection = {
     } finally {
       db.close();
     }
-  }
+  },
 
 };
 

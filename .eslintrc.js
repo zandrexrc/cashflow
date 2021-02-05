@@ -20,24 +20,37 @@ module.exports = {
     'react',
     'import',
   ],
+  'settings': {
+    'react': {
+      'version': 'detect'
+    }
+  },
   'rules': {
-    "linebreak-style": ["error", "windows"],
-    "import/order": [
-      "error",
+    'linebreak-style': ['error', 'windows'],
+    'import/order': [
+      'error',
       {
-        "groups": ["builtin", "external", "internal"],
-        "pathGroups": [
+        'groups': ['builtin', 'external', 'internal'],
+        'pathGroups': [
           {
-            "pattern": "react",
-            "group": "external",
-            "position": "before"
+            'pattern': 'react',
+            'group': 'external',
+            'position': 'before'
           }
         ],
-        "pathGroupsExcludedImportTypes": ["react"],
-        "newlines-between": "always",
-        "alphabetize": {
-          "order": "asc",
-          "caseInsensitive": true
+        'pathGroupsExcludedImportTypes': ['react'],
+        'newlines-between': 'always',
+        'alphabetize': {
+          'order': 'asc',
+          'caseInsensitive': true
+        }
+      }
+    ],
+    'require-jsdoc': [
+      'error',
+      {
+        'require': { 
+          'FunctionDeclaration': false 
         }
       }
     ],
