@@ -23,7 +23,6 @@ Check out the [demo](https://cashflow-zandrexrc.netlify.app/).
 - [User manual](https://github.com/zandrexrc/cashflow/blob/master/docs/user-manual.md)
 
 ## Documentation
-- [React components](https://github.com/zandrexrc/cashflow/blob/master/docs/components.md)
 - [Redux state](https://github.com/zandrexrc/cashflow/blob/master/docs/redux.md)
 - [Express server API](https://github.com/zandrexrc/cashflow/tree/master/docs/api)
 - [Database](https://github.com/zandrexrc/cashflow/blob/master/docs/database.md)

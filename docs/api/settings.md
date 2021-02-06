@@ -12,17 +12,17 @@ Below is a list of all relevant endpoints:
 | PUT    | /api/settings | Update settings   |
 
 
-# The settings object
+## The settings object
 The settings is represented as a JavaScript object with the following properties:
 
-| Property   | Type   | Null | Description                                  |
-| ---------- | ------ | ---- | -------------------------------------------- |
-| currency   | string | No   | a three-letter [ISO currency code][iso-link] |
-| dateFormat | string | No   | the format in which dates are displayed      |
-| appTheme   | string | No   | the appearance theme of the app (light/dark) |
+| Property   | Type   | Null | Description                                       |
+| ---------- | ------ | ---- | ------------------------------------------------- |
+| currency   | string | No   | a currency symbol or code (max three characters)  |
+| dateFormat | string | No   | the format in which dates are displayed           |
+| appTheme   | string | No   | the appearance theme of the app (light/dark)      |
 
 
-# Retrieve settings
+## Retrieve settings
 Request using [Fetch API][fetch-api-url] :
 ```javascript
 const response = await fetch('/api/settings');
@@ -32,13 +32,13 @@ Response:
 ```javascript
 {
     "currency": "NOK",
-    "dateFormat": "DD.MM.YYYY",
+    "dateFormat": "dd.MM.yyyy",
     "appTheme": "light"
 }
 ```
 
 
-# Update settings
+## Update settings
 Request using [Fetch API][fetch-api-url] :
 ```javascript
 const response = await fetch(
@@ -47,8 +47,8 @@ const response = await fetch(
         method: 'PUT',
         headers: {'Content-Type': 'application/json' },
         body: JSON.stringify({
-            currency: 'USD',
-            dateFormat: 'MM-DD-YYYY',
+            currency: '$',
+            dateFormat: 'MM-dd-yyyy',
             appTheme: 'dark'
         })
     }
@@ -58,8 +58,8 @@ const response = await fetch(
 Response:
 ```javascript
 {
-    "currency": "USD",
-    "dateFormat": "MM-DD-YYYY",
+    "currency": "$",
+    "dateFormat": "MM-dd-yyyy",
     "appTheme": "dark"
 }
 ```

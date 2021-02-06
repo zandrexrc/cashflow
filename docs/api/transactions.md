@@ -6,25 +6,27 @@ Transactions are records of financial expenses or revenues.
 - [Update a transaction](#update-a-transaction)
 - [Delete a transaction](#delete-a-transaction)
 - [Retrieve all transactions](#retrieve-all-transactions)
+- [Create multiple tranasctions](#create-multiple-transactions)
 
 Below is a list of all relevant endpoints:
-| Method | URI                  | Description               |
-| ------ | -------------------- | ------------------------- |
-| GET    | /api/transactions    | Retrieve all transactions |
-| POST   | /api/transactions    | Create a transaction      |
-| PUT    | /api/transactions/:id | Update a transaction      |
-| DELETE | /api/transactions/:id | Delete a transaction      |
+| Method | URI                     | Description                  |
+| ------ | ----------------------- | ---------------------------- |
+| GET    | /api/transactions       | Retrieve all transactions    |
+| POST   | /api/transactions       | Create a transaction         |
+| PUT    | /api/transactions/:id   | Update a transaction         |
+| DELETE | /api/transactions/:id   | Delete a transaction         |
+| POST   | /api/transactions-group | Create multiple transactions |
 
 
-# The transaction object
+## The transaction object
 A transaction is represented as a JavaScript object with the following properties:
 
 | Property      | Type   | Null | Description                            |
 | ------------- | ------ | ---- | -------------------------------------- |
-| transactionID | number | No   | unique identifier for the transaction  |
+| transactionId | number | No   | unique identifier for the transaction  |
 | date          | string | No   | the transaction date in ISO format     |
 | description   | string | No   | a short description of the transaction |
-| accountID     | number | No   | the account used for the transaction   |
+| accountId     | number | No   | the account used for the transaction   |
 | category      | string | Yes  | a label used for grouping transactions |
 | amount        | number | No   | the amount of money gained or lost     |
 
@@ -32,7 +34,7 @@ A transaction is represented as a JavaScript object with the following propertie
 > If it is a financial revenue, the amount is positive (e.g. 123.45)
 
 
-# Create a transaction
+## Create a transaction
 Request using [Fetch API][fetch-api-url] :
 ```javascript
 const response = await fetch(
@@ -54,17 +56,17 @@ const response = await fetch(
 Response:
 ```javascript
 {
-    "transactionID": 1,
-    "date": "2020-07-10T22:00:00.000Z",
+    "transactionId": 1,
+    "date": "2020-07-11",
     "description": "Groceries",
-    "accountID": 2,
+    "accountId": 2,
     "category": "Food",
     "amount": -246.8
 }
 ```
 
 
-# Update a transaction
+## Update a transaction
 Request using [Fetch API][fetch-api-url] :
 ```javascript
 const response = await fetch(
@@ -75,7 +77,7 @@ const response = await fetch(
         body: JSON.stringify({
             date: '2020-07-11',
             description: 'Groceries',
-            accountID: 2,
+            accountId: 2,
             category: null,
             amount: -100.00
         })
@@ -86,16 +88,16 @@ const response = await fetch(
 Response:
 ```javascript
 {
-    "transactionID": 1,
-    "date": "2020-07-10T22:00:00.000Z",
+    "transactionId": 1,
+    "date": "2020-07-11",
     "description": "Groceries",
-    "accountID": 2,
+    "accountId": 2,
     "category": "",
     "amount": -100
 }
 ```
 
-# Delete a transaction
+## Delete a transaction
 Request using [Fetch API][fetch-api-url] :
 ```javascript
 const response = await fetch(
@@ -107,13 +109,13 @@ const response = await fetch(
 Response:
 ```javascript
 {
-    "transactionID": 1,
+    "transactionId": 1,
     "deleted": true
 }
 ```
 
 
-# Retrieve all transactions
+## Retrieve all transactions
 Request using [Fetch API][fetch-api-url] :
 ```javascript
 const response = await fetch('/api/transactions');
@@ -123,28 +125,79 @@ Response:
 ```javascript
 [
     {
-        "transactionID": 2,
-        "date": "2020-07-10T22:00:00.000Z",
+        "transactionId": 2,
+        "date": "2020-07-10",
         "description": "Sneakers",
-        "accountID": 2,
+        "accountId": 2,
         "category": "Clothing",
         "amount": -799.99
     },
     {
-        "transactionID": 3,
-        "date": "2020-07-10T22:00:00.000Z",
+        "transactionId": 3,
+        "date": "2020-07-10",
         "description": "PS4 DualShock controller",
-        "accountID": 2,
+        "accountId": 2,
         "category": "Gaming",
         "amount": -599.99
     },
     {
-        "transactionID": 4,
-        "date": "2020-07-11T22:00:00.000Z",
+        "transactionId": 4,
+        "date": "2020-07-11",
         "description": "Ramen for next weekend",
-        "accountID": 4,
+        "accountId": 4,
         "category": "Food",
         "amount": 100
+    }
+]
+```
+
+
+## Create multiple transactions
+Request using [Fetch API][fetch-api-url] :
+```javascript
+const response = await fetch(
+    '/api/transactions-group',
+    {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json' },
+        body: JSON.stringify([
+            {
+                date: '2020-07-12',
+                description: 'Lunch',
+                accountID: 1,
+                category: 'Food',
+                amount: -79.9
+            },
+            {
+                date: '2020-07-12',
+                description: 'Dinner',
+                accountID: 1,
+                category: 'Food',
+                amount: -149.9
+            },
+        ])
+    }
+);
+```
+
+Response:
+```javascript
+[
+    {
+        "transactionId": 5,
+        "date": "2020-07-12",
+        "description": "Lunch",
+        "accountId": 1,
+        "category": "Food",
+        "amount": -79.9
+    },
+    {
+        "transactionId": 6,
+        "date": "2020-07-12",
+        "description": "Dinner",
+        "accountId": 1,
+        "category": "Food",
+        "amount": -149.9
     }
 ]
 ```
