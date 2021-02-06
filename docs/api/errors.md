@@ -10,7 +10,7 @@ In the event of a request failure, the response also includes the following obje
 | -------- | ------ | ---- | -------------------------------------------- |
 | error    | string | No   | a short description of the error             |
 
-# Example
+## Example
 An error is returned when trying to update an account using an invalid accountID in the URL:
 ```javascript
 await fetch(

@@ -1,7 +1,7 @@
-// set up modules
-const express = require("express");
+const path = require('path');
+
+const express = require('express');
 const app = express();
-const path = require("path");
 
 // app configuration
 app.use(express.static(path.resolve(__dirname, '../../build')));
@@ -10,11 +10,11 @@ app.use(express.json({type: 'application/vnd.api+json'}));
 app.use(express.urlencoded({extended: true}));
 
 // API endpoints
-require("./routes")(app);
+require('./routes')(app);
 
-// root 
-app.get("/", function(req, res) {
-    res.sendFile(path.resolve(__dirname, '../../build', 'index.html'));
+// root
+app.get('/', function(req, res) {
+  res.sendFile(path.resolve(__dirname, '../../build', 'index.html'));
 });
 
 // listen

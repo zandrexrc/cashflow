@@ -1,35 +1,35 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setActivePage, hideDialog, hideToast } from './redux/actions/ui';
-import { ThemeProvider } from '@material-ui/core/styles';
-import { Box, CircularProgress } from '@material-ui/core';
-import { Navbar } from './components/Navbar';
-import { PageContainer } from './components/PageContainer';
-import { Dialog } from './components/alerts/Dialog';
-import { Toast } from './components/alerts/Toast';
-import { Introduction } from './components/introduction/Introduction';
-import { getTheme } from './themes';
+
+import {ThemeProvider} from '@material-ui/core/styles';
+import {useDispatch, useSelector} from 'react-redux';
+
+import {loadingLight} from './assets/images';
+import {Toast} from './components/alerts/Toast';
+import {Introduction} from './components/introduction/Introduction';
+import {Navbar} from './components/Navbar';
+import {PageContainer} from './components/PageContainer';
+import {setActivePage, hideToast} from './redux/actions/ui';
+import {getTheme} from './themes';
 import './App.css';
 
 
 function App() {
-  // Fetch state from Redux store
   const dispatch = useDispatch();
-  const activePage = useSelector(state => state.activePage);
-  const appTheme = useSelector(state => state.settings.appTheme);
-  const dataIsLoaded = useSelector(state => state.dataIsLoaded);
-  const dialogState = useSelector(state => state.dialogState);
-  const error = useSelector(state => state.error);
-  const firstTimeUser = useSelector(state => state.settings.firstTimeUser);
-  const toastState = useSelector(state => state.toastState);
+  const activePage = useSelector((state) => state.activePage);
+  const appTheme = useSelector((state) => state.settings.appTheme);
+  const dataIsLoaded = useSelector((state) => state.dataIsLoaded);
+  const error = useSelector((state) => state.error);
+  const firstTimeUser = useSelector((state) => state.settings.firstTimeUser);
+  const isFetching = useSelector((state) => state.isFetching);
+  const toastState = useSelector((state) => state.toastState);
 
   return (
     <ThemeProvider theme={getTheme(appTheme)}>
       {
         !dataIsLoaded &&
-        <Box className="App">
-          <CircularProgress />
-        </Box>
+        <div className="App">
+          <img src={loadingLight} alt="loading" width="100px" />
+        </div>
       }
       {
         dataIsLoaded && firstTimeUser &&
@@ -37,20 +37,15 @@ function App() {
       }
       {
         dataIsLoaded && !firstTimeUser &&
-        <Box className="App">
+        <div className="App">
           <Navbar
             activePage={activePage}
-            setActivePage={id => dispatch(setActivePage(id))}
+            setActivePage={(id) => dispatch(setActivePage(id))}
           />
           <PageContainer
             activePage={activePage}
             error={error}
-          />
-          <Dialog
-            cancel={() => dispatch(hideDialog())}
-            confirm={dialogState.confirm}
-            isOpen={dialogState.isOpen}
-            title={dialogState.message}
+            isFetching={isFetching}
           />
           <Toast
             close={() => dispatch(hideToast())}
@@ -58,10 +53,10 @@ function App() {
             message={toastState.message}
             severity={toastState.severity}
           />
-        </Box>
+        </div>
       }
     </ThemeProvider>
   );
 }
 
-export { App };
+export {App};

@@ -1,13 +1,13 @@
-const accounts = require("./accounts");
-const transactions = require("./transactions");
-const subscriptions = require("./subscriptions");
-const settings = require("./settings");
+const accounts = require('./accounts');
+const settings = require('./settings');
+const subscriptions = require('./subscriptions');
+const transactions = require('./transactions');
 
 const queries = {
-    accounts,
-    transactions,
-    subscriptions,
-    settings
+  accounts,
+  transactions,
+  subscriptions,
+  settings,
 };
 
 module.exports = queries;

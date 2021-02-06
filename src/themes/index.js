@@ -1,8 +1,8 @@
-import lightTheme from './light';
 import darkTheme from './dark';
+import lightTheme from './light';
 
 function getTheme(type) {
-    return type === "light" ? lightTheme : darkTheme ;
+  return type === 'light' ? lightTheme : darkTheme;
 }
 
-export { getTheme };
+export {getTheme};

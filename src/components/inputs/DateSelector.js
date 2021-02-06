@@ -1,36 +1,53 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+
 import DateFnsUtils from '@date-io/date-fns';
-import { isValid } from 'date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+import {isValid, format} from 'date-fns';
+import PropTypes from 'prop-types';
+import {useSelector} from 'react-redux';
+
+import {DATE_FORMAT_ISO} from '../../constants';
 
 
-const DateSelector = props => {
-    return (
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-                className="datepicker"
-                disableToolbar
-                variant="inline"
-                format="dd.MM.yyyy"
-                margin="normal"
-                id="date-picker-inline"
-                label="Date"
-                value={props.selectedDate}
-                onChange={props.setDate}
-                KeyboardButtonProps={{
-                    'aria-label': 'change date',
-                }}
-                error={!isValid(new Date(props.selectedDate))}
-            />
-        </MuiPickersUtilsProvider>
-    )
-}
+const DateSelector = (props) => {
+  const dateFormat = useSelector((state) => state.settings.dateFormat);
+  const currentDate = format(new Date(), DATE_FORMAT_ISO);
+  const datePickerValue = props.selectedDate || currentDate;
 
-// PropTypes
-DateSelector.propTypes = {
-    selectedDate: PropTypes.any.isRequired,
-    setDate: PropTypes.func.isRequired,
+  const onChangeHandler = (date) => {
+    const dateString = format(date, DATE_FORMAT_ISO);
+    props.setDate(dateString);
+  };
+
+  return (
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <KeyboardDatePicker
+        className="datepicker"
+        disableToolbar
+        variant="inline"
+        format={dateFormat}
+        margin="normal"
+        id="date-picker-inline"
+        label="Date"
+        value={datePickerValue}
+        onChange={onChangeHandler}
+        KeyboardButtonProps={{
+          'aria-label': 'change date',
+        }}
+        error={!isValid(new Date(props.selectedDate))}
+      />
+    </MuiPickersUtilsProvider>
+  );
 };
 
-export { DateSelector };
+DateSelector.propTypes = {
+  /** The selected date (as string) */
+  selectedDate: PropTypes.string.isRequired,
+  /** Function to change the selected date */
+  setDate: PropTypes.func.isRequired,
+};
+
+export {DateSelector};

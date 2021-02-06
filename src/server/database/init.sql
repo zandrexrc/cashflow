@@ -1,38 +1,38 @@
 -- Create tables
 CREATE TABLE "accounts" (
-	"accountId"	INTEGER NOT NULL,
-	"name"	TEXT NOT NULL,
-	"type"	TEXT NOT NULL,
-	"balance"	REAL NOT NULL,
+	"accountId" INTEGER NOT NULL,
+	"name" TEXT NOT NULL,
+	"type" TEXT NOT NULL,
+	"balance" REAL NOT NULL,
 	PRIMARY KEY("accountId" AUTOINCREMENT)
 );
 
 CREATE TABLE "transactions" (
-	"transactionId"	INTEGER NOT NULL,
-	"date"	TEXT NOT NULL,
-	"description"	TEXT NOT NULL,
-	"category"	TEXT,
-	"amount"	REAL NOT NULL,
+	"transactionId" INTEGER NOT NULL,
+	"date" TEXT NOT NULL,
+	"description" TEXT NOT NULL,
+	"category" TEXT,
+	"amount" REAL NOT NULL,
 	"accountId"	INTEGER NOT NULL,
 	FOREIGN KEY("accountId") REFERENCES "accounts"("accountId"),
 	PRIMARY KEY("transactionId" AUTOINCREMENT)
 );
 
 CREATE TABLE "subscriptions" (
-	"subscriptionId"	INTEGER NOT NULL,
-	"name"	TEXT NOT NULL,
-	"firstBillingDate"	TEXT NOT NULL,
+	"subscriptionId" INTEGER NOT NULL,
+	"name" TEXT NOT NULL,
+	"firstBillingDate" TEXT NOT NULL,
 	"cycle"	TEXT NOT NULL,
-	"category"	TEXT,
-	"amount"	REAL NOT NULL,
+	"category" TEXT,
+	"amount" REAL NOT NULL,
 	"accountId"	INTEGER NOT NULL,
 	PRIMARY KEY("subscriptionId" AUTOINCREMENT),
 	FOREIGN KEY("accountId") REFERENCES "accounts"("accountId")
 );
 
 CREATE TABLE "settings" (
-	"userId"	INTEGER NOT NULL,
-	"userSettings"	TEXT NOT NULL,
+	"userId" INTEGER NOT NULL,
+	"userSettings" TEXT NOT NULL,
 	PRIMARY KEY("userId" AUTOINCREMENT)
 );
 

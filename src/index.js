@@ -1,19 +1,21 @@
 import React from 'react';
+
 import ReactDOM from 'react-dom';
 import './index.css';
-import { App } from './App';
-import { Provider } from 'react-redux';
-import { store } from './redux/store';
-import { getTransactions } from './redux/actions/transactions';
-import { getSubscriptions } from './redux/actions/subscriptions';
-import { getAccounts } from './redux/actions/accounts';
-import { getSettings } from './redux/actions/settings';
-import { setDataIsLoaded } from './redux/actions/ui';
+import {Provider} from 'react-redux';
+
+import {App} from './App';
+import {getAccounts} from './redux/actions/accounts';
+import {getSettings} from './redux/actions/settings';
+import {getSubscriptions} from './redux/actions/subscriptions';
+import {getTransactions} from './redux/actions/transactions';
+import {setDataIsLoaded} from './redux/actions/ui';
+import {store} from './redux/store';
 import * as serviceWorker from './serviceWorker';
 
 
 // Fetch data from the database
-async function loadData () {
+async function loadData() {
   await store.dispatch(getSettings());
   await store.dispatch(getAccounts());
   await store.dispatch(getTransactions());
@@ -23,10 +25,10 @@ async function loadData () {
 loadData();
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('root')
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change
