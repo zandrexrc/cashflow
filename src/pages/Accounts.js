@@ -93,8 +93,8 @@ const Accounts = () => {
 
   const deleteData = () => {
     dispatch(deleteAccount(selectedAccount.accountId));
-    toggleConfirmationDialog();
-    closeDetailsTab();
+    setUi({...ui, detailsTabIsOpen: false, confirmationDialogIsOpen: false});
+    setSelectedAccount(null);
   };
 
   const exportData = () => {
@@ -141,6 +141,10 @@ const Accounts = () => {
         cancel={toggleConfirmationDialog}
         confirm={deleteData}
         isOpen={ui.confirmationDialogIsOpen}
+        message={
+          `This will also delete all transactions and subscriptions that are 
+          associated with the account.`
+        }
         title="Delete account?"
       />
       <ImportFileDialog
