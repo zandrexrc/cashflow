@@ -113,8 +113,8 @@ const Transactions = () => {
     const oldData = selectedTransaction;
     await dispatch(deleteTransaction(oldData.transactionId));
     dispatch(updateAccountBalance(oldData.accountId, -oldData.amount));
-    toggleConfirmationDialog();
-    closeDetailsTab();
+    setUi({...ui, detailsTabIsOpen: false, confirmationDialogIsOpen: false});
+    setSelectedTransaction(null);
   };
 
   const exportData = () => {
@@ -166,6 +166,7 @@ const Transactions = () => {
         cancel={toggleConfirmationDialog}
         confirm={deleteData}
         isOpen={ui.confirmationDialogIsOpen}
+        message="This action cannot be undone."
         title="Delete transaction?"
       />
       <ImportFileDialog

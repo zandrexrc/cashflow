@@ -23,7 +23,7 @@ const ConfirmationDialog = (props) => {
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          This action cannot be undone.
+          { props.message }
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -45,7 +45,9 @@ ConfirmationDialog.propTypes = {
   confirm: PropTypes.func.isRequired,
   /** If true, the dialog is open/visible */
   isOpen: PropTypes.bool.isRequired,
-  /** The message displayed at the top of the dialog */
+  /** The message displayed in the body of the dialog */
+  message: PropTypes.string.isRequired,
+  /** The text displayed at the top of the dialog */
   title: PropTypes.string.isRequired,
 };
 

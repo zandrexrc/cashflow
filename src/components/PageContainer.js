@@ -25,6 +25,16 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '200px',
     backgroundColor: theme.palette.background.default,
   },
+  loading: {
+    position: 'absolute',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100vh',
+    backgroundColor: theme.palette.background.default,
+    zIndex: '99',
+  },
 }));
 
 
@@ -33,15 +43,17 @@ const PageContainer = (props) => {
   const theme = useTheme();
 
   return (
-    props.isFetching ?
     <div className={classes.root}>
-      <img
-        src={theme.palette.type === 'light' ? loadingLight : loadingDark }
-        alt="loading"
-        width="100px"
-      />
-    </div> :
-    <div className={classes.root}>
+      {
+        props.isFetching &&
+        <div className={classes.loading}>
+          <img
+            src={theme.palette.type === 'light' ? loadingLight : loadingDark }
+            alt="loading"
+            width="100px"
+          />
+        </div>
+      }
       {
         props.error ?
         <ErrorPage error={props.error} /> :

@@ -112,6 +112,12 @@ const AccountForm = (props) => {
     }
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      saveChanges();
+    }
+  };
+
   return (
     <Slide direction="left" in={props.isOpen} mountOnEnter unmountOnExit>
       <Paper className={classes.root} square elevation={10}>
@@ -128,21 +134,23 @@ const AccountForm = (props) => {
             label="Type"
             margin="normal"
             defaultValue={state.account.type}
-            onBlur={(event) => setType(event.target.value)}
+            onChange={(event) => setType(event.target.value)}
             error={state.account.type.trim().length === 0}
             helperText={
               state.account.type.trim().length === 0 ?
               'Required' : ''
             }
+            onKeyPress={handleKeyPress}
           />
           <TextField
             label="Name"
             margin="normal"
             fullWidth
             defaultValue={state.account.name}
-            onBlur={(event) => changeName(event.target.value)}
+            onChange={(event) => changeName(event.target.value)}
             error={Boolean(nameError)}
             helperText={nameError}
+            onKeyPress={handleKeyPress}
           />
           <TextField
             label="Balance"
@@ -150,13 +158,14 @@ const AccountForm = (props) => {
             variant="filled"
             fullWidth
             defaultValue={state.account.balance}
-            onBlur={(event) => setBalance(event.target.value)}
+            onChange={(event) => setBalance(event.target.value)}
             error={!isValidCurrencyAmount(state.account.balance)}
             helperText={
               !isValidCurrencyAmount(state.account.balance) ?
               'Invalid amount' : ''
             }
             InputProps={{endAdornment: props.currency}}
+            onKeyPress={handleKeyPress}
           />
         </div>
       </Paper>

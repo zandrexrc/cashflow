@@ -115,8 +115,8 @@ const Subscriptions = () => {
 
   const deleteData = () => {
     dispatch(deleteSubscription(selectedSubscription.subscriptionId));
-    toggleConfirmationDialog();
-    closeDetailsTab();
+    setUi({...ui, detailsTabIsOpen: false, confirmationDialogIsOpen: false});
+    setSelectedSubscription(null);
   };
 
   const exportData = () => {
@@ -170,6 +170,7 @@ const Subscriptions = () => {
         cancel={toggleConfirmationDialog}
         confirm={deleteData}
         isOpen={ui.confirmationDialogIsOpen}
+        message="This action cannot be undone."
         title="Delete subscription?"
       />
       <ImportFileDialog

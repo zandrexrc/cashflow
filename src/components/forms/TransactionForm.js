@@ -119,6 +119,12 @@ const TransactionForm = (props) => {
     }
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      saveChanges();
+    }
+  };
+
   return (
     <Slide direction="left" in={props.isOpen} mountOnEnter unmountOnExit>
       <Paper className={classes.root} square elevation={10}>
@@ -156,13 +162,14 @@ const TransactionForm = (props) => {
             variant="filled"
             fullWidth
             defaultValue={state.transaction.amount}
-            onBlur={(event) => setAmount(event.target.value)}
+            onChange={(event) => setAmount(event.target.value)}
             error={!isValidCurrencyAmount(state.transaction.amount)}
             helperText={
               !isValidCurrencyAmount(state.transaction.amount) ?
               'Invalid amount' : ''
             }
             InputProps={{endAdornment: props.currency}}
+            onKeyPress={handleKeyPress}
           />
           <div className="tags">
             <CategorySelector

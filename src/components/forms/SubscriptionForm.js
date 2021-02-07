@@ -139,6 +139,12 @@ const SubscriptionForm = (props) => {
     }
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      saveChanges();
+    }
+  };
+
   return (
     <Slide direction="left" in={props.isOpen} mountOnEnter unmountOnExit>
       <Paper className={classes.root} square elevation={10}>
@@ -173,16 +179,15 @@ const SubscriptionForm = (props) => {
             label="Name"
             margin="normal"
             variant="outlined"
-            multiline
-            rows={2}
             fullWidth
             defaultValue={state.subscription.name}
-            onBlur={(event) => setName(event.target.value)}
+            onChange={(event) => setName(event.target.value)}
             error={state.subscription.name.trim().length === 0}
             helperText={
               state.subscription.name.trim().length === 0 ?
               'Required' : ''
             }
+            onKeyPress={handleKeyPress}
           />
           <TextField
             label="Amount"
@@ -190,13 +195,14 @@ const SubscriptionForm = (props) => {
             variant="filled"
             fullWidth
             defaultValue={state.subscription.amount}
-            onBlur={(event) => setAmount(event.target.value)}
+            onChange={(event) => setAmount(event.target.value)}
             error={!isValidCurrencyAmount(state.subscription.amount)}
             helperText={
               !isValidCurrencyAmount(state.subscription.amount) ?
               'Invalid amount' : ''
             }
             InputProps={{endAdornment: props.currency}}
+            onKeyPress={handleKeyPress}
           />
           <div className="tags">
             <CategorySelector
