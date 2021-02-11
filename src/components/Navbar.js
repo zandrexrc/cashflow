@@ -15,9 +15,10 @@ import CreditCardIcon from '@material-ui/icons/CreditCard';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import SettingsIcon from '@material-ui/icons/Settings';
 import TimelineIcon from '@material-ui/icons/Timeline';
-import PropTypes from 'prop-types';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {Navigation} from '../constants';
+import {setActivePage} from '../redux/actions/ui';
 
 
 // Set up navigation icons
@@ -60,8 +61,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Navbar = (props) => {
+const Navbar = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const activePage = useSelector((state) => state.activePage);
 
   return (
     <Drawer
@@ -78,8 +81,8 @@ const Navbar = (props) => {
           <ListItem
             button
             key={nav.id}
-            onClick={() => props.setActivePage(nav.id)}
-            selected={props.activePage === nav.id}
+            onClick={() => dispatch(setActivePage(nav.id))}
+            selected={activePage === nav.id}
           >
             <ListItemIcon>{navIcons[nav.name]}</ListItemIcon>
             <ListItemText primary={nav.name} />
@@ -89,13 +92,6 @@ const Navbar = (props) => {
       <a href="http://zandrexrc.me" className="creds">©</a>
     </Drawer>
   );
-};
-
-Navbar.propTypes = {
-  /** ID of the active page */
-  activePage: PropTypes.number.isRequired,
-  /** Function to change the active page */
-  setActivePage: PropTypes.func.isRequired,
 };
 
 export {Navbar};

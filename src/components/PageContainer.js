@@ -2,6 +2,7 @@ import React from 'react';
 
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import {useSelector} from 'react-redux';
 
 import {loadingLight, loadingDark} from '../assets/images';
 import {Accounts} from '../pages/Accounts';
@@ -20,9 +21,8 @@ const useStyles = makeStyles((theme) => ({
     flexFlow: 'row wrap',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
+    width: 'calc(100% - 200px)',
     height: '100vh',
-    marginLeft: '200px',
     backgroundColor: theme.palette.background.default,
   },
   loading: {
@@ -38,14 +38,44 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const PageContainer = (props) => {
+const Tab = (props) => {
+  return (
+    <div style={{width: '100%'}} hidden={props.id !== props.activeId}>
+      {
+        props.id === props.activeId &&
+        props.children
+      }
+    </div>
+  );
+};
+
+Tab.propTypes = {
+  children: PropTypes.node.isRequired,
+  id: PropTypes.number.isRequired,
+  activeId: PropTypes.number.isRequired,
+};
+
+
+const PageContainer = () => {
   const classes = useStyles();
   const theme = useTheme();
+
+  const activePage = useSelector((state) => state.activePage);
+  const error = useSelector((state) => state.error);
+  const isFetching = useSelector((state) => state.isFetching);
+
+  React.useEffect(() => {
+    if (error) {
+      activePage = -1;
+    }
+  }, [error]);
+
+  console.log('PAGECONTAINER');
 
   return (
     <div className={classes.root}>
       {
-        props.isFetching &&
+        isFetching &&
         <div className={classes.loading}>
           <img
             src={theme.palette.type === 'light' ? loadingLight : loadingDark }
@@ -54,47 +84,29 @@ const PageContainer = (props) => {
           />
         </div>
       }
-      {
-        props.error ?
-        <ErrorPage error={props.error} /> :
-        <>
-          {
-            props.activePage === 0 &&
-            <Overview />
-          }
-          {
-            props.activePage === 1 &&
-            <Transactions />
-          }
-          {
-            props.activePage === 2 &&
-            <Subscriptions />
-          }
-          {
-            props.activePage === 3 &&
-            <Accounts />
-          }
-          {
-            props.activePage === 4 &&
-            <Statistics />
-          }
-          {
-            props.activePage === 5 &&
-            <Settings />
-          }
-        </>
-      }
+      <Tab id={0} activeId={activePage}>
+        <Overview />
+      </Tab>
+      <Tab id={1} activeId={activePage}>
+        <Transactions />
+      </Tab>
+      <Tab id={2} activeId={activePage}>
+        <Subscriptions />
+      </Tab>
+      <Tab id={3} activeId={activePage}>
+        <Accounts />
+      </Tab>
+      <Tab id={4} activeId={activePage}>
+        <Statistics />
+      </Tab>
+      <Tab id={5} activeId={activePage}>
+        <Settings />
+      </Tab>
+      <Tab id={-1} activeId={activePage}>
+        <ErrorPage error={error} />
+      </Tab>
     </div>
   );
-};
-
-PageContainer.propTypes = {
-  /** ID of the active page */
-  activePage: PropTypes.number.isRequired,
-  /** Error message (if any) */
-  error: PropTypes.string,
-  /** true if the app is currently executing a FETCH request */
-  isFetching: PropTypes.bool.isRequired,
 };
 
 export {PageContainer};
