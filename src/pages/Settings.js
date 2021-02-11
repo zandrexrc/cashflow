@@ -54,10 +54,6 @@ const Settings = () => {
   // Local component state
   const [state, setState] = React.useState({...settings});
 
-  React.useEffect(() => {
-    setState({...settings});
-  }, [settings]);
-
   // Manage local state
   const setCurrency = (event) =>
     setState({...state, currency: event.target.value});

@@ -2,7 +2,9 @@ import React from 'react';
 
 import {Snackbar} from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
-import PropTypes from 'prop-types';
+import {useDispatch, useSelector} from 'react-redux';
+
+import {hideToast} from '../../redux/actions/ui';
 
 
 const Alert = (props) => {
@@ -10,34 +12,27 @@ const Alert = (props) => {
 };
 
 
-const Toast = (props) => {
+const Toast = () => {
+  const dispatch = useDispatch();
+  const toastState = useSelector((state) => state.toastState);
+
+  const closeToast = () => dispatch(hideToast());
+
   return (
     <Snackbar
       anchorOrigin={{
         vertical: 'bottom',
         horizontal: 'center',
       }}
-      open={props.isOpen}
+      open={toastState.isOpen}
       autoHideDuration={6000}
-      onClose={props.close}
+      onClose={closeToast}
     >
-      <Alert onClose={props.close} severity={props.severity}>
-        {props.message}
+      <Alert onClose={closeToast} severity={toastState.severity}>
+        {toastState.message}
       </Alert>
     </Snackbar>
   );
-};
-
-Toast.propTypes = {
-  /** Function to close the toast */
-  close: PropTypes.func.isRequired,
-  /** If true, the toast is open/visible */
-  isOpen: PropTypes.bool.isRequired,
-  /** The text content of the toast */
-  message: PropTypes.string.isRequired,
-  /** Defines the color and icon of the toast.
-   * Values: 'success' | 'warning' | 'error' | 'info' */
-  severity: PropTypes.string.isRequired,
 };
 
 export {Toast};

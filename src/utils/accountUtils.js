@@ -65,7 +65,7 @@ function calcMostUsedAccounts(accounts, transactions) {
     return -(accountsCounter[a] - accountsCounter[b]);
   });
   let mostUsedAccounts = sortedAccounts.map((id) =>
-    accounts.find((a) => a.id === id),
+    accounts.find((a) => a.accountId === parseInt(id)),
   );
 
   // Fallback to default order if not enough accounts

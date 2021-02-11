@@ -46,16 +46,18 @@ const Overview = () => {
   const dispatch = useDispatch();
   const accounts = useSelector((state) => state.accounts);
   const currency = useSelector((state) => state.settings.currency);
-  const subscriptions = useSelector((state) => state.subscriptions.filter((s) =>
+  const allSubscriptions = useSelector((state) => state.subscriptions);
+  const allTransactions = useSelector((state) => state.transactions);
+  const subscriptions = allSubscriptions.filter((s) =>
     s.cycle === 'monthly' ||
       parseInt(s.firstBillingDate.substring(5, 7)) === today.getMonth()+1,
-  ));
-  const transactions = useSelector((state) => state.transactions.filter((t) => {
+  );
+  const transactions = allTransactions.filter((t) => {
     return (
       parseInt(t.date.substring(5, 7)) === today.getMonth()+1 &&
         parseInt(t.date.substring(0, 4)) === today.getFullYear()
     );
-  }));
+  });
 
   // Card values
   const accountsData = calcMostUsedAccounts(accounts, transactions);
