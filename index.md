@@ -1,6 +1,7 @@
 ---
 title: Cashflow
 description: An app to help you keep track of your finances.
+layout: default
 ---
 
 # Features
