@@ -1,15 +1,13 @@
 ---
 title: User manual
 layout: page
+sections:
+  - transactions
+  - subscriptions
+  - accounts
+  - statistics
+  - settings
 ---
-
-# User manual
-- [Transactions](#transactions)
-- [Subscriptions](#subscriptions)
-- [Accounts](#accounts)
-- [Statistics](#statistics)
-- [Settings](#settings)
-
 
 ## Transactions
 
