@@ -1,4 +1,4 @@
 title: Cashflow
 description: An app to help you keep track of your finances.
 theme: jekyll-theme-cayman
-markdown: kramdown
+markdown: GFM
