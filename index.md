@@ -1,3 +1,8 @@
+---
+title: Cashflow
+description: An app to help you keep track of your finances.
+---
+
 # Features
 - *Transactions*: Record your transactions and organize them into categories.
 - *Subscriptions*: Keep track of your subscriptions and their billing dates.
