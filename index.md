@@ -1,37 +1,30 @@
-## Welcome to GitHub Pages
+<div align="center" markdown="1">
 
-You can use the [editor on GitHub](https://github.com/zandrexrc/cashflow/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+<img src="https://i.imgur.com/jKQ4ywE.png" alt="Cashflow" width="240">
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+# Cashflow   
+Cashflow is an app that helps you keep track of your finances.  
 
-### Markdown
+</div> 
+   
+Check out the desktop demo [here](https://cashflow-zandrexrc.netlify.app/). 
+*(Not optimized for mobile devices)*
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Features
+- *Transactions*: Record your transactions and organize them into categories.
+- *Subscriptions*: Keep track of your subscriptions and their billing dates.
+- *Accounts*: Check your current account balances.
+- *Statistics*: Monitor your transaction activities.
 
-```markdown
-Syntax highlighted code block
+## Getting started
+- [Installing Cashflow](https://github.com/zandrexrc/cashflow/blob/master/docs/getting-started.md)
+- [User manual](https://github.com/zandrexrc/cashflow/blob/master/docs/user-manual.md)
 
-# Header 1
-## Header 2
-### Header 3
+## Documentation
+- [Redux state](https://github.com/zandrexrc/cashflow/blob/master/docs/redux.md)
+- [Express server API](https://github.com/zandrexrc/cashflow/tree/master/docs/api)
+- [Database](https://github.com/zandrexrc/cashflow/blob/master/docs/database.md)
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/zandrexrc/cashflow/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+## Author and license
+Cashflow is developed by [Zandrex Camagon](http://zandrexrc.me). 
+Licensed under [MIT License](https://github.com/zandrexrc/cashflow/blob/master/LICENSE).
