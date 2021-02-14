@@ -4,21 +4,11 @@ description: An app to help you keep track of your finances.
 layout: default
 ---
 
-# Features
-- *Transactions*: Record your transactions and organize them into categories.
-- *Subscriptions*: Keep track of your subscriptions and their billing dates.
-- *Accounts*: Check your current account balances.
-- *Statistics*: Monitor your transaction activities.
+# Downloads
 
-# Getting started
-- [Installing Cashflow](https://github.com/zandrexrc/cashflow/blob/master/docs/getting-started.md)
-- [User manual](https://github.com/zandrexrc/cashflow/blob/master/docs/user-manual.md)
-
-# Documentation
-- [Redux state](https://github.com/zandrexrc/cashflow/blob/master/docs/redux.md)
-- [Express server API](https://github.com/zandrexrc/cashflow/tree/master/docs/api)
-- [Database](https://github.com/zandrexrc/cashflow/blob/master/docs/database.md)
-
-# Author and license
-Cashflow is developed by [Zandrex Camagon](http://zandrexrc.me). 
-Licensed under [MIT License](https://github.com/zandrexrc/cashflow/blob/master/LICENSE).
+<a href="#" class="download-btn">Download installer for Windows</a>
+   
+## Notes
+You might get a warning from anti-virus softwares when installing the app for the first time. 
+Why? Because the app is improperly signed (code signing certificates aren't really cheap :/ ). 
+Nevertheless, please be assured that the app is safe and does not contain any malware.
