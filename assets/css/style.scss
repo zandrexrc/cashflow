@@ -13,3 +13,28 @@ $body-link-color: #c79100 !default;
 $blockquote-text-color: #819198 !default;
 
 @import "{{ site.theme }}";
+
+.features {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  
+  @include small {
+    justify-content: center;
+  }
+  
+  .feature {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 30%;
+
+    @include small {
+      width: 80%;
+    }
+
+    .material-icons {
+      font-size: 6rem;
+      align-self: center;
+    }
+  }
+}
