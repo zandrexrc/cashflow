@@ -164,12 +164,14 @@ On the __activities__ tab, the filters are on the upper right side of the chart.
 
 ### Changing the settings
 Here are the different settings you can customize:
+
 | Setting     | Description                                             |
 | ----------- | ------------------------------------------------------- |
 | Currency*   | The currency symbol used in the transactions            |
 | Date format | The format in which the dates are displayed             |
 | Theme       | Determines the color palette of the app (light or dark) |
 
+   
 **Can be a symbol ($, €, kr) or a three-letter currency code (USD, EUR, NOK).*   
 Make sure to click on the __apply changes__ button to save your preferences.
 
