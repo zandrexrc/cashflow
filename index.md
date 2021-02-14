@@ -14,4 +14,4 @@ Why? Because the app is improperly signed (code signing certificates aren't real
 Nevertheless, please be assured that the app is safe and does not contain any malware.
 
 ## Guides
-- [User manual](/user-manual)
+- [User manual](/cashflow/user-manual)
