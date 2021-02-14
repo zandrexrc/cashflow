@@ -5,33 +5,30 @@
 
 
 ## Requirements
-- [NodeJS](https://nodejs.org/en/)
+- [Node.js](https://nodejs.org/en/) _(v12 or higher)_
 
 
 ## Installation guide
-1. Download or clone this GitHub repo.
-
-2. On your local copy of the repo, navigate to *src/server/database* and rename 
-*cashflow-empty.db* to *cashflow.db*.
-
-2. Go back to the root directory of the app and install the dependencies: 
+1. Clone the repo via git and install dependencies:
 ```bash
+git clone https://github.com/zandrexrc/cashflow.git
+cd cashflow
 npm install
 ```
 
-3. Build the app:
+2. Build the app:
 ```bash
 npm run build
 ```
 
-4. Start the server:
+3. Start the server:
 ```bash
 npm start
 ```
 
-5. The app is now available on http://localhost:8080/.   
+4. The app is now available on http://localhost:8080/.   
 *_8080 is the default port._ 
-_To change this, open **src/server/index.js** and edit the **port** variable._
+_You can change this by editing the **port** variable in **src/server/index.js**._
 
 
 ## Uninstallation guide

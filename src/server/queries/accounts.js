@@ -55,7 +55,7 @@ const accountsQueries = {
       connection.query(async (db) => {
         const stmt = `UPDATE accounts 
                         SET name = ?, type = ?, balance = ? 
-                        WHERE accountID = ?`;
+                        WHERE accountId = ?`;
         const params = [
           req.body.name,
           req.body.type,
@@ -69,7 +69,7 @@ const accountsQueries = {
           }
         });
         const result = await db.get(
-            `SELECT * FROM accounts WHERE accountID = ?`,
+            `SELECT * FROM accounts WHERE accountId = ?`,
             [req.params.id],
         );
         res.status(201).json(result);

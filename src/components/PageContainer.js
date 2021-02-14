@@ -2,7 +2,7 @@ import React from 'react';
 
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {loadingLight, loadingDark} from '../assets/images';
 import {Accounts} from '../pages/Accounts';
@@ -12,6 +12,7 @@ import {Settings} from '../pages/Settings';
 import {Statistics} from '../pages/Statistics';
 import {Subscriptions} from '../pages/Subscriptions';
 import {Transactions} from '../pages/Transactions';
+import {setActivePage} from '../redux/actions/ui';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -58,6 +59,7 @@ Tab.propTypes = {
 
 const PageContainer = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const theme = useTheme();
 
   const activePage = useSelector((state) => state.activePage);
@@ -66,11 +68,9 @@ const PageContainer = () => {
 
   React.useEffect(() => {
     if (error) {
-      activePage = -1;
+      dispatch(setActivePage(-1));
     }
-  }, [error]);
-
-  console.log('PAGECONTAINER');
+  }, [error, dispatch]);
 
   return (
     <div className={classes.root}>

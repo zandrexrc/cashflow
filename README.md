@@ -3,24 +3,29 @@
 <img src="https://i.imgur.com/jKQ4ywE.png" alt="Cashflow" width="240">
 
 # Cashflow   
-Cashflow is an app that helps you keep track of your finances.  
+An app to help you keep track of your finances.  
 
 </div> 
    
-![cashflow-screenshot](https://i.imgur.com/8u5cwge.png)
 
-Check out the [demo](https://cashflow-zandrexrc.netlify.app/). 
+## Links
+- Check out the live demo [here](https://cashflow-zandrexrc.netlify.app/). 
 *(Not optimized for mobile devices)*
+- There is also an Electron implementation of the project [here](https://github.com/zandrexrc/cashflow-electron).
+- [Here](https://zandrexrc.github.io/cashflow/) is the official project website.
 
 ## Features
-- *Transactions*: Record your transactions and organize them into categories.
-- *Subscriptions*: Keep track of your subscriptions and their billing dates.
-- *Accounts*: Check your current account balances.
-- *Statistics*: Monitor your transaction activities.
+- *Transactions:* Record your transactions and organize them into categories.
+- *Subscriptions:* Keep track of your subscriptions and their billing dates.
+- *Accounts:* Have an overview of your accounts and their balances.
+- *Statistics:* Monitor your financial activities in closer detail.
 
 ## Getting started
-- [Installing Cashflow](https://github.com/zandrexrc/cashflow/blob/master/docs/getting-started.md)
+- [Installation guide](https://github.com/zandrexrc/cashflow/blob/master/docs/getting-started.md)
 - [User manual](https://github.com/zandrexrc/cashflow/blob/master/docs/user-manual.md)
+
+## Starting development
+- [Development guide](https://github.com/zandrexrc/cashflow/blob/master/docs/development.md)
 
 ## Documentation
 - [Redux state](https://github.com/zandrexrc/cashflow/blob/master/docs/redux.md)
