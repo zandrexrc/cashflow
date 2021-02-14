@@ -19,8 +19,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#157878">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   </head>
   <body>
     <header class="page-header" role="banner">
@@ -38,6 +39,23 @@
     </header>
 
     <main id="content" class="main-content" role="main">
+      
+      <h1>Features</h1>
+      <div class="features">
+        <div class="feature">
+          <span class="material-icons">paid</span>
+          <p>Keep track of your income and expenses, as well as your bills and subscriptions.</p>
+        </div>
+        <div class="feature">
+          <span class="material-icons">bar_chart</span>
+          <p>Monitor your finances. Check how much you have spent or earned in a given month or year.</p>
+        </div>
+        <div class="feature">
+          <span class="material-icons">description</span>
+          <p>Import or export your data to a CSV file, so you can work on it with a spreadsheet software like Excel.</p>
+        </div>
+      </div>
+      
       {{ content }}
 
       <footer class="site-footer">
