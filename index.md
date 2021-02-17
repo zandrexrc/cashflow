@@ -6,8 +6,8 @@ layout: default
 
 # Downloads
 
-<a href="https://www.dropbox.com/s/1pswg1am4hgdlmx/Cashflow%20Setup%201.0.0.exe?dl=1" class="download-btn">Installer for Windows</a>
-<a href="https://www.dropbox.com/s/p1loapzo4ooa1q8/cashflow-win-unpacked.zip?dl=1" class="download-btn">Unpacked Windows app (no installation)</a>
+<a href="https://www.dropbox.com/s/9he09mm9rybuw52/Cashflow%20Setup%201.0.1.exe?dl=1" class="download-btn">Installer for Windows</a>
+<a href="https://www.dropbox.com/s/6oab51m4l9ypjlw/cashflow-win-unpacked.zip?dl=1" class="download-btn">Unpacked Windows app (no installation)</a>
    
 ## Notes
 - You might get a warning from your anti-virus software when installing the app for the first time. 
