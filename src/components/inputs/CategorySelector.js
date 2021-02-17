@@ -32,7 +32,7 @@ const CategorySelector = (props) => {
       selectOnFocus
       options={categories}
       value={props.selectedCategory}
-      onChange={(event, value) => props.setCategory(value)}
+      onBlur={(event) => props.setCategory(event.target.value)}
       renderInput={(params) => (
         <TextField
           label="Category"

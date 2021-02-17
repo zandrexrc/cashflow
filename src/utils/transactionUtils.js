@@ -29,13 +29,13 @@ function calcCategoryAmounts(transactions) {
   const categoryAmounts = {};
   for (let i = 0; i < transactions.length; i++) {
     if (transactions[i].category) {
-      const category = transactions[i].category.toLowerCase();
+      const category = transactions[i].category;
       categoryAmounts[category] = categoryAmounts[category] ?
                 categoryAmounts[category] + transactions[i].amount :
                 transactions[i].amount;
     } else {
-      categoryAmounts['uncategorized'] = categoryAmounts['uncategorized'] ?
-                categoryAmounts['uncategorized'] + transactions[i].amount :
+      categoryAmounts['Uncategorized'] = categoryAmounts['Uncategorized'] ?
+                categoryAmounts['Uncategorized'] + transactions[i].amount :
                 transactions[i].amount;
     }
   }

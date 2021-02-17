@@ -87,14 +87,19 @@ function createCategoryGraphData(transactions) {
     colors.push(`hsl(${(j * 55) % 359}, 100%, 70%)`);
   }
 
+  // Sort by amount
+  const sortedCategories = Object.entries(categoriesCount)
+    .sort(([,a],[,b]) => a-b)
+    .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
+
   return {
     datasets: [
       {
-        data: Object.values(categoriesCount),
+        data: Object.values(sortedCategories),
         backgroundColor: colors,
       },
     ],
-    labels: Object.keys(categoriesCount),
+    labels: Object.keys(sortedCategories),
   };
 }
 

@@ -3,7 +3,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 
-import {calcCategoryAmounts, getCategories} from '../../utils';
+import {calcCategoryAmounts} from '../../utils';
 import {ListContainer} from './ListContainer';
 
 
@@ -34,12 +34,12 @@ const renderRow = (props) => {
 
 const CategoryList = (props) => {
   const categories = [];
-  const categoryNames = getCategories(props.transactions);
   const categoryAmounts = calcCategoryAmounts(props.transactions);
+  const categoryNames = Object.keys(categoryAmounts);
   for (let i = 0; i < categoryNames.length; i++) {
     categories.push({
       label: categoryNames[i],
-      amount: categoryAmounts[categoryNames[i].toLowerCase()],
+      amount: categoryAmounts[categoryNames[i]],
     });
   }
   categories.sort((a, b) => a.amount - b.amount);
